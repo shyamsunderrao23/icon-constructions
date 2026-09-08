@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    font-family: 'Plus Jakarta Sans', 'Outfit', system-ui, -apple-system, sans-serif;
+    color-scheme: light;
+    
+    /* Logo Brand Palette */
+    --logo-gold: #c5a059;
+    --logo-gold-light: #e5be6b;
+    --logo-gold-dark: #a8813a;
+    --logo-navy: #0d214a;
+    --logo-navy-dark: #07132c;
+    --logo-navy-light: #16336e;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    color: #0d214a;
+    font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.015em;
+  }
+
+  .font-serif {
+    font-family: 'Playfair Display', 'Cinzel', serif !important;
+  }
+
+  .font-display {
+    font-family: 'Cinzel', 'Playfair Display', serif !important;
+  }
+
+  .font-sans {
+    font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif !important;
+  }
+}
+
+/* Lenis Smooth Scroll Setup */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #c5a059;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8813a;
+}
+
+/* Buttons Styled After Logo Metallic Gold & Royal Navy */
+.acc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.acc-btn--gold {
+  background: linear-gradient(135deg, #d4af37 0%, #c5a059 50%, #a8813a 100%);
+  color: #07132c;
+  border: 1px solid #d4af37;
+  box-shadow: 0 4px 18px rgba(197, 160, 89, 0.35);
+}
+
+.acc-btn--gold:hover {
+  background: linear-gradient(135deg, #e5be6b 0%, #d4af37 50%, #b8860b 100%);
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(197, 160, 89, 0.5);
+}
+
+.acc-btn--navy {
+  background: linear-gradient(135deg, #0d214a 0%, #07132c 100%);
+  color: #e5be6b;
+  border: 1px solid #0d214a;
+  box-shadow: 0 4px 15px rgba(13, 33, 74, 0.2);
+}
+
+.acc-btn--navy:hover {
+  background: linear-gradient(135deg, #16336e 0%, #0d214a 100%);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(13, 33, 74, 0.35);
+}
+
+.acc-btn--outline {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  color: #0d214a;
+  border: 2px solid #c5a059;
+}
+
+.acc-btn--outline:hover {
+  background: #0d214a;
+  color: #e5be6b;
+  border-color: #0d214a;
+  transform: translateY(-2px);
+}
+
+/* Video Frame Ambient Glow */
+.video-hero-frame {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px -15px rgba(7, 19, 44, 0.35);
+  border: 1px solid rgba(197, 160, 89, 0.3);
+}
+
+.video-hero-frame::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.6), transparent 50%, rgba(13, 33, 74, 0.4));
+  z-index: -1;
+}
+
+/* Glassmorphism Card Overlay */
+.glass-badge {
+  background: rgba(7, 19, 44, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(197, 160, 89, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Project Card Styled After Logo Palette */
+.project-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(13, 33, 74, 0.06);
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(13, 33, 74, 0.15);
+  border-color: #c5a059;
+}
+
+.project-card-img {
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.project-card:hover .project-card-img {
+  transform: scale(1.08);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideDownSearch {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slideDownSearch 0.3s ease-out forwards;
+}
+
+/* Hero Slider Progress Line Animation */
+@keyframes progressFill {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-progress-fill {
+  animation: progressFill 7s linear forwards;
+}
+
+/* Hero Content Swipe Animations */
+@keyframes heroSwipeInNext {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes heroSwipeInPrev {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-hero-swipe-next {
+  animation: heroSwipeInNext 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-hero-swipe-prev {
+  animation: heroSwipeInPrev 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
