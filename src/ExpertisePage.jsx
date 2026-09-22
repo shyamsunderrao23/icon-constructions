@@ -13,7 +13,7 @@ const expertiseSectors = [
     sectorNumber: '01',
     title: 'Multi-Span Highway River Bridges & Pile Foundations',
     tagline: 'Heavy Infrastructure & Hydraulic Crossings',
-    image: '/icon_river_bridge.jpg',
+    image: '/icon_tonkini_10span_bridge.jpg',
     description: 'Icon Constructions specializes in high-capacity highway river crossings, pre-stressed concrete girder installations, and deep underwater pile foundations engineered to withstand peak seasonal monsoon currents.',
     capabilities: [
       'Multi-span pre-stressed concrete (PSC) girder erection',
@@ -21,14 +21,24 @@ const expertiseSectors = [
       'Hydraulic scour analysis & riverbank gabion wall protection',
       'Heavy load-bearing abutments & elastomeric bridge bearings'
     ],
-    highlightProject: 'Tonkini & Sirpur 10-Span Highway River Bridges'
+    highlightProject: 'Tonkini & Sirpur 10-Span Highway River Bridges',
+    projectsUnderDiscipline: [
+      { sno: '08', name: 'Tonkini – 10 Span Bridge', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '13', name: 'Sirpur – 10 Span Bridge', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '12', name: 'Rasply – 7 Span Bridge', location: 'Kumuram Bheem Asifabad District, Telangana' },
+      { sno: '14', name: 'Bridge with 6 Spans – Kondapally', location: 'Kondapally, KB Asifabad District, Telangana' },
+      { sno: '07', name: 'Dubbaguda – 3 Span Bridge', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '09', name: 'Navegaon – 2 Span Bridge', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '10', name: 'Pile Foundation & Jacketing – Gudem Bridge', location: 'Gudem, Telangana' },
+      { sno: '22', name: 'Box Bridges – 25 Nos.', location: 'Porsa, Maharashtra' }
+    ]
   },
   {
     id: 'educational',
     sectorNumber: '02',
     title: 'Educational Campuses, 100-Column Structures & Hostels',
     tagline: 'Institutional & Welfare Infrastructure',
-    image: '/icon_school_campus.jpg',
+    image: '/icon_school_assembly.jpg',
     description: 'High-capacity institutional complexes engineered for generational durability, including 100-column heavy structural concrete frames, multi-story government high schools, and KGBV tribal residential hostels.',
     capabilities: [
       '100-column high-span structural concrete frame engineering',
@@ -36,14 +46,24 @@ const expertiseSectors = [
       'Multi-story residential dormitories with safety-first egress',
       'Complete campus utility grids, perimeter security & sports grounds'
     ],
-    highlightProject: 'Boys Residential School (100 Columns) & KGBV Campuses'
+    highlightProject: 'Boys Residential School (100 Columns) & KGBV Campuses',
+    projectsUnderDiscipline: [
+      { sno: '05', name: 'Boys Residential School – 100 Columns', location: 'Near Sirpur Police Station, Sirpur Town, Telangana' },
+      { sno: '03', name: 'High School Building – 2010', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '15', name: 'Jyotiba Phule Building', location: 'Kagaznagar, KB Asifabad District, Telangana' },
+      { sno: '16', name: 'Minority Residential Building', location: 'Balagalla, KB Asifabad District, Telangana' },
+      { sno: '20', name: 'Kasturba KGBV Building', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '02', name: 'ST Hostel Building – 2009', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '06', name: 'Girls Hostel Building', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '24', name: 'Girls School Buildings – 2 Nos.', location: 'Kumuram Bheem Asifabad District, Telangana' }
+    ]
   },
   {
     id: 'civic',
     sectorNumber: '03',
     title: 'Government & Civic Administrative Headquarters',
     tagline: 'Public Administration & Municipal Facilities',
-    image: '/icon_mro_headquarters.jpg',
+    image: '/icon_tahasildar_mro.jpg',
     description: 'Official Mandal Revenue Office (MRO) headquarters, sub-collectorate executive wings, integrated municipal wholesale markets, and forest department command centers built to rigorous government specifications.',
     capabilities: [
       'Public administrative suites, archive vaults & revenue registry halls',
@@ -51,14 +71,21 @@ const expertiseSectors = [
       'Sanitary municipal market complexes with cold-storage drainage',
       'Government standard RCC framing & architectural all-weather facades'
     ],
-    highlightProject: 'MRO Administrative Headquarters & Integrated Markets'
+    highlightProject: 'MRO Administrative Headquarters & Integrated Markets',
+    projectsUnderDiscipline: [
+      { sno: '01', name: 'MRO Office Building – 2008', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '25', name: 'Agriculture Building', location: 'Mancherial, Telangana' },
+      { sno: '23', name: 'Forest Office Building', location: 'Penchikalpet, KB Asifabad District, Telangana' },
+      { sno: '19', name: 'Integrated Market Buildings – 5 Nos.', location: 'Mancherial, Mancherial District, Telangana' },
+      { sno: '18', name: 'Three-Floor Buildings – 16 Nos.', location: 'Ramagundam, Telangana' }
+    ]
   },
   {
     id: 'hydraulic',
     sectorNumber: '04',
     title: 'Hydraulic Infrastructure, Check Dams & Box Culverts',
     tagline: 'Water Resource Management & Flood Protection',
-    image: '/icon_check_dam.jpg',
+    image: '/icon_overflow_check_dam.jpg',
     description: 'Specialized hydraulic civil engineering including stream check dams for groundwater recharge, flood-mitigation retaining walls, and reinforced concrete box culvert networks across highway corridors.',
     capabilities: [
       'Gravity masonry & reinforced concrete check dam construction',
@@ -66,14 +93,19 @@ const expertiseSectors = [
       'Spillway channels, silt traps & watershed management systems',
       'Water balancing elevated reservoirs (ELSR) with food-grade lining'
     ],
-    highlightProject: 'Sirpur Check Dam & 10-Unit Highway Box Culverts'
+    highlightProject: 'Sirpur Check Dam & 10-Unit Highway Box Culverts',
+    projectsUnderDiscipline: [
+      { sno: '11', name: 'Check Dam', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '04', name: 'Culverts – 10 Nos.', location: 'Kumuram Bheem Asifabad District, Telangana' },
+      { sno: '21', name: 'Box Culverts – 20 Nos.', location: 'Gadchiroli, Maharashtra' }
+    ]
   },
   {
     id: 'industrial',
     sectorNumber: '05',
     title: 'Industrial Heavy Sheds & Manufacturing Megahubs',
     tagline: 'Pre-Engineered Structures & High-Bay Facilities',
-    image: '/icon_industrial_shed.jpg',
+    image: '/icon_industrial_steel_sheds.jpg',
     description: 'Pre-engineered industrial steel complexes featuring clear-span trusses, high-clearance overhead gantry crane tracks, and heavy-load concrete floor aprons designed for continuous heavy machinery operations.',
     capabilities: [
       'Pre-engineered structural steel (PEB) fabrication & erection',
@@ -81,7 +113,10 @@ const expertiseSectors = [
       'Heavy industrial laser-leveled concrete flooring with epoxy coating',
       'Industrial ventilation, fire-suppression networks & loading docks'
     ],
-    highlightProject: 'Sirpur Industrial Fabrication Sheds & Modern Megahub'
+    highlightProject: 'Sirpur Industrial Fabrication Sheds & Modern Megahub',
+    projectsUnderDiscipline: [
+      { sno: '17', name: 'IIT Sheds', location: 'Kumuram Bheem Asifabad District, Telangana' }
+    ]
   }
 ];
 
@@ -346,12 +381,46 @@ export default function ExpertisePage({ onNavigate, onBack }) {
                   </div>
                 </div>
 
+                {/* Projects Executed Under This Expertise */}
+                {sec.projectsUnderDiscipline && sec.projectsUnderDiscipline.length > 0 && (
+                  <div className="space-y-3 pt-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-xs font-bold text-[#07132c] uppercase tracking-wider flex items-center gap-2">
+                        <Building2 className="w-4 h-4 text-[#c5a059]" />
+                        <span>Official Projects Executed Under This Discipline ({sec.projectsUnderDiscipline.length}):</span>
+                      </h4>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {sec.projectsUnderDiscipline.map((proj, pIdx) => (
+                        <div
+                          key={pIdx}
+                          onClick={() => navigate('projects')}
+                          className="group/item flex items-start gap-3 p-3 rounded-xl bg-slate-50 hover:bg-[#07132c] hover:text-white border border-slate-200/80 hover:border-[#c5a059] transition-all duration-200 cursor-pointer shadow-sm"
+                        >
+                          <span className="shrink-0 px-2 py-0.5 rounded text-[10px] font-black bg-[#c5a059]/20 text-[#84631d] group-hover/item:bg-[#c5a059] group-hover/item:text-[#07132c] transition-colors">
+                            #{proj.sno}
+                          </span>
+                          <div className="space-y-0.5 min-w-0">
+                            <h5 className="text-xs font-bold text-[#07132c] group-hover/item:text-white truncate">
+                              {proj.name}
+                            </h5>
+                            <p className="text-[10px] text-slate-500 group-hover/item:text-slate-300 truncate flex items-center gap-1">
+                              <MapPin className="w-2.5 h-2.5 text-[#c5a059] shrink-0" />
+                              <span>{proj.location}</span>
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="pt-4 flex items-center gap-4">
                   <button
                     onClick={() => navigate('projects')}
                     className="inline-flex items-center gap-2 bg-[#07132c] text-white text-xs font-bold uppercase tracking-wider px-6 py-3.5 rounded-xl hover:bg-[#0b1e3d] transition-colors cursor-pointer border-0 shadow-md"
                   >
-                    <span>View Projects In This Sector</span>
+                    <span>Explore All Projects</span>
                     <ArrowRight className="w-4 h-4 text-[#c5a059]" />
                   </button>
 

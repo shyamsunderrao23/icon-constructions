@@ -388,73 +388,73 @@ export default function App() {
     return () => clearInterval(timer);
   }, [heroSlides.length, isPlaying, currentSlide]);
 
-  // Real Client Project Execution Record (Exact 6 Projects from Client Document)
+  // Real Client Project Execution Record (Top 6 Signature Projects Featured on Home Page)
   const projects = [
     {
       id: 1,
-      title: "MRO Office Building – 2008",
+      title: "MRO Office Building – Tahasildar Karyalayam",
       category: "civic",
       categoryName: "Government & Civic",
-      image: "/icon_mro_headquarters.jpg",
+      image: "/icon_tahasildar_mro.jpg",
       location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
       scale: "MRO Administrative Headquarters",
       year: "2008",
-      description: "Official Mandal Revenue Office headquarters building engineered for public civil administration, land records, and revenue services."
+      description: "Official Mandal Revenue Office (Tahasildar) headquarters building engineered for public civil administration, land records, and citizen revenue services."
     },
     {
       id: 2,
-      title: "ST Hostel Building – 2009",
-      category: "educational",
-      categoryName: "Educational & Hostels",
-      image: "/icon_landmark_tower.jpg",
-      location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
-      scale: "ST Student Residential Hostel",
-      year: "2009",
-      description: "Dedicated Scheduled Tribe (ST) Welfare student residential hostel facility providing secure housing, study spaces, and amenities."
+      title: "Tonkini 10-Span High-Level Major River Bridge",
+      category: "infrastructure",
+      categoryName: "Hydraulic Infrastructure",
+      image: "/icon_tonkini_10span_bridge.jpg",
+      location: "Tonkini River Crossing, Sirpur Region, Telangana",
+      scale: "10-Span Major Pre-Stressed Concrete Bridge",
+      year: "Completed",
+      description: "Critical regional arterial river bridge spanning 10 heavy prestressed concrete spans over the Tonkini riverbed, engineered on deep pile foundations."
     },
     {
       id: 3,
-      title: "High School Building – 2010",
+      title: "TSWR Residential School & Junior College (Boys)",
       category: "educational",
       categoryName: "Educational & Campuses",
-      image: "/icon_skybridge_resort.jpg",
+      image: "/icon_tswrs_campus.jpg",
       location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
-      scale: "Multi-Story Academic High School",
-      year: "2010",
-      description: "Multi-story government high school academic building featuring modern classrooms, science laboratories, and sports grounds."
+      scale: "TSWRS/JC(B) Institutional Campus",
+      year: "2012",
+      description: "Telangana Social Welfare Residential School and Junior College for Boys campus with grand entrance portico, administrative offices, and academic wings."
     },
     {
       id: 4,
-      title: "Culverts – 10 Nos.",
-      category: "infrastructure",
-      categoryName: "Hydraulic Infrastructure",
-      image: "/icon_check_dam.jpg",
-      location: "Kumuram Bheem Asifabad District, Telangana",
-      scale: "10 Reinforced RCC Box Culverts",
+      title: "KGBV CM School of Excellence – Circular Campus",
+      category: "educational",
+      categoryName: "Educational & Campuses",
+      image: "/icon_kgbv_school_of_excellence.jpg",
+      location: "Latehar Model Campus Development",
+      scale: "Monumental Circular Architectural Wing",
       year: "Completed",
-      description: "Construction of 10 heavy reinforced concrete box culverts across highway regional networks for water drainage and stream flow."
+      description: "Award-winning circular institutional building designed with grand colonnaded facade, circular academic atrium, manicured planters, and sports grounds."
     },
     {
       id: 5,
-      title: "Boys Residential School – 100 Columns",
-      category: "educational",
-      categoryName: "Educational & Campuses",
-      image: "/icon_school_campus.jpg",
-      location: "Near Sirpur Police Station, Sirpur Town, Telangana",
-      scale: "100-Column RCC Heavy Framework",
+      title: "Pre-Engineered Structural Steel Industrial Sheds",
+      category: "industrial",
+      categoryName: "Industrial & Fabrication",
+      image: "/icon_industrial_steel_sheds.jpg",
+      location: "Sirpur Regional Industrial Corridor, Telangana",
+      scale: "Multi-Bay Pre-Engineered Steel Sheds",
       year: "Completed",
-      description: "High-capacity institutional campus featuring a 100-column structural concrete framework, academic wings, and sports infrastructure."
+      description: "Heavy-duty structural steel workshop sheds featuring multi-bay open entries, crane gantry support systems, concrete aprons, and industrial machinery bays."
     },
     {
       id: 6,
-      title: "Girls Hostel Building",
+      title: "TSWR Residential School & College (Girls) – Grand Arch",
       category: "educational",
-      categoryName: "Educational & Hostels",
-      image: "/icon_waterfront_estate.jpg",
-      location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
-      scale: "KGBV Residential Campus",
+      categoryName: "Educational & Campuses",
+      image: "/icon_tswrdc_girls_arch.jpg",
+      location: "Narketpally, Nalgonda District, Telangana",
+      scale: "Grand Entrance Arch & Campus Perimeter",
       year: "Completed",
-      description: "State-of-the-art government residential campus for girls, providing secure lodging, study lounges, and high-level safety systems."
+      description: "Signature monumental entrance arch, security gatehouse, and perimeter enclosure engineered for the Telangana Social Welfare Residential Girls College campus."
     }
   ];
 
@@ -829,161 +829,247 @@ export default function App() {
 
       </section>
 
-      {/* 4. SECTION 2: GSAP SCROLLTRIGGER PINNED 5-IMAGE EXPERTISE SHOWCASE */}
+      {/* 4. SECTION 2: GSAP SCROLLTRIGGER PINNED 5-IMAGE FULLSCREEN PROJECT SHOWCASE */}
       <section
         ref={section2PinRef}
-        className="relative w-full h-screen bg-[#07132c] overflow-hidden flex items-center justify-center"
+        className="relative w-full h-screen bg-[#07132c] overflow-hidden flex items-center justify-center select-none"
       >
         <div className="relative w-full h-full">
           
-          {/* IMAGE 1: Tonkini & Sirpur 10-Span River Bridges */}
+          {/* IMAGE 1: Tahasildar & Mandal Revenue Office (MRO) */}
           <div
             ref={image1Ref}
             className="absolute inset-0 w-full h-full overflow-hidden z-10"
           >
             <img
-              src="/icon_river_bridge.jpg"
-              alt="Tonkini & Sirpur 10-Span Major Highway River Bridges"
-              className="w-full h-full object-cover"
+              src="/icon_tahasildar_mro.jpg"
+              alt="Tahasildar & Mandal Revenue Office (MRO) - Sirpur Town"
+              className="w-full h-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/85 via-transparent to-[#07132c]/40 pointer-events-none" />
+            {/* Cinematic Gradient Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/30 to-[#07132c]/40 pointer-events-none" />
+            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#07132c]/80 to-transparent pointer-events-none" />
             
             {/* Floating Glassmorphic Badge 1 */}
             <div
               ref={badge1Ref}
-              className="absolute bottom-4 sm:bottom-10 left-3 right-3 sm:left-14 sm:right-auto z-50 p-4 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/60 text-white max-w-lg shadow-2xl space-y-1.5"
+              className="absolute bottom-6 sm:bottom-12 left-4 sm:left-12 lg:left-16 z-50 p-5 sm:p-7 rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-3"
             >
-              <div className="flex items-center gap-2 text-[#e5be6b] text-xs font-bold uppercase tracking-wider">
-                <Globe className="w-4 h-4 text-[#d4af37]" />
-                <span>01 / 05 • Multi-Span River Bridges</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#e5be6b]" />
+                  01 / 05 • Government & Civic
+                </span>
+                <span className="inline-flex items-center gap-1 text-[11px] text-slate-300 bg-white/10 px-2.5 py-0.5 rounded-full">
+                  <MapPin className="w-3 h-3 text-[#c5a059]" /> Sirpur Town, Telangana
+                </span>
               </div>
-              <h3 className="text-base sm:text-xl font-extrabold text-white">
-                Tonkini & Sirpur 10-Span Major River Bridges
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-tight">
+                Mandal Revenue Office (MRO) Headquarters
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                High-capacity highway river bridge structures featuring multi-span pre-stressed concrete girders, underwater piling, and heavy pier protection.
+              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                Official Tahasildar administrative headquarters engineered for civic administration, land registry, and public revenue governance with robust reinforced concrete superstructure.
               </p>
+              <div className="pt-1 flex items-center gap-4">
+                <button
+                  onClick={() => handleNavigate('projects')}
+                  className="inline-flex items-center gap-2 text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group"
+                >
+                  <span>Explore Project Records</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* IMAGE 2: Boys Residential School (100 Columns) & KGBV Campuses */}
+          {/* IMAGE 2: ST Welfare Residential Hostel Complex */}
           <div
             ref={image2Ref}
             className="absolute inset-0 w-full h-full overflow-hidden z-20"
           >
             <img
-              src="/icon_school_campus.jpg"
-              alt="Boys Residential School & KGBV Academic Campus"
-              className="w-full h-full object-cover"
+              src="/icon_hostel_building.jpg"
+              alt="ST Welfare Residential Hostel Building & Security Gate"
+              className="w-full h-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/85 via-transparent to-[#07132c]/40 pointer-events-none" />
+            {/* Cinematic Gradient Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/30 to-[#07132c]/40 pointer-events-none" />
+            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#07132c]/80 to-transparent pointer-events-none" />
             
             {/* Floating Glassmorphic Badge 2 */}
             <div
               ref={badge2Ref}
-              className="absolute bottom-4 sm:bottom-10 left-3 right-3 sm:left-14 sm:right-auto z-50 p-4 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/60 text-white max-w-lg shadow-2xl space-y-1.5"
+              className="absolute bottom-6 sm:bottom-12 left-4 sm:left-12 lg:left-16 z-50 p-5 sm:p-7 rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-3"
             >
-              <div className="flex items-center gap-2 text-[#e5be6b] text-xs font-bold uppercase tracking-wider">
-                <Building2 className="w-4 h-4 text-[#e5be6b]" />
-                <span>02 / 05 • Educational & Hostels</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider">
+                  <Building2 className="w-3.5 h-3.5 text-[#e5be6b]" />
+                  02 / 05 • Welfare & Hostels
+                </span>
+                <span className="inline-flex items-center gap-1 text-[11px] text-slate-300 bg-white/10 px-2.5 py-0.5 rounded-full">
+                  <MapPin className="w-3 h-3 text-[#c5a059]" /> Sirpur Town, Telangana
+                </span>
               </div>
-              <h3 className="text-base sm:text-xl font-extrabold text-white">
-                Boys Residential School (100 Columns) & KGBV Campus
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-tight">
+                ST Welfare Residential Hostel Complex
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                100-column concrete structural frame academic campus, Kasturba KGBV residential quarters, minority welfare complexes, and student hostels.
+              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                Multi-capacity student welfare residential building engineered with security boundary walls, gated entry portico, spacious dormitories, and integrated student amenities.
               </p>
+              <div className="pt-1 flex items-center gap-4">
+                <button
+                  onClick={() => handleNavigate('projects')}
+                  className="inline-flex items-center gap-2 text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group"
+                >
+                  <span>Explore Project Records</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* IMAGE 3: MRO Administrative Headquarters & Integrated Markets */}
+          {/* IMAGE 3: Government High School Academic Complex & Assembly */}
           <div
             ref={image3Ref}
             className="absolute inset-0 w-full h-full overflow-hidden z-30"
           >
             <img
-              src="/icon_mro_headquarters.jpg"
-              alt="MRO Administrative Headquarters & Integrated Markets"
-              className="w-full h-full object-cover"
+              src="/icon_school_assembly.jpg"
+              alt="Government High School Campus & School Assembly Grounds"
+              className="w-full h-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/85 via-transparent to-[#07132c]/40 pointer-events-none" />
+            {/* Cinematic Gradient Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/30 to-[#07132c]/40 pointer-events-none" />
+            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#07132c]/80 to-transparent pointer-events-none" />
             
             {/* Floating Glassmorphic Badge 3 */}
             <div
               ref={badge3Ref}
-              className="absolute bottom-4 sm:bottom-10 left-3 right-3 sm:left-14 sm:right-auto z-50 p-4 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/60 text-white max-w-lg shadow-2xl space-y-1.5"
+              className="absolute bottom-6 sm:bottom-12 left-4 sm:left-12 lg:left-16 z-50 p-5 sm:p-7 rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-3"
             >
-              <div className="flex items-center gap-2 text-[#e5be6b] text-xs font-bold uppercase tracking-wider">
-                <ShieldCheck className="w-4 h-4 text-[#e5be6b]" />
-                <span>03 / 05 • Government & Civic</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider">
+                  <Users className="w-3.5 h-3.5 text-[#e5be6b]" />
+                  03 / 05 • Educational & Campuses
+                </span>
+                <span className="inline-flex items-center gap-1 text-[11px] text-slate-300 bg-white/10 px-2.5 py-0.5 rounded-full">
+                  <MapPin className="w-3 h-3 text-[#c5a059]" /> Sirpur Town, Telangana
+                </span>
               </div>
-              <h3 className="text-base sm:text-xl font-extrabold text-white">
-                MRO Headquarters & Integrated Municipal Markets
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-tight">
+                Government High School Academic Campus & Assembly
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Official Mandal Revenue Office (MRO) headquarters building, forest department blocks, agriculture offices, and 5 integrated market complexes.
+              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                Multi-wing academic campus featuring modern classrooms, shaded assembly courtyards, faculty wings, and sports grounds serving regional student education.
               </p>
+              <div className="pt-1 flex items-center gap-4">
+                <button
+                  onClick={() => handleNavigate('projects')}
+                  className="inline-flex items-center gap-2 text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group"
+                >
+                  <span>Explore Project Records</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* IMAGE 4: Sirpur Check Dam & Reinforced Box Culverts */}
+          {/* IMAGE 4: Institutional Dining Hall & Mess Facility */}
           <div
             ref={image4Ref}
             className="absolute inset-0 w-full h-full overflow-hidden z-40"
           >
             <img
-              src="/icon_check_dam.jpg"
-              alt="Sirpur Check Dam & Cross-Drainage Box Culverts"
-              className="w-full h-full object-cover"
+              src="/icon_dining_hall.jpg"
+              alt="Institutional Dining Hall & Campus Mess Facility"
+              className="w-full h-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/85 via-transparent to-[#07132c]/40 pointer-events-none" />
+            {/* Cinematic Gradient Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/30 to-[#07132c]/40 pointer-events-none" />
+            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#07132c]/80 to-transparent pointer-events-none" />
             
             {/* Floating Glassmorphic Badge 4 */}
             <div
               ref={badge4Ref}
-              className="absolute bottom-4 sm:bottom-10 left-3 right-3 sm:left-14 sm:right-auto z-50 p-4 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/60 text-white max-w-lg shadow-2xl space-y-1.5"
+              className="absolute bottom-6 sm:bottom-12 left-4 sm:left-12 lg:left-16 z-50 p-5 sm:p-7 rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-3"
             >
-              <div className="flex items-center gap-2 text-[#e5be6b] text-xs font-bold uppercase tracking-wider">
-                <CheckCircle2 className="w-4 h-4 text-[#e5be6b]" />
-                <span>04 / 05 • Hydraulic Infrastructure</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider">
+                  <Award className="w-3.5 h-3.5 text-[#e5be6b]" />
+                  04 / 05 • Institutional Dining
+                </span>
+                <span className="inline-flex items-center gap-1 text-[11px] text-slate-300 bg-white/10 px-2.5 py-0.5 rounded-full">
+                  <MapPin className="w-3 h-3 text-[#c5a059]" /> KB Asifabad Dist, Telangana
+                </span>
               </div>
-              <h3 className="text-base sm:text-xl font-extrabold text-white">
-                Sirpur Hydraulic Check Dam & 45+ Box Culverts
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-tight">
+                Institutional Dining Hall & Nutrition Facility
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Stream flow diversion check dams, water spillways, pile foundation jacketing, and 45+ reinforced concrete highway box culvert bridges.
+              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                Dedicated large-format campus dining hall facility engineered with hygienic food prep kitchens, paved approach pathways, ventilation, and landscaped facades.
               </p>
+              <div className="pt-1 flex items-center gap-4">
+                <button
+                  onClick={() => handleNavigate('projects')}
+                  className="inline-flex items-center gap-2 text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group"
+                >
+                  <span>Explore Project Records</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* IMAGE 5: IIT Industrial Structural Steel Sheds */}
+          {/* IMAGE 5: Modern Student Dormitory Complex */}
           <div
             ref={image5Ref}
             className="absolute inset-0 w-full h-full overflow-hidden z-50"
           >
             <img
-              src="/icon_industrial_shed.jpg"
-              alt="IIT Industrial Pre-Engineered Structural Steel Sheds"
-              className="w-full h-full object-cover"
+              src="/icon_dormitory.jpg"
+              alt="Modern Student Dormitory & Residential Quarters"
+              className="w-full h-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/85 via-transparent to-[#07132c]/40 pointer-events-none" />
+            {/* Cinematic Gradient Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/30 to-[#07132c]/40 pointer-events-none" />
+            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#07132c]/80 to-transparent pointer-events-none" />
             
             {/* Floating Glassmorphic Badge 5 */}
             <div
               ref={badge5Ref}
-              className="absolute bottom-4 sm:bottom-10 left-3 right-3 sm:left-14 sm:right-auto z-50 p-4 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/60 text-white max-w-lg shadow-2xl space-y-1.5"
+              className="absolute bottom-6 sm:bottom-12 left-4 sm:left-12 lg:left-16 z-50 p-5 sm:p-7 rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-3"
             >
-              <div className="flex items-center gap-2 text-[#e5be6b] text-xs font-bold uppercase tracking-wider">
-                <Sparkles className="w-4 h-4 text-[#e5be6b]" />
-                <span>05 / 05 • Industrial Sheds & Steel</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider">
+                  <HardHat className="w-3.5 h-3.5 text-[#e5be6b]" />
+                  05 / 05 • Student Housing & Dormitories
+                </span>
+                <span className="inline-flex items-center gap-1 text-[11px] text-slate-300 bg-white/10 px-2.5 py-0.5 rounded-full">
+                  <MapPin className="w-3 h-3 text-[#c5a059]" /> KB Asifabad Dist, Telangana
+                </span>
               </div>
-              <h3 className="text-base sm:text-xl font-extrabold text-white">
-                IIT Industrial Pre-Engineered Steel Sheds
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-tight">
+                Modern Student Dormitory & Residential Quarters
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                High-span structural steel warehouse sheds, industrial facilities, heavy multi-storey RCC column framing, and fast-track pre-engineered sheds.
+              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                Heavy reinforced concrete student dormitory building engineered with cross-ventilation, student lodging rooms, secure access corridors, and durable weather-resistant joinery.
               </p>
+              <div className="pt-1 flex items-center gap-4">
+                <button
+                  onClick={() => handleNavigate('projects')}
+                  className="inline-flex items-center gap-2 text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group"
+                >
+                  <span>Explore Project Records</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </div>
+          </div>
+
+          {/* Floating Fullscreen Scroll Cue & Pill */}
+          <div className="hidden md:flex items-center gap-2 absolute top-8 right-8 z-50 px-4 py-2 rounded-full bg-[#07132c]/80 backdrop-blur-md border border-[#c5a059]/30 text-white/90 text-xs font-semibold shadow-lg">
+            <span className="w-2 h-2 rounded-full bg-[#c5a059] animate-pulse" />
+            <span>Scroll To Explore 5 Signature Projects</span>
           </div>
 
         </div>
@@ -1011,39 +1097,45 @@ export default function App() {
               {
                 title: "Bridges &\nSubstructures",
                 tag: "STRONGER CONNECTIONS",
-                image: "/icon_river_bridge.jpg",
-                desc: "Tonkini & Sirpur 10-span river bridges, pile foundations, pier jacketing & 25 box bridges."
+                image: "/icon_tonkini_10span_bridge.jpg",
+                desc: "Tonkini & Sirpur 10-span river bridges, pile foundations, pier jacketing & 25 box bridges.",
+                projects: ["Tonkini 10-Span Bridge", "Sirpur 10-Span Bridge", "Rasply 7-Span Bridge", "Kondapally 6-Span Bridge", "Dubbaguda 3-Span Bridge", "25 Box Bridges (Porsa)"]
               },
               {
                 title: "Educational &\nHostels",
                 tag: "SPACES FOR BRIGHTER FUTURES",
-                image: "/icon_school_campus.jpg",
-                desc: "100-column residential schools, Kasturba KGBV campuses & student hostels."
+                image: "/icon_school_assembly.jpg",
+                desc: "100-column residential schools, Kasturba KGBV campuses & student hostels.",
+                projects: ["Boys Residential School (100 Columns)", "High School Building – 2010", "Jyotiba Phule Building", "Minority Residential Building", "Kasturba KGBV Campus", "ST Hostel Building – 2009"]
               },
               {
                 title: "Government &\nCivic Works",
                 tag: "INFRASTRUCTURE FOR PEOPLE",
-                image: "/icon_mro_headquarters.jpg",
-                desc: "MRO office headquarters, forest department offices & 5 integrated market complexes."
+                image: "/icon_tahasildar_mro.jpg",
+                desc: "MRO office headquarters, forest department offices & 5 integrated market complexes.",
+                projects: ["MRO Office Building – 2008", "Agriculture Building (Mancherial)", "Forest Range Office (Penchikalpet)", "Integrated Market Buildings (5 Nos.)", "Three-Floor Buildings (16 Nos.)"]
               },
               {
                 title: "Hydraulic\nInfrastructure",
                 tag: "SUSTAINABLE WATER SOLUTIONS",
-                image: "/icon_check_dam.jpg",
-                desc: "Sirpur stream diversion check dams & 45+ reinforced highway box culverts."
+                image: "/icon_overflow_check_dam.jpg",
+                desc: "Sirpur stream diversion check dams & 45+ reinforced highway box culverts.",
+                projects: ["Sirpur Stream Check Dam", "10-Unit Culverts Network", "20 Box Culverts (Gadchiroli)", "High-Discharge Box Culverts"]
               },
               {
                 title: "Industrial Sheds\n& Steel",
                 tag: "PRECISION ENGINEERING",
-                image: "/icon_industrial_shed.jpg",
-                desc: "Pre-engineered structural steel sheds (IIT Asifabad) & heavy warehouses."
+                image: "/icon_industrial_steel_sheds.jpg",
+                desc: "Pre-engineered structural steel sheds (IIT Asifabad) & heavy warehouses.",
+                projects: ["IIT Industrial Sheds (KB Asifabad)", "Structural Steel Fabrication Bays", "Heavy Gantry Crane Runways"]
               }
             ].slice(0, showAllExpertise ? 5 : 2).map((exp, idx) => (
               <div
                 key={idx}
+                onClick={() => handleNavigate('expertise')}
                 data-aos="fade-up"
                 data-aos-delay={idx * 120}
-                className="relative h-[380px] sm:h-[460px] rounded-none overflow-hidden shadow-lg group cursor-pointer border border-slate-200/60 hover:shadow-2xl transition-all duration-500 flex flex-col justify-end"
+                className="relative h-[420px] sm:h-[480px] rounded-none overflow-hidden shadow-lg group cursor-pointer border border-slate-200/60 hover:shadow-2xl transition-all duration-500 flex flex-col justify-end"
               >
                 {/* Background Full Cover Image */}
                 <img
@@ -1053,7 +1145,7 @@ export default function App() {
                 />
 
                 {/* Dark Vignette Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/40 to-transparent group-hover:from-[#07132c]/98 group-hover:via-[#07132c]/60 transition-colors duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/55 to-transparent group-hover:from-[#07132c]/98 group-hover:via-[#07132c]/70 transition-colors duration-500" />
 
                 {/* Content Area */}
                 <div className="relative z-10 p-5 sm:p-7 flex flex-col justify-end h-full">
@@ -1070,6 +1162,29 @@ export default function App() {
                     <span className="text-[10px] font-extrabold text-slate-200 uppercase tracking-widest block drop-shadow">
                       {exp.tag}
                     </span>
+
+                    <p className="text-[11px] text-slate-300 line-clamp-2 pt-1 font-normal leading-relaxed">
+                      {exp.desc}
+                    </p>
+
+                    {/* Preview of Projects Included */}
+                    <div className="pt-2 hidden sm:block">
+                      <span className="text-[9px] font-bold text-[#e5be6b] uppercase tracking-wider block mb-1">
+                        Projects Under This Discipline:
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {exp.projects.slice(0, 3).map((p, pIdx) => (
+                          <span key={pIdx} className="text-[9px] px-2 py-0.5 rounded bg-white/10 text-white/90 border border-white/15 backdrop-blur-sm truncate max-w-[200px]">
+                            • {p}
+                          </span>
+                        ))}
+                        {exp.projects.length > 3 && (
+                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#c5a059]/30 text-[#e5be6b] font-bold">
+                            +{exp.projects.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
 
                   {/* Circular Arrow Button (Bottom Right) */}
@@ -1110,7 +1225,7 @@ export default function App() {
                 Our Projects
               </h2>
               <p className="text-xs sm:text-base text-slate-300 max-w-2xl mx-auto md:mx-0 leading-relaxed">
-                Featured 6 major civil and building projects executed across Sirpur Town &amp; Kumuram Bheem Asifabad District, Telangana.
+                Featured signature civil and building projects executed across Sirpur Town &amp; Kumuram Bheem Asifabad District, Telangana.
               </p>
             </div>
           </div>

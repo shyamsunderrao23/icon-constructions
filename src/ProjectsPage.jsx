@@ -8,278 +8,423 @@ import {
 } from 'lucide-react';
 
 const allProjectsData = [
+  // ── OFFICIAL 25 CLIENT BENCHMARK PROJECTS (EXACT S.NO. 1 TO 25) ──
   {
     id: 1,
-    title: "Administrative Block & Revenue Complex",
-    alphabetLetter: "A",
+    officialSno: "01",
+    title: "MRO Office Building – 2008",
+    alphabetLetter: "M",
     category: "civic",
     categoryName: "Government & Civic",
-    image: "/icon_mro_headquarters.jpg",
+    image: "/icon_tahasildar_mro.jpg",
     location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
-    scale: "Mandal Revenue Administrative Wing",
-    year: "2011",
+    scale: "Mandal Revenue Administrative Headquarters",
+    year: "2008",
     status: "Completed",
-    description: "Multi-tiered administrative complex engineered for district revenue coordination, citizen service desks, and municipal administration with heavy reinforced framing."
+    description: "Official Mandal Revenue Office (MRO) headquarters engineered for public administration, revenue registry, citizen service halls, and permanent government records."
   },
   {
     id: 2,
-    title: "Boys Residential School – 100 Columns",
-    alphabetLetter: "B",
+    officialSno: "02",
+    title: "ST Hostel Building – 2009",
+    alphabetLetter: "S",
     category: "educational",
-    categoryName: "Educational & Campuses",
-    image: "/icon_school_campus.jpg",
-    location: "Near Sirpur Police Station, Sirpur Town, Telangana",
-    scale: "100-Column Heavy RCC Structural Framework",
-    year: "Completed",
+    categoryName: "Educational & Hostels",
+    image: "/icon_hostel_building.jpg",
+    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
+    scale: "ST Student Residential Hostel & Gated Campus",
+    year: "2009",
     status: "Completed",
-    description: "High-capacity institutional campus featuring a massive 100-column concrete frame, academic lecture halls, library wings, and sports grounds serving tribal youth."
+    description: "Dedicated Scheduled Tribe Welfare student residential hostel facility providing secure housing, security perimeter gates, study rooms, and hygienic cafeteria."
   },
   {
     id: 3,
-    title: "Culverts – 10 Nos. Drainage Network",
+    officialSno: "03",
+    title: "High School Building – 2010",
+    alphabetLetter: "H",
+    category: "educational",
+    categoryName: "Educational & Campuses",
+    image: "/icon_school_assembly.jpg",
+    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
+    scale: "Multi-Story Academic High School & Assembly",
+    year: "2010",
+    status: "Completed",
+    description: "Multi-story government high school academic building featuring modern laboratories, central assembly courtyard, ventilated lecture halls, and all-weather exterior weatherproofing."
+  },
+  {
+    id: 4,
+    officialSno: "04",
+    title: "Culverts – 10 Nos.",
     alphabetLetter: "C",
     category: "infrastructure",
     categoryName: "Hydraulic Infrastructure",
-    image: "/icon_check_dam.jpg",
-    location: "Kumuram Bheem Asifabad Highway Corridor, Telangana",
-    scale: "10 Reinforced RCC Box Culverts",
+    image: "/icon_4cell_box_culvert.jpg",
+    location: "Kumuram Bheem Asifabad District, Telangana",
+    scale: "10 Reinforced Concrete Box Culverts Network",
     year: "Completed",
     status: "Completed",
     description: "Strategic hydraulic engineering consisting of 10 heavy reinforced box culverts constructed to withstand torrential monsoon flash floods across the district highway network."
   },
   {
-    id: 4,
-    title: "District Collectorate Sub-Divisional Wing",
-    alphabetLetter: "D",
-    category: "civic",
-    categoryName: "Government & Civic",
-    image: "/icon_mro_headquarters.jpg",
-    location: "Asifabad District Headquarters, Telangana",
-    scale: "Sub-Collector Administrative Headquarters",
-    year: "2014",
-    status: "Completed",
-    description: "Executive administrative offices designed with high-security perimeters, conference halls, and digital record archives for district governance."
-  },
-  {
     id: 5,
-    title: "Engineering Workshop & Equipment Yard",
-    alphabetLetter: "E",
-    category: "industrial",
-    categoryName: "Industrial & Campuses",
-    image: "/icon_industrial_shed.jpg",
-    location: "Sirpur Industrial Zone, Telangana",
-    scale: "Industrial Heavy Fabrication Facility",
-    year: "2017",
+    officialSno: "05",
+    title: "Boys Residential School – 100 Columns",
+    alphabetLetter: "B",
+    category: "educational",
+    categoryName: "Educational & Campuses",
+    image: "/icon_school_campus.jpg",
+    location: "Near Sirpur Police Station, Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
+    scale: "100-Column Heavy RCC Structural Frame",
+    year: "Completed",
     status: "Completed",
-    description: "Pre-engineered structural steel industrial shed featuring high-clearance overhead crane tracks, reinforced concrete apron flooring, and heavy machinery bays."
+    description: "High-capacity institutional campus featuring a massive 100-column concrete frame, academic lecture halls, library wings, and sports grounds serving tribal youth."
   },
   {
     id: 6,
-    title: "Forest Department Divisional Headquarters",
-    alphabetLetter: "F",
-    category: "civic",
-    categoryName: "Government & Civic",
-    image: "/icon_mro_headquarters.jpg",
-    location: "Kagaznagar - Sirpur Forest Range, Telangana",
-    scale: "Forest Conservation & Divisional Office",
-    year: "2016",
-    status: "Completed",
-    description: "Eco-integrated administrative building designed for the Telangana Forest Department, including wildlife monitoring command hubs and field officer facilities."
-  },
-  {
-    id: 7,
-    title: "Girls Hostel Building – KGBV Campus",
+    officialSno: "06",
+    title: "Girls Hostel Building",
     alphabetLetter: "G",
     category: "educational",
     categoryName: "Educational & Hostels",
-    image: "/icon_waterfront_estate.jpg",
+    image: "/icon_dining_hall.jpg",
     location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
-    scale: "KGBV Residential Student Campus",
+    scale: "Residential Hostels & Modern Dining Mess",
     year: "Completed",
     status: "Completed",
-    description: "State-of-the-art government residential campus for girls, providing secure lodging, study lounges, hygiene sanitation systems, and modern dining quarters."
+    description: "State-of-the-art government residential campus for girls, providing secure lodging, study lounges, modern dining hall, and hygiene sanitation systems."
+  },
+  {
+    id: 7,
+    officialSno: "07",
+    title: "Dubbaguda – 3 Span Bridge",
+    alphabetLetter: "D",
+    category: "infrastructure",
+    categoryName: "Bridges & Substructures",
+    image: "/icon_river_bridge_concrete.jpg",
+    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
+    scale: "3-Span Reinforced Concrete River Bridge",
+    year: "Completed",
+    status: "Completed",
+    description: "3-span reinforced concrete river crossing engineered with heavy submerged circular pier bents and durable crash barriers over flowing river beds."
   },
   {
     id: 8,
-    title: "High School Academic Complex – 2010",
-    alphabetLetter: "H",
-    category: "educational",
-    categoryName: "Educational & Campuses",
-    image: "/icon_skybridge_resort.jpg",
-    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
-    scale: "Multi-Story Academic High School",
-    year: "2010",
-    status: "Completed",
-    description: "Multi-story government high school academic building featuring modern laboratories, ventilated lecture halls, and all-weather exterior weatherproofing."
-  },
-  {
-    id: 9,
-    title: "Integrated Veg & Meat Modern Market Complex",
-    alphabetLetter: "I",
-    category: "civic",
-    categoryName: "Government & Civic",
-    image: "/icon_mro_headquarters.jpg",
-    location: "Sirpur Town Central Market Hub, Telangana",
-    scale: "Multi-Zone Municipal Wholesale Market",
-    year: "2018",
-    status: "Completed",
-    description: "Sanitary municipal retail and wholesale commercial facility featuring segregated sections, underground drainage systems, and automated cold-storage provisions."
-  },
-  {
-    id: 10,
-    title: "KGBV Model Residential School Campus",
-    alphabetLetter: "K",
-    category: "educational",
-    categoryName: "Educational & Hostels",
-    image: "/icon_school_campus.jpg",
-    location: "Kouthala Mandal, Kumuram Bheem District, Telangana",
-    scale: "Model High School & Hostels",
-    year: "2015",
-    status: "Completed",
-    description: "Comprehensive educational complex constructed under tribal development initiatives with dedicated faculty housing, science laboratories, and library facilities."
-  },
-  {
-    id: 11,
-    title: "Landmark Commercial Office Tower",
-    alphabetLetter: "L",
-    category: "industrial",
-    categoryName: "Industrial & Campuses",
-    image: "/icon_landmark_tower.jpg",
-    location: "Regional Commercial Corridor, Telangana",
-    scale: "G+7 Grade-A Commercial Landmark",
-    year: "2019",
-    status: "Completed",
-    description: "Modern commercial tower with glass curtain facade, energy-efficient HVAC engineering, and multi-level parking for corporate tenants and government offices."
-  },
-  {
-    id: 12,
-    title: "MRO Office Building – 2008",
-    alphabetLetter: "M",
-    category: "civic",
-    categoryName: "Government & Civic",
-    image: "/icon_mro_headquarters.jpg",
-    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
-    scale: "MRO Administrative Headquarters",
-    year: "2008",
-    status: "Completed",
-    description: "Official Mandal Revenue Office headquarters engineered for public administration, revenue registry, citizen service halls, and permanent government records."
-  },
-  {
-    id: 13,
-    title: "Modern Industrial Manufacturing Megahub",
-    alphabetLetter: "M",
-    category: "industrial",
-    categoryName: "Industrial & Campuses",
-    image: "/icon_industrial_megahub.jpg",
-    location: "Kumuram Bheem Industrial Corridor, Telangana",
-    scale: "High-Bay Industrial Production Facility",
-    year: "2022",
-    status: "Completed",
-    description: "Heavy-duty manufacturing complex spanning extensive square footage, engineered for heavy robotics, overhead gantry cranes, and continuous logistical flow."
-  },
-  {
-    id: 14,
-    title: "Panchayat Raj Community Hall",
-    alphabetLetter: "P",
-    category: "civic",
-    categoryName: "Government & Civic",
-    image: "/icon_mro_headquarters.jpg",
-    location: "Dahegaon Mandal, Asifabad District, Telangana",
-    scale: "Civic Gathering & Assembly Hall",
-    year: "2013",
-    status: "Completed",
-    description: "Large span civic assembly facility with acoustic ceiling treatments, public dais, and community training centers serving rural regional councils."
-  },
-  {
-    id: 15,
-    title: "Regional Stream Check Dam & Retaining Walls",
-    alphabetLetter: "R",
-    category: "infrastructure",
-    categoryName: "Hydraulic Infrastructure",
-    image: "/icon_check_dam.jpg",
-    location: "Vattivagu Stream Basin, Asifabad District, Telangana",
-    scale: "Water Storage & Stream Check Dam",
-    year: "Completed",
-    status: "Completed",
-    description: "Gravity masonry and reinforced concrete check dam with spillway gates designed to recharge underground aquifers and ensure year-round rural water availability."
-  },
-  {
-    id: 16,
-    title: "ST Hostel Building – 2009",
-    alphabetLetter: "S",
-    category: "educational",
-    categoryName: "Educational & Hostels",
-    image: "/icon_landmark_tower.jpg",
-    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
-    scale: "ST Student Residential Hostel",
-    year: "2009",
-    status: "Completed",
-    description: "Dedicated Scheduled Tribe Welfare student residential hostel facility providing secure housing, solar water heating, study rooms, and hygienic cafeteria."
-  },
-  {
-    id: 17,
-    title: "Skybridge Institutional Academic Center",
-    alphabetLetter: "S",
-    category: "educational",
-    categoryName: "Educational & Campuses",
-    image: "/icon_skybridge_resort.jpg",
-    location: "Kumuram Bheem District, Telangana",
-    scale: "Connected Dual-Wing Academic Campus",
-    year: "2020",
-    status: "Completed",
-    description: "Architectural campus featuring an elevated structural steel skybridge linking administrative and academic wings with seismic-resistant construction."
-  },
-  {
-    id: 18,
-    title: "Tonkini 10-Span High-Level River Bridge",
+    officialSno: "08",
+    title: "Tonkini – 10 Span Bridge",
     alphabetLetter: "T",
     category: "infrastructure",
-    categoryName: "Hydraulic Infrastructure",
-    image: "/icon_river_bridge.jpg",
-    location: "Tonkini River Crossing, Sirpur Region, Telangana",
+    categoryName: "Bridges & Substructures",
+    image: "/icon_tonkini_10span_bridge.jpg",
+    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
     scale: "10-Span Major Pre-Stressed Concrete Bridge",
     year: "Completed",
     status: "Completed",
     description: "Critical regional arterial bridge spanning 10 high-strength prestressed concrete spans over river Tonkini, built on deep pile foundations for all-weather connectivity."
   },
   {
+    id: 9,
+    officialSno: "09",
+    title: "Navegaon – 2 Span Bridge",
+    alphabetLetter: "N",
+    category: "infrastructure",
+    categoryName: "Bridges & Substructures",
+    image: "/icon_2cell_box_bridge.jpg",
+    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
+    scale: "2-Span Reinforced Concrete Highway Bridge",
+    year: "Completed",
+    status: "Completed",
+    description: "2-span heavy-duty reinforced concrete highway bridge with stone masonry retaining wing walls and high-volume water passage."
+  },
+  {
+    id: 10,
+    officialSno: "10",
+    title: "Pile Foundation & Jacketing – Gudem Bridge",
+    alphabetLetter: "P",
+    category: "infrastructure",
+    categoryName: "Bridges & Substructures",
+    image: "/icon_pier_jacketing_bridge.jpg",
+    location: "Gudem, Telangana",
+    scale: "Deep Bored Piles & Pier Jacketing Retrofitting",
+    year: "Completed",
+    status: "Completed",
+    description: "Specialized hydraulic substructure retrofitting, circular RCC pier jacketing with heavy reinforcement cages, and deep underwater pile foundation casting in river currents."
+  },
+  {
+    id: 11,
+    officialSno: "11",
+    title: "Check Dam",
+    alphabetLetter: "C",
+    category: "infrastructure",
+    categoryName: "Hydraulic Infrastructure",
+    image: "/icon_overflow_check_dam.jpg",
+    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
+    scale: "Gravity Concrete Overflow Check Dam & Spillway",
+    year: "Completed",
+    status: "Completed",
+    description: "Stream water conservation check dam engineered with reinforced concrete overflow spillway, stone apron riprap, and groundwater recharge basins."
+  },
+  {
+    id: 12,
+    officialSno: "12",
+    title: "Rasply – 7 Span Bridge",
+    alphabetLetter: "R",
+    category: "infrastructure",
+    categoryName: "Bridges & Substructures",
+    image: "/icon_8span_river_bridge.jpg",
+    location: "Kumuram Bheem Asifabad District, Telangana",
+    scale: "7-Span High-Capacity River Bridge",
+    year: "Completed",
+    status: "Completed",
+    description: "7-span reinforced concrete river bridge engineered on heavy submerged pier bents, providing high-load connectivity over wide regional riverbeds."
+  },
+  {
+    id: 13,
+    officialSno: "13",
+    title: "Sirpur – 10 Span Bridge",
+    alphabetLetter: "S",
+    category: "infrastructure",
+    categoryName: "Bridges & Substructures",
+    image: "/icon_tonkini_10span_bridge.jpg",
+    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
+    scale: "10-Span High-Level Major River Crossing",
+    year: "Completed",
+    status: "Completed",
+    description: "Monumental 10-span high-level major river bridge constructed with pre-stressed concrete girders and heavy load-bearing abutments across Sirpur river basin."
+  },
+  {
+    id: 14,
+    officialSno: "14",
+    title: "Bridge with 6 Spans – Kondapally",
+    alphabetLetter: "B",
+    category: "infrastructure",
+    categoryName: "Bridges & Substructures",
+    image: "/icon_girder_channel_bridge.jpg",
+    location: "Kondapally, Kumuram Bheem Asifabad District, Telangana",
+    scale: "6-Span Composite Girder Bridge",
+    year: "Completed",
+    status: "Completed",
+    description: "6-span composite steel and concrete bridge with heavy stone-pitched embankment retaining walls, riprap scour protection, and heavy pier substructures."
+  },
+  {
+    id: 15,
+    officialSno: "15",
+    title: "Jyotiba Phule Building",
+    alphabetLetter: "J",
+    category: "educational",
+    categoryName: "Educational & Campuses",
+    image: "/icon_mjp_residential_school.jpg",
+    location: "Kagaznagar, Kumuram Bheem Asifabad District, Telangana",
+    scale: "Three-Story Model Residential Campus",
+    year: "Completed",
+    status: "Completed",
+    description: "Mahatma Jyotiba Phule (MJP) three-story government residential educational complex with entrance portico, academic lecture wings, science laboratories, and student lodging."
+  },
+  {
+    id: 16,
+    officialSno: "16",
+    title: "Minority Residential Building",
+    alphabetLetter: "M",
+    category: "educational",
+    categoryName: "Educational & Campuses",
+    image: "/icon_minority_residential_school.jpg",
+    location: "Balagalla, Kumuram Bheem Asifabad District, Telangana",
+    scale: "Three-Story Multi-Wing Residential Campus",
+    year: "Completed",
+    status: "Completed",
+    description: "Telangana Minority Residential Educational Society institutional campus with entrance portico, boundary enclosure, student classrooms, laboratories, and hostel wings."
+  },
+  {
+    id: 17,
+    officialSno: "17",
+    title: "IIT Sheds",
+    alphabetLetter: "I",
+    category: "industrial",
+    categoryName: "Industrial Sheds & Steel",
+    image: "/icon_industrial_steel_sheds.jpg",
+    location: "Kumuram Bheem Asifabad District, Telangana",
+    scale: "Pre-Engineered Structural Steel Workshop Sheds",
+    year: "Completed",
+    status: "Completed",
+    description: "Heavy-duty structural steel workshop sheds featuring multi-bay open entries, overhead gantry crane tracks, concrete aprons, and industrial machinery bays."
+  },
+  {
+    id: 18,
+    officialSno: "18",
+    title: "Three-Floor Buildings – 16 Nos.",
+    alphabetLetter: "T",
+    category: "residential",
+    categoryName: "Government & Civic / Residential",
+    image: "/icon_staff_quarters_apartments.jpg",
+    location: "Ramagundam, Telangana",
+    scale: "16 Blocks of G+2 Multi-Story Residential Quarters",
+    year: "Completed",
+    status: "Completed",
+    description: "16 blocks of three-floor (G+2) residential staff apartments featuring external stairwells, private balconies, gated boundary walls, and durable RCC construction."
+  },
+  {
     id: 19,
-    title: "Veterinary Hospital & Research Wing",
-    alphabetLetter: "V",
+    officialSno: "19",
+    title: "Integrated Market Buildings – 5 Nos.",
+    alphabetLetter: "I",
     category: "civic",
     categoryName: "Government & Civic",
-    image: "/icon_mro_headquarters.jpg",
-    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
-    scale: "District Animal Care Hospital",
-    year: "2021",
+    image: "/icon_administrative_block.jpg",
+    location: "Mancherial, Mancherial District, Telangana",
+    scale: "5 Municipal Integrated Market Complexes",
+    year: "Completed",
     status: "Completed",
-    description: "Government veterinary medical facility equipped with clinical surgical suites, diagnostics, medicine dispensaries, and livestock care barns."
+    description: "5 comprehensive integrated vegetable and meat municipal wholesale market facilities featuring segregated zones, underground drainage systems, and loading bays."
   },
   {
     id: 20,
-    title: "Water Supply Overhead RCC Reservoir",
-    alphabetLetter: "W",
-    category: "infrastructure",
-    categoryName: "Hydraulic Infrastructure",
-    image: "/icon_check_dam.jpg",
-    location: "Asifabad Rural Water Grid, Telangana",
-    scale: "Elevated Water Balancing Reservoir (ELSR)",
-    year: "2012",
+    officialSno: "20",
+    title: "Kasturba KGBV Building",
+    alphabetLetter: "K",
+    category: "educational",
+    categoryName: "Educational & Hostels",
+    image: "/icon_kgbv_residential_campus.jpg",
+    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
+    scale: "Kasturba Gandhi Balika Vidyalaya Residential Complex",
+    year: "Completed",
     status: "Completed",
-    description: "Elevated high-capacity water balancing reservoir engineered with reinforced concrete staging and specialized food-grade internal waterproofing."
+    description: "KGBV residential school and dormitory complex with architectural detailing, paved courtyard approaches, student recreation grounds, and high-security perimeter."
   },
   {
     id: 21,
-    title: "Zilla Parishad High School Science Wing",
-    alphabetLetter: "Z",
+    officialSno: "21",
+    title: "Box Culverts – 20 Nos.",
+    alphabetLetter: "B",
+    category: "infrastructure",
+    categoryName: "Hydraulic Infrastructure",
+    image: "/icon_5cell_box_culvert.jpg",
+    location: "Gadchiroli, Maharashtra",
+    scale: "20 High-Discharge Reinforced Box Culverts",
+    year: "Completed",
+    status: "Completed",
+    description: "Network of 20 high-discharge reinforced concrete box culvert bridge structures designed for heavy flood flows, all-weather highway traffic clearance, and anti-scour stone pitching."
+  },
+  {
+    id: 22,
+    officialSno: "22",
+    title: "Box Bridges – 25 Nos.",
+    alphabetLetter: "B",
+    category: "infrastructure",
+    categoryName: "Bridges & Substructures",
+    image: "/icon_4cell_box_culvert.jpg",
+    location: "Porsa, Maharashtra",
+    scale: "25 Reinforced Concrete Highway Box Bridges",
+    year: "Completed",
+    status: "Completed",
+    description: "25 reinforced concrete box bridges engineered for highway cross-drainage, extreme hydraulic discharge, and long-term structural durability across regional corridors."
+  },
+  {
+    id: 23,
+    officialSno: "23",
+    title: "Forest Office Building",
+    alphabetLetter: "F",
+    category: "civic",
+    categoryName: "Government & Civic",
+    image: "/icon_forest_range_office.jpg",
+    location: "Penchikalpet, Kumuram Bheem Asifabad District, Telangana",
+    scale: "Forest Range Administrative Office Headquarters",
+    year: "Completed",
+    status: "Completed",
+    description: "Official administrative headquarters and forest range office for the Telangana Forest Department (అటవీ రేంజ్ అధికారి కార్యాలయం), engineered with public service desks and security markers."
+  },
+  {
+    id: 24,
+    officialSno: "24",
+    title: "Girls School Buildings – 2 Nos.",
+    alphabetLetter: "G",
     category: "educational",
     categoryName: "Educational & Campuses",
-    image: "/icon_school_campus.jpg",
+    image: "/icon_tswrdc_girls_arch.jpg",
+    location: "Kumuram Bheem Asifabad District, Telangana",
+    scale: "2 Signature Institutional Academic Wings & Grand Porticos",
+    year: "Completed",
+    status: "Completed",
+    description: "2 government institutional girls school academic complexes engineered with monumental entrance arches, ventilated lecture halls, science labs, and secure boundary perimeter."
+  },
+  {
+    id: 25,
+    officialSno: "25",
+    title: "Agriculture Building",
+    alphabetLetter: "A",
+    category: "civic",
+    categoryName: "Government & Civic",
+    image: "/icon_agriculture_dept_mancherial.jpg",
+    location: "Mancherial, Telangana",
+    scale: "Agriculture Department Administrative Headquarters",
+    year: "Completed",
+    status: "Completed",
+    description: "Official district agricultural department headquarters complex (వ్యవసాయశాఖ కార్యాలయం) featuring farmer service halls, administrative chambers, and security perimeter."
+  },
+
+  // ── ADDITIONAL SIGNATURE LANDMARK ACADEMIC & CIVIC EXTENSIONS ──
+  {
+    id: 26,
+    title: "TSWR Residential School & Junior College (Boys)",
+    alphabetLetter: "T",
+    category: "educational",
+    categoryName: "Educational & Campuses",
+    image: "/icon_tswrs_campus.jpg",
     location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
-    scale: "Advanced Physics & Chemistry Labs",
+    scale: "TSWRS/JC(B) Institutional Campus",
     year: "2012",
     status: "Completed",
-    description: "Modern educational annex featuring specialized biology, chemistry, and computer laboratories built to state secondary education benchmarks."
+    description: "Telangana Social Welfare Residential School and Junior College for Boys campus with grand entrance portico, administrative chambers, and student academic wings."
+  },
+  {
+    id: 27,
+    title: "Academic Classroom Corridor & Art Education Wing",
+    alphabetLetter: "A",
+    category: "educational",
+    categoryName: "Educational & Campuses",
+    image: "/icon_corridor_academic.jpg",
+    location: "Sirpur Town Educational Complex, Telangana",
+    scale: "Dual-Wing Academic Corridor & Art Department",
+    year: "Completed",
+    status: "Completed",
+    description: "Spacious tiled institutional classroom corridors with tri-color pillars, natural ventilation, art education department, and landscaped inner courtyard."
+  },
+  {
+    id: 28,
+    title: "School Main Academic Quadrangle & Campus Facade",
+    alphabetLetter: "S",
+    category: "educational",
+    categoryName: "Educational & Campuses",
+    image: "/icon_school_front_campus.jpg",
+    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
+    scale: "Full-Length Institutional Academic Wing",
+    year: "Completed",
+    status: "Completed",
+    description: "Long-span institutional school facade with green perimeter canopy, student gathering grounds, and integrated administrative chambers."
+  },
+  {
+    id: 29,
+    title: "New Dormitory Block & Residential Facility",
+    alphabetLetter: "N",
+    category: "educational",
+    categoryName: "Educational & Hostels",
+    image: "/icon_new_dormitory_block.jpg",
+    location: "Kumuram Bheem Asifabad District, Telangana",
+    scale: "Reinforced RCC Dormitory Wing",
+    year: "Completed",
+    status: "Completed",
+    description: "Modern single-story residential dormitory block engineered with weatherproofing, cross-ventilation, student living quarters, and landscaped approach."
+  },
+  {
+    id: 30,
+    title: "Campus Central Avenue & Infrastructure Pathway",
+    alphabetLetter: "C",
+    category: "infrastructure",
+    categoryName: "Infrastructure & Campuses",
+    image: "/icon_campus_avenue.jpg",
+    location: "Sirpur Town Regional Campus, Telangana",
+    scale: "Paved Internal Arterial Road & Campus Avenue",
+    year: "Completed",
+    status: "Completed",
+    description: "Heavy-duty paved arterial roadway connecting institutional wings, student residential blocks, and lush green landscaped grounds."
   }
 ];
 
@@ -647,7 +792,12 @@ export default function ProjectsPage({ onNavigate, onBack }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
 
                 {/* Top Badges */}
-                <div className="absolute top-6 left-6 z-10">
+                <div className="absolute top-6 left-6 z-10 flex items-center gap-2">
+                  {project.officialSno && (
+                    <span className="px-3 py-2 rounded-none bg-[#c5a059] text-[#07132c] text-xs font-black tracking-wider uppercase shadow-md">
+                      #{project.officialSno}
+                    </span>
+                  )}
                   <span className="px-4 py-2 rounded-none bg-[#07132c]/90 text-[#e5be6b] text-xs font-black uppercase tracking-widest border border-[#c5a059]/40 backdrop-blur-md">
                     {project.categoryName}
                   </span>
@@ -704,11 +854,18 @@ export default function ProjectsPage({ onNavigate, onBack }) {
                 <X className="w-5 h-5" />
               </button>
 
-              <div className="absolute bottom-4 left-6 right-6 text-white">
-                <span className="px-3 py-1 rounded-none bg-[#c5a059] text-[#07132c] text-xs font-black uppercase tracking-widest">
-                  {selectedProjectModal.categoryName}
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-serif font-black text-white mt-2 leading-tight">
+              <div className="absolute bottom-4 left-6 right-6 text-white space-y-1.5">
+                <div className="flex items-center gap-2">
+                  {selectedProjectModal.officialSno && (
+                    <span className="px-3 py-1 rounded-none bg-white text-[#07132c] text-xs font-black tracking-wider uppercase">
+                      Official Register #{selectedProjectModal.officialSno}
+                    </span>
+                  )}
+                  <span className="px-3 py-1 rounded-none bg-[#c5a059] text-[#07132c] text-xs font-black uppercase tracking-widest">
+                    {selectedProjectModal.categoryName}
+                  </span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-serif font-black text-white mt-1 leading-tight">
                   {selectedProjectModal.title}
                 </h3>
               </div>
