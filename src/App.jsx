@@ -334,12 +334,12 @@ export default function App() {
       id: 1,
       title: "Engaging, elevating and empowering our people",
       subtitle: "Our strength lies in our people, driving growth, innovation, and Icon's legacy of performance.",
-      btn1Text: "Careers",
-      btn1Link: "#careers",
-      btn2Text: "About Us",
-      btn2Link: "#about",
-      video: "https://accgroup.com/wp-content/uploads/2025/10/banner-video-one.mp4",
-      poster: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=1920&q=80",
+      btn1Text: "About Us",
+      btn1Link: "#about",
+      btn2Text: "Our Projects",
+      btn2Link: "#projects",
+      image: "/icon_tonkini_10span_bridge.jpg",
+      location: "Tonkini 10-Span River Bridge, Sirpur",
       tealBg: "bg-[#07132c]" // Deep Icon Navy
     },
     {
@@ -350,20 +350,20 @@ export default function App() {
       btn1Link: "#projects",
       btn2Text: "Expertise",
       btn2Link: "#expertise",
-      video: "https://accgroup.com/wp-content/uploads/2025/10/ACC_Corporate_Film_Website_multi5_v1.mp4",
-      poster: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80",
+      image: "/icon_school_assembly.jpg",
+      location: "High School Academic Campus, Sirpur Town",
       tealBg: "bg-[#07132c]"
     },
     {
       id: 3,
-      title: "Transforming the delivery of capital projects",
-      subtitle: "We leverage 50+ years of engineering discipline, technical innovation, and financial strength to build lasting regional infrastructure.",
+      title: "Delivering landmark civic & government headquarters",
+      subtitle: "Empaneled Class-1 contractor specializing in multi-tier administrative blocks, revenue complexes, and municipal megastructures.",
       btn1Text: "Projects",
       btn1Link: "#projects",
       btn2Text: "Expertise",
       btn2Link: "#expertise",
-      video: "https://accgroup.com/wp-content/uploads/2025/10/ACC_Corporate_Film_Website_multi5_v1.mp4",
-      poster: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80",
+      image: "/icon_tahasildar_mro.jpg",
+      location: "Mandal Revenue Office Headquarters, Sirpur Town",
       tealBg: "bg-[#07132c]"
     },
   ];
@@ -764,19 +764,29 @@ export default function App() {
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-4">
-              <a
-                href={currentHero.btn1Link}
+              <button
+                onClick={() => {
+                  const target = currentHero.btn1Link.replace('#', '');
+                  if (['about', 'projects', 'expertise', 'contact', 'home'].includes(target)) {
+                    handleNavigate(target);
+                  }
+                }}
                 className="px-8 py-3 rounded-none border-2 border-white text-white font-bold text-sm hover:bg-white hover:text-[#07132c] transition-all cursor-pointer inline-flex items-center justify-center min-w-[130px]"
               >
                 {currentHero.btn1Text}
-              </a>
+              </button>
 
-              <a
-                href={currentHero.btn2Link}
+              <button
+                onClick={() => {
+                  const target = currentHero.btn2Link.replace('#', '');
+                  if (['about', 'projects', 'expertise', 'contact', 'home'].includes(target)) {
+                    handleNavigate(target);
+                  }
+                }}
                 className="px-8 py-3 rounded-none bg-[#c5a059] text-white font-bold text-sm hover:bg-[#b58f45] transition-all cursor-pointer inline-flex items-center justify-center min-w-[130px]"
               >
                 {currentHero.btn2Text}
-              </a>
+              </button>
             </div>
 
           </div>
@@ -808,23 +818,26 @@ export default function App() {
 
         </div>
 
-        {/* RIGHT SIDE (50% WIDTH): 100% Height HD Video / Image with Smooth Swipe */}
+        {/* RIGHT SIDE (50% WIDTH): 100% Height HD Image with Clean Border Separator (Zero Shadow) */}
         <div
-          key={`hero-video-${currentSlide}`}
-          className={`w-full lg:w-1/2 relative h-[350px] lg:h-auto overflow-hidden ${
+          key={`hero-img-${currentSlide}`}
+          className={`w-full lg:w-1/2 relative h-[380px] sm:h-[460px] lg:h-auto min-h-[420px] overflow-hidden group border-t lg:border-t-0 lg:border-l border-slate-700/80 bg-slate-950 ${
             slideDirection === 'next' ? 'animate-hero-swipe-next' : 'animate-hero-swipe-prev'
           }`}
         >
-          <video
-            className="w-full h-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster={currentHero.poster}
-          >
-            <source src={currentHero.video} type="video/mp4" />
-          </video>
+          <img
+            src={currentHero.image}
+            alt={currentHero.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+          />
+
+          {/* Location Badge Pill */}
+          {currentHero.location && (
+            <div className="absolute bottom-6 left-6 z-10 flex items-center gap-2 px-4 py-2 bg-[#07132c]/90 backdrop-blur-md border border-[#c5a059]/40 text-white text-xs font-semibold shadow-md">
+              <MapPin className="w-3.5 h-3.5 text-[#c5a059] shrink-0" />
+              <span className="tracking-wide">{currentHero.location}</span>
+            </div>
+          )}
         </div>
 
       </section>
