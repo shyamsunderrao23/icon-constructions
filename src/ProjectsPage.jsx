@@ -430,29 +430,61 @@ const allProjectsData = [
 
 const alphabetList = ['ALL', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
 
-export default function ProjectsPage({ onNavigate, onBack }) {
+export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = 'ALL' }) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLetter, setSelectedLetter] = useState('ALL');
+  const [selectedDiscipline, setSelectedDiscipline] = useState(initialDiscipline);
   const [selectedProjectModal, setSelectedProjectModal] = useState(null);
 
-  const navigate = (page) => {
+  const navigate = (page, params) => {
     if (onNavigate) {
-      onNavigate(page);
+      onNavigate(page, params);
     } else if (onBack) {
       onBack();
     }
   };
 
   useEffect(() => {
+    if (initialDiscipline) {
+      setSelectedDiscipline(initialDiscipline);
+    }
+  }, [initialDiscipline]);
+
+  useEffect(() => {
     AOS.init({ duration: 800, once: true, easing: 'ease-out-cubic', offset: 30 });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Filter projects based on Search Query and Alphabet Letter
+  // Filter projects based on Discipline, Search Query and Alphabet Letter
   const filteredProjects = useMemo(() => {
     return allProjectsData.filter((project) => {
-      // 1. Alphabet Filter (checks first letter of title)
+      // 1. Discipline Filter
+      if (selectedDiscipline && selectedDiscipline !== 'ALL') {
+        const d = selectedDiscipline.toLowerCase();
+        const cat = (project.categoryName || '').toLowerCase();
+        const pCat = (project.category || '').toLowerCase();
+        
+        let matchesDiscipline = false;
+        if (d.includes('bridge')) {
+          matchesDiscipline = cat.includes('bridge') || pCat.includes('bridge') || pCat.includes('infra');
+        } else if (d.includes('educat') || d.includes('hostel') || d.includes('school') || d.includes('campus')) {
+          matchesDiscipline = cat.includes('educat') || cat.includes('hostel') || cat.includes('campus') || pCat.includes('educat');
+        } else if (d.includes('civic') || d.includes('gov') || d.includes('mro')) {
+          matchesDiscipline = cat.includes('gov') || cat.includes('civic') || pCat.includes('civic');
+        } else if (d.includes('hydraul') || d.includes('water') || d.includes('dam') || d.includes('culvert')) {
+          matchesDiscipline = cat.includes('hydraul') || cat.includes('culvert') || cat.includes('dam');
+        } else if (d.includes('industr') || d.includes('steel') || d.includes('shed')) {
+          matchesDiscipline = cat.includes('industr') || cat.includes('steel') || cat.includes('shed') || pCat.includes('industr');
+        } else {
+          matchesDiscipline = cat.includes(d) || pCat.includes(d);
+        }
+
+        if (!matchesDiscipline) return false;
+      }
+
+      // 2. Alphabet Filter (checks first letter of title)
       if (selectedLetter !== 'ALL') {
         const firstLetter = project.title.trim().charAt(0).toUpperCase();
         if (firstLetter !== selectedLetter) {
@@ -460,7 +492,7 @@ export default function ProjectsPage({ onNavigate, onBack }) {
         }
       }
 
-      // 2. Search Query Filter
+      // 3. Search Query Filter
       if (searchQuery.trim() !== '') {
         const query = searchQuery.toLowerCase().trim();
         const matchesTitle = project.title.toLowerCase().includes(query);
@@ -476,7 +508,7 @@ export default function ProjectsPage({ onNavigate, onBack }) {
 
       return true;
     });
-  }, [searchQuery, selectedLetter]);
+  }, [searchQuery, selectedLetter, selectedDiscipline]);
 
   // Set of letters that actually have projects for visual styling
   const availableLetters = useMemo(() => {
@@ -511,8 +543,8 @@ export default function ProjectsPage({ onNavigate, onBack }) {
         </div>
       </div>
 
-      {/* ── HEADER / NAVBAR (Warm Ivory Theme) ─── */}
-      <header className="sticky top-0 z-40 bg-[#F8F7F3] shadow-sm border-b border-slate-200 transition-all duration-300">
+      {/* ── HEADER / NAVBAR (Clean White Theme) ─── */}
+      <header className="sticky top-0 z-40 bg-white shadow-sm border-b border-slate-200 transition-all duration-300">
         <div className="w-full px-6 sm:px-10 lg:px-14 h-16 sm:h-18 flex items-center justify-between gap-6 relative">
 
           {/* Logo */}
@@ -600,7 +632,7 @@ export default function ProjectsPage({ onNavigate, onBack }) {
                 className="h-10 w-auto object-contain"
               />
               <div>
-                <span className="text-[#07132c] font-serif text-sm font-black tracking-wider block">ICON</span>
+                <span className="text-[#07132c] font-sans text-sm font-black tracking-wider block">ICON</span>
                 <span className="text-[#c5a059] text-[9px] font-bold tracking-widest uppercase block -mt-0.5">CONSTRUCTIONS</span>
               </div>
             </div>
@@ -673,12 +705,12 @@ export default function ProjectsPage({ onNavigate, onBack }) {
         </div>
       </div>
 
-      {/* ── 1. CENTERED HERO & SEARCH ─── */}
-      <section className="relative w-full overflow-hidden bg-white pt-8 pb-6 px-2 sm:px-4 lg:px-8 border-b border-slate-200">
+      {/* ── 1. CENTERED HERO & SEARCH (z-30 ensures floating dropdown is always on top) ─── */}
+      <section className="relative z-30 w-full overflow-visible bg-white pt-8 pb-6 px-2 sm:px-4 lg:px-8 border-b border-slate-200">
         <div className="relative z-10 w-full max-w-[1600px] mx-auto text-center space-y-4">
 
           {/* Centered Main Title */}
-          <h1 data-aos="fade-up" className="text-3xl sm:text-5xl lg:text-6xl font-serif font-black text-[#07132c] tracking-tight leading-tight">
+          <h1 data-aos="fade-up" className="text-3xl sm:text-5xl lg:text-6xl font-sans font-black text-[#07132c] tracking-tight leading-tight">
             Our Projects
           </h1>
 
@@ -712,10 +744,123 @@ export default function ProjectsPage({ onNavigate, onBack }) {
               </div>
             </div>
 
-            {/* ── 3. A TO Z ALPHABETICAL FILTER BAR (Clean, non-bold letters & thin box) ─── */}
+            {/* ── 2.5 DISCIPLINE CATEGORY FILTER (RESPONSIVE MOBILE SELECTOR + DESKTOP TABS) ─── */}
             <div className="pt-1 w-full">
-              <div className="w-full overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-slate-300">
-                <div className="flex items-stretch justify-start w-full min-w-[950px] border border-slate-200 rounded-none overflow-hidden bg-white shadow-xs">
+              
+              {/* Custom Filter Dropdown ONLY for Responsive / Mobile (< md) */}
+              <div className="md:hidden w-full text-left relative z-40">
+                <div className="flex items-center justify-between px-1 mb-1.5">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-[#07132c] flex items-center gap-1.5">
+                    <Filter className="w-3.5 h-3.5 text-[#c5a059]" />
+                    <span>Filter by Sector:</span>
+                  </span>
+                  <span className="text-[10px] font-bold text-[#c5a059] bg-[#07132c] px-2.5 py-0.5 border border-[#c5a059]/40">
+                    {filteredProjects.length} Projects
+                  </span>
+                </div>
+
+                {/* Dropdown Trigger Button */}
+                <button
+                  type="button"
+                  onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
+                  className="w-full bg-white text-[#07132c] text-sm font-bold border-2 border-[#c5a059] py-3.5 px-4 flex items-center justify-between shadow-sm cursor-pointer transition-all relative z-50"
+                >
+                  <div className="flex items-center gap-2.5 truncate">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#c5a059] shrink-0" />
+                    <span className="truncate font-black text-[#07132c]">
+                      {selectedDiscipline && selectedDiscipline !== 'ALL'
+                        ? selectedDiscipline
+                        : 'All Projects (Complete Portfolio)'}
+                    </span>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-[#c5a059] transition-transform duration-300 shrink-0 ${mobileDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Backdrop Click Outside to Smoothly Close */}
+                {mobileDropdownOpen && (
+                  <div
+                    className="fixed inset-0 z-40 bg-black/25 backdrop-blur-[1px] transition-opacity duration-300"
+                    onClick={() => setMobileDropdownOpen(false)}
+                  />
+                )}
+
+                {/* Custom Dropdown Floating Overlay Menu (Overlaps Project List Smoothly without Moving Content) */}
+                <div
+                  className={`absolute top-full left-0 right-0 z-50 mt-1.5 bg-white border-2 border-[#c5a059] shadow-2xl divide-y divide-slate-100 transition-all duration-300 origin-top ease-out ${
+                    mobileDropdownOpen
+                      ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto visible'
+                      : 'opacity-0 -translate-y-2 scale-95 pointer-events-none invisible'
+                  }`}
+                >
+                  {[
+                    { id: 'ALL', label: 'All Projects (Complete Portfolio)' },
+                    { id: 'Bridges & Substructures', label: 'Bridges & Substructures' },
+                    { id: 'Educational & Hostels', label: 'Educational & Hostels' },
+                    { id: 'Government & Civic', label: 'Government & Civic' },
+                    { id: 'Hydraulic Infrastructure', label: 'Hydraulic Infrastructure' },
+                    { id: 'Industrial Sheds & Steel', label: 'Industrial & Steel' }
+                  ].map((item) => {
+                    const isSelected = selectedDiscipline === item.id || (item.id === 'ALL' && (!selectedDiscipline || selectedDiscipline === 'ALL'));
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedDiscipline(item.id);
+                          setSelectedLetter('ALL');
+                          setMobileDropdownOpen(false);
+                        }}
+                        className={`w-full px-4 py-3.5 text-left text-xs sm:text-sm font-bold transition-all flex items-center justify-between cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#07132c] text-[#e5be6b]'
+                            : 'bg-white text-slate-800 hover:bg-slate-50 hover:text-[#07132c]'
+                        }`}
+                      >
+                        <span>{item.label}</span>
+                        {isSelected && <CheckCircle2 className="w-4 h-4 text-[#e5be6b] shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Desktop Filter Tabs (>= md) */}
+              <div className="hidden md:block w-full">
+                <div className="flex items-stretch justify-start w-full border border-slate-200 rounded-none overflow-hidden bg-white shadow-xs">
+                  {[
+                    { id: 'ALL', label: 'All Projects' },
+                    { id: 'Bridges & Substructures', label: 'Bridges & Substructures' },
+                    { id: 'Educational & Hostels', label: 'Educational & Hostels' },
+                    { id: 'Government & Civic', label: 'Government & Civic' },
+                    { id: 'Hydraulic Infrastructure', label: 'Hydraulic Infrastructure' },
+                    { id: 'Industrial Sheds & Steel', label: 'Industrial & Steel' }
+                  ].map((tab) => {
+                    const isActive = selectedDiscipline === tab.id || (tab.id === 'ALL' && (!selectedDiscipline || selectedDiscipline === 'ALL'));
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => {
+                          setSelectedDiscipline(tab.id);
+                          setSelectedLetter('ALL');
+                        }}
+                        className={`flex-1 h-[44px] sm:h-[46px] px-3 sm:px-4 rounded-none text-xs sm:text-sm font-semibold transition-all duration-150 flex items-center justify-center cursor-pointer border-r border-slate-200 last:border-r-0 whitespace-nowrap ${
+                          isActive
+                            ? 'bg-[#07132c] text-[#e5be6b] font-black border-2 border-[#c5a059] shadow-sm relative z-10'
+                            : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-[#07132c]'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* ── 3. A TO Z ALPHABETICAL FILTER BAR ─── */}
+            <div className="pt-1 w-full">
+              <div className="w-full overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                <div className="flex items-stretch justify-start w-full min-w-[750px] sm:min-w-[850px] md:min-w-[950px] border border-slate-200 rounded-none overflow-hidden bg-white shadow-xs">
                   {alphabetList.map((letter) => {
                     const isActive = selectedLetter === letter;
                     const hasItems = letter === 'ALL' || availableLetters.has(letter);
@@ -725,12 +870,12 @@ export default function ProjectsPage({ onNavigate, onBack }) {
                         key={letter}
                         onClick={() => setSelectedLetter(letter)}
                         className={`${
-                          letter === 'ALL' ? 'min-w-[64px] sm:min-w-[72px] flex-[1.4]' : 'min-w-[34px] sm:min-w-[42px] flex-1'
-                        } h-[46px] sm:h-[48px] px-1 rounded-none text-xs sm:text-sm md:text-base font-normal transition-all duration-150 flex items-center justify-center cursor-pointer border-r border-slate-200 last:border-r-0 ${
+                          letter === 'ALL' ? 'min-w-[54px] sm:min-w-[64px] flex-[1.4]' : 'min-w-[28px] sm:min-w-[36px] flex-1'
+                        } h-[42px] sm:h-[48px] px-1 rounded-none text-xs sm:text-sm md:text-base font-normal transition-all duration-150 flex items-center justify-center cursor-pointer border-r border-slate-200 last:border-r-0 ${
                           isActive
-                            ? 'bg-[#c5a059] text-white border-r-[#b88f44] font-medium'
+                            ? 'bg-[#07132c] text-[#e5be6b] font-black border-2 border-[#c5a059] shadow-sm relative z-10'
                             : hasItems
-                            ? 'bg-white text-slate-700 hover:bg-[#07132c] hover:text-[#e5be6b]'
+                            ? 'bg-white text-slate-700 hover:bg-slate-50 hover:text-[#07132c]'
                             : 'bg-slate-50 text-slate-400 hover:text-slate-600'
                         }`}
                         title={letter === 'ALL' ? 'View All' : `Filter by letter ${letter}`}
@@ -743,12 +888,35 @@ export default function ProjectsPage({ onNavigate, onBack }) {
               </div>
             </div>
 
+            {/* Active Discipline Filter Notification Banner */}
+            {selectedDiscipline && selectedDiscipline !== 'ALL' && (
+              <div className="flex items-center justify-between gap-3 px-4 py-2.5 bg-amber-50/80 border border-[#c5a059]/40 text-xs">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-slate-600 font-medium">Discipline Filter:</span>
+                  <span className="font-black text-[#07132c] bg-white px-2.5 py-0.5 border border-[#c5a059]/50 shadow-xs">
+                    {selectedDiscipline}
+                  </span>
+                  <span className="text-slate-600">({filteredProjects.length} projects displayed)</span>
+                </div>
+                <button
+                  onClick={() => {
+                    setSelectedDiscipline('ALL');
+                    setSelectedLetter('ALL');
+                  }}
+                  className="font-bold text-[#07132c] hover:text-[#c5a059] transition-colors cursor-pointer flex items-center gap-1 shrink-0"
+                >
+                  <span>Reset Discipline</span>
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+
           </div>
         </div>
       </section>
 
-      {/* ── 4. FULL-BLEED EDGE-TO-EDGE 0-BORDER-RADIUS 0-GAP GRID ─── */}
-      <div className="w-full px-0 py-0 overflow-hidden bg-slate-950">
+      {/* ── 4. FULL-BLEED EDGE-TO-EDGE 0-BORDER-RADIUS 0-GAP GRID (WHITE BACKGROUND) ─── */}
+      <div className="w-full px-0 py-0 overflow-hidden bg-white relative z-10">
 
         {/* Empty State */}
         {filteredProjects.length === 0 ? (
@@ -771,25 +939,22 @@ export default function ProjectsPage({ onNavigate, onBack }) {
           </div>
         ) : (
           /* Full-Bleed 2-Column Edge-to-Edge Grid (0 Gap, 0 Border Radius, Left-to-Right Full Width) */
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full px-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full px-0 bg-white">
             {filteredProjects.map((project) => (
               <div
                 key={project.id}
                 onClick={() => setSelectedProjectModal(project)}
-                className="relative h-[440px] sm:h-[520px] lg:h-[600px] rounded-none overflow-hidden group shadow-none border-0 transition-all duration-500 bg-slate-950 cursor-pointer"
+                className="relative h-[440px] sm:h-[520px] lg:h-[600px] rounded-none overflow-hidden group shadow-none border-0 transition-all duration-500 bg-white cursor-pointer"
               >
-                {/* Full Background Image */}
+                {/* Full Background Image (No Shadow Layer) */}
                 <img
                   src={project.image}
                   alt={project.title}
                   onError={(e) => {
                     e.currentTarget.src = "/icon_mro_headquarters.jpg";
                   }}
-                  className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
-
-                {/* High Contrast Gradient Overlay for Clear Text Readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
 
                 {/* Top Badges */}
                 <div className="absolute top-6 left-6 z-10 flex items-center gap-2">
@@ -803,12 +968,12 @@ export default function ProjectsPage({ onNavigate, onBack }) {
                   </span>
                 </div>
 
-                <div className="absolute top-6 right-6 z-10 bg-black/70 backdrop-blur-md px-3.5 py-1.5 text-xs font-extrabold text-white">
+                <div className="absolute top-6 right-6 z-10 bg-black/80 backdrop-blur-md px-3.5 py-1.5 text-xs font-extrabold text-white border border-white/20">
                   {project.year}
                 </div>
 
-                {/* Bottom Overlay Info (Clean, No Description, No Button) */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-10 z-10 space-y-3">
+                {/* Bottom Overlay Info in crisp bottom container */}
+                <div className="absolute bottom-0 inset-x-0 p-6 sm:p-8 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 z-10 space-y-2">
                   {/* Location with Pin */}
                   <div className="flex items-center gap-2 text-xs sm:text-sm text-[#e5be6b] font-extrabold">
                     <MapPin className="w-4 h-4 shrink-0 text-[#c5a059]" />
@@ -817,7 +982,7 @@ export default function ProjectsPage({ onNavigate, onBack }) {
 
                   {/* Main Title */}
                   <div className="flex items-center gap-6">
-                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-white leading-snug group-hover:text-[#f3d38c] transition-colors">
+                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-sans font-extrabold text-white leading-snug group-hover:text-[#f3d38c] transition-colors">
                       {project.title}
                     </h3>
                   </div>
@@ -844,17 +1009,16 @@ export default function ProjectsPage({ onNavigate, onBack }) {
                 }}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
               
               <button
                 onClick={() => setSelectedProjectModal(null)}
-                className="absolute top-4 right-4 p-2 rounded-none bg-black/70 text-white hover:bg-[#c5a059] hover:text-[#07132c] transition-colors cursor-pointer border border-white/20"
+                className="absolute top-4 right-4 z-10 p-2 rounded-none bg-black/70 text-white hover:bg-[#c5a059] hover:text-[#07132c] transition-colors cursor-pointer border border-white/20"
                 title="Close"
               >
                 <X className="w-5 h-5" />
               </button>
 
-              <div className="absolute bottom-4 left-6 right-6 text-white space-y-1.5">
+              <div className="absolute bottom-0 inset-x-0 p-5 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 text-white space-y-1.5">
                 <div className="flex items-center gap-2">
                   {selectedProjectModal.officialSno && (
                     <span className="px-3 py-1 rounded-none bg-white text-[#07132c] text-xs font-black tracking-wider uppercase">
@@ -865,7 +1029,7 @@ export default function ProjectsPage({ onNavigate, onBack }) {
                     {selectedProjectModal.categoryName}
                   </span>
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-serif font-black text-white mt-1 leading-tight">
+                <h3 className="text-xl sm:text-2xl font-sans font-black text-white mt-1 leading-tight">
                   {selectedProjectModal.title}
                 </h3>
               </div>
@@ -947,7 +1111,7 @@ export default function ProjectsPage({ onNavigate, onBack }) {
             <span className="text-xs font-semibold text-[#e5be6b] tracking-wide block uppercase">
               Have a high-scale civil engineering requirement?
             </span>
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-white">
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-bold text-white">
               Let's build something landmark together!
             </h3>
           </div>

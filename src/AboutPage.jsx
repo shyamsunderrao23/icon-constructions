@@ -129,7 +129,7 @@ export default function AboutPage({ onNavigate, onBack }) {
                 className="h-10 w-auto object-contain"
               />
               <div>
-                <span className="text-[#07132c] font-serif text-sm font-black tracking-wider block">ICON</span>
+                <span className="text-[#07132c] font-sans text-sm font-black tracking-wider block">ICON</span>
                 <span className="text-[#c5a059] text-[9px] font-bold tracking-widest uppercase block -mt-0.5">CONSTRUCTIONS</span>
               </div>
             </div>
@@ -205,7 +205,7 @@ export default function AboutPage({ onNavigate, onBack }) {
       {/* ── HERO BANNER ─── */}
       <section className="relative w-full overflow-hidden bg-white pt-16 pb-12 px-4 sm:px-6 lg:px-8 border-b border-slate-200">
         <div className="max-w-4xl mx-auto text-center space-y-4">
-          <h1 data-aos="fade-up" className="text-4xl sm:text-6xl lg:text-7xl font-serif font-black text-[#07132c] tracking-tight leading-tight">
+          <h1 data-aos="fade-up" className="text-4xl sm:text-6xl lg:text-7xl font-sans font-black text-[#07132c] tracking-tight leading-tight">
             About Icon Constructions
           </h1>
 
@@ -265,7 +265,7 @@ export default function AboutPage({ onNavigate, onBack }) {
                 <span>STRATEGIC DIRECTION</span>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black text-[#07132c] leading-tight">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-sans font-black text-[#07132c] leading-tight">
                 Our Vision
               </h2>
 
@@ -312,8 +312,7 @@ export default function AboutPage({ onNavigate, onBack }) {
                   alt="Our Vision Architectural Project"
                   className="w-full h-[520px] object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/40 to-transparent" />
-                <div className="absolute bottom-8 left-8 right-8 text-white space-y-2">
+                <div className="absolute bottom-0 inset-x-0 p-6 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 text-white space-y-2">
                   <span className="px-3 py-1 rounded-none bg-[#c5a059] text-[#07132c] text-xs font-black uppercase tracking-widest">
                     Vision In Action
                   </span>
@@ -337,7 +336,7 @@ export default function AboutPage({ onNavigate, onBack }) {
                 <Scale className="w-3.5 h-3.5 text-[#c5a059]" />
                 <span>UNCOMPROMISED STANDARDS</span>
               </div>
-              <h2 className="text-3xl sm:text-5xl font-serif font-black text-[#07132c]">
+              <h2 className="text-3xl sm:text-5xl font-sans font-black text-[#07132c]">
                 Our Policy
               </h2>
               <p className="text-sm sm:text-base text-slate-600">
@@ -353,7 +352,7 @@ export default function AboutPage({ onNavigate, onBack }) {
                   <div className="w-14 h-14 rounded-none bg-amber-50 text-[#927027] flex items-center justify-center border border-[#c5a059]/30">
                     <Award className="w-7 h-7 text-[#c5a059]" />
                   </div>
-                  <h3 className="text-xl font-serif font-bold text-[#07132c]">Quality Management Policy</h3>
+                  <h3 className="text-xl font-sans font-bold text-[#07132c]">Quality Management Policy</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     We adhere to strict quality assurance protocols at every stage of civil execution, from raw material procurement to structural handover.
                   </p>
@@ -383,7 +382,7 @@ export default function AboutPage({ onNavigate, onBack }) {
                   <div className="w-14 h-14 rounded-none bg-amber-50 text-[#927027] flex items-center justify-center border border-[#c5a059]/30">
                     <HardHat className="w-7 h-7 text-[#c5a059]" />
                   </div>
-                  <h3 className="text-xl font-serif font-bold text-[#07132c]">Zero-Harm Safety Policy</h3>
+                  <h3 className="text-xl font-sans font-bold text-[#07132c]">Zero-Harm Safety Policy</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     The life and health of our engineers, labor force, and neighboring communities take precedence over all operational schedules.
                   </p>
@@ -413,7 +412,7 @@ export default function AboutPage({ onNavigate, onBack }) {
                   <div className="w-14 h-14 rounded-none bg-amber-50 text-[#927027] flex items-center justify-center border border-[#c5a059]/30">
                     <Leaf className="w-7 h-7 text-[#c5a059]" />
                   </div>
-                  <h3 className="text-xl font-serif font-bold text-[#07132c]">Environmental &amp; Ethics Policy</h3>
+                  <h3 className="text-xl font-sans font-bold text-[#07132c]">Environmental &amp; Ethics Policy</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     We practice ethical governance, anti-fraud vigilance, and environmentally sensitive construction across regional watersheds.
                   </p>
@@ -455,8 +454,7 @@ export default function AboutPage({ onNavigate, onBack }) {
                   alt="Our Legacy Bridge Construction"
                   className="w-full h-[500px] object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/35 to-transparent" />
-                <div className="absolute bottom-8 left-8 right-8 text-white space-y-2">
+                <div className="absolute bottom-0 inset-x-0 p-6 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 text-white space-y-2">
                   <span className="px-3 py-1 rounded-none bg-[#c5a059] text-[#07132c] text-xs font-black uppercase tracking-widest">
                     50+ Years In Telangana
                   </span>
@@ -472,7 +470,7 @@ export default function AboutPage({ onNavigate, onBack }) {
                 <span>50+ YEARS OF REGIONAL TRUST</span>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black text-[#07132c] leading-tight">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-sans font-black text-[#07132c] leading-tight">
                 Our Legacy
               </h2>
 
@@ -516,7 +514,7 @@ export default function AboutPage({ onNavigate, onBack }) {
             <span className="text-xs sm:text-sm font-semibold text-[#e5be6b] tracking-wide block uppercase">
               Partner with a 50-year legacy contractor
             </span>
-            <h3 className="text-xl sm:text-4xl lg:text-5xl font-serif font-bold text-white leading-tight">
+            <h3 className="text-xl sm:text-4xl lg:text-5xl font-sans font-bold text-white leading-tight">
               Experience the Icon standard of engineering.
             </h3>
           </div>

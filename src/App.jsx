@@ -52,7 +52,6 @@ export default function App() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [selectedProjectModal, setSelectedProjectModal] = useState(null);
-  const [showAllExpertise, setShowAllExpertise] = useState(false);
   const [activeReviewIndex, setActiveReviewIndex] = useState(0);
   const getInitialPage = () => {
     try {
@@ -156,6 +155,9 @@ export default function App() {
       if (!section2PinRef.current) return;
 
       ctx = gsap.context(() => {
+        // Prevent initial subpixel peeking on mobile viewports
+        gsap.set([image2Ref.current, image3Ref.current, image4Ref.current, image5Ref.current], { yPercent: 100.1 });
+
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: section2PinRef.current,
@@ -177,7 +179,7 @@ export default function App() {
         // Step 2: Image 2 slides up smoothly from bottom (01 -> 02)
         .fromTo(
           image2Ref.current,
-          { yPercent: 100 },
+          { yPercent: 100.1 },
           { yPercent: 0, duration: 2, ease: 'none' },
           'slide2'
         )
@@ -200,7 +202,7 @@ export default function App() {
         // Step 3: Image 3 slides up smoothly from bottom (02 -> 03)
         .fromTo(
           image3Ref.current,
-          { yPercent: 100 },
+          { yPercent: 100.1 },
           { yPercent: 0, duration: 2, ease: 'none' },
           'slide3'
         )
@@ -223,7 +225,7 @@ export default function App() {
         // Step 4: Image 4 slides up smoothly from bottom (03 -> 04)
         .fromTo(
           image4Ref.current,
-          { yPercent: 100 },
+          { yPercent: 100.1 },
           { yPercent: 0, duration: 2, ease: 'none' },
           'slide4'
         )
@@ -246,7 +248,7 @@ export default function App() {
         // Step 5: Image 5 slides up smoothly from bottom (04 -> 05)
         .fromTo(
           image5Ref.current,
-          { yPercent: 100 },
+          { yPercent: 100.1 },
           { yPercent: 0, duration: 2, ease: 'none' },
           'slide5'
         )
@@ -480,9 +482,16 @@ export default function App() {
     }
   ];
 
+  const [selectedDisciplineForProjects, setSelectedDisciplineForProjects] = useState('ALL');
+
   const currentHero = heroSlides[currentSlide];
 
-  const handleNavigate = (page) => {
+  const handleNavigate = (page, params = {}) => {
+    if (params?.discipline) {
+      setSelectedDisciplineForProjects(params.discipline);
+    } else if (page === 'projects' && !params?.discipline) {
+      setSelectedDisciplineForProjects('ALL');
+    }
     setCurrentPage(page);
     try {
       localStorage.setItem('icon_page', page);
@@ -497,7 +506,13 @@ export default function App() {
   };
 
   if (currentPage === 'projects') {
-    return <ProjectsPage onNavigate={handleNavigate} onBack={() => handleNavigate('home')} />;
+    return (
+      <ProjectsPage
+        onNavigate={handleNavigate}
+        onBack={() => handleNavigate('home')}
+        initialDiscipline={selectedDisciplineForProjects}
+      />
+    );
   }
 
   if (currentPage === 'about') {
@@ -608,7 +623,7 @@ export default function App() {
                 className="h-10 w-auto object-contain"
               />
               <div>
-                <span className="text-[#07132c] font-serif text-sm font-black tracking-wider block">ICON</span>
+                <span className="text-[#07132c] font-sans text-sm font-black tracking-wider block">ICON</span>
                 <span className="text-[#c5a059] text-[9px] font-bold tracking-widest uppercase block -mt-0.5">CONSTRUCTIONS</span>
               </div>
             </div>
@@ -845,7 +860,7 @@ export default function App() {
       {/* 4. SECTION 2: GSAP SCROLLTRIGGER PINNED 5-IMAGE FULLSCREEN PROJECT SHOWCASE */}
       <section
         ref={section2PinRef}
-        className="relative w-full h-screen bg-[#07132c] overflow-hidden flex items-center justify-center select-none"
+        className="relative w-full h-screen h-[100dvh] min-h-[100dvh] max-h-[100dvh] bg-[#07132c] overflow-hidden flex items-center justify-center select-none"
       >
         <div className="relative w-full h-full">
           
@@ -859,37 +874,34 @@ export default function App() {
               alt="Tahasildar & Mandal Revenue Office (MRO) - Sirpur Town"
               className="w-full h-full object-cover object-center"
             />
-            {/* Cinematic Gradient Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/30 to-[#07132c]/40 pointer-events-none" />
-            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#07132c]/80 to-transparent pointer-events-none" />
             
             {/* Floating Glassmorphic Badge 1 */}
             <div
               ref={badge1Ref}
-              className="absolute bottom-6 sm:bottom-12 left-4 sm:left-12 lg:left-16 z-50 p-5 sm:p-7 rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-3"
+              className="absolute bottom-3 sm:bottom-12 left-3 right-3 sm:right-auto sm:left-12 lg:left-16 z-50 p-3.5 sm:p-7 rounded-xl sm:rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-1.5 sm:space-y-3"
             >
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#e5be6b]" />
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+                  <ShieldCheck className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#e5be6b]" />
                   01 / 05 • Government & Civic
                 </span>
-                <span className="inline-flex items-center gap-1 text-[11px] text-slate-300 bg-white/10 px-2.5 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] text-slate-300 bg-white/10 px-2 sm:px-2.5 py-0.5 rounded-full">
                   <MapPin className="w-3 h-3 text-[#c5a059]" /> Sirpur Town, Telangana
                 </span>
               </div>
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-tight">
+              <h3 className="text-base sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-snug sm:leading-tight">
                 Mandal Revenue Office (MRO) Headquarters
               </h3>
-              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+              <p className="text-[11px] sm:text-sm text-slate-200 leading-relaxed font-normal line-clamp-2 sm:line-clamp-none">
                 Official Tahasildar administrative headquarters engineered for civic administration, land registry, and public revenue governance with robust reinforced concrete superstructure.
               </p>
-              <div className="pt-1 flex items-center gap-4">
+              <div className="pt-0.5 sm:pt-1 flex items-center gap-4">
                 <button
                   onClick={() => handleNavigate('projects')}
-                  className="inline-flex items-center gap-2 text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group cursor-pointer"
                 >
                   <span>Explore Project Records</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-3.5 sm:w-4 h-3.5 sm:h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </div>
@@ -905,37 +917,34 @@ export default function App() {
               alt="ST Welfare Residential Hostel Building & Security Gate"
               className="w-full h-full object-cover object-center"
             />
-            {/* Cinematic Gradient Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/30 to-[#07132c]/40 pointer-events-none" />
-            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#07132c]/80 to-transparent pointer-events-none" />
             
             {/* Floating Glassmorphic Badge 2 */}
             <div
               ref={badge2Ref}
-              className="absolute bottom-6 sm:bottom-12 left-4 sm:left-12 lg:left-16 z-50 p-5 sm:p-7 rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-3"
+              className="absolute bottom-3 sm:bottom-12 left-3 right-3 sm:right-auto sm:left-12 lg:left-16 z-50 p-3.5 sm:p-7 rounded-xl sm:rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-1.5 sm:space-y-3"
             >
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider">
-                  <Building2 className="w-3.5 h-3.5 text-[#e5be6b]" />
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+                  <Building2 className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#e5be6b]" />
                   02 / 05 • Welfare & Hostels
                 </span>
-                <span className="inline-flex items-center gap-1 text-[11px] text-slate-300 bg-white/10 px-2.5 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] text-slate-300 bg-white/10 px-2 sm:px-2.5 py-0.5 rounded-full">
                   <MapPin className="w-3 h-3 text-[#c5a059]" /> Sirpur Town, Telangana
                 </span>
               </div>
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-tight">
+              <h3 className="text-base sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-snug sm:leading-tight">
                 ST Welfare Residential Hostel Complex
               </h3>
-              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+              <p className="text-[11px] sm:text-sm text-slate-200 leading-relaxed font-normal line-clamp-2 sm:line-clamp-none">
                 Multi-capacity student welfare residential building engineered with security boundary walls, gated entry portico, spacious dormitories, and integrated student amenities.
               </p>
-              <div className="pt-1 flex items-center gap-4">
+              <div className="pt-0.5 sm:pt-1 flex items-center gap-4">
                 <button
                   onClick={() => handleNavigate('projects')}
-                  className="inline-flex items-center gap-2 text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group cursor-pointer"
                 >
                   <span>Explore Project Records</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-3.5 sm:w-4 h-3.5 sm:h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </div>
@@ -951,37 +960,34 @@ export default function App() {
               alt="Government High School Campus & School Assembly Grounds"
               className="w-full h-full object-cover object-center"
             />
-            {/* Cinematic Gradient Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/30 to-[#07132c]/40 pointer-events-none" />
-            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#07132c]/80 to-transparent pointer-events-none" />
             
             {/* Floating Glassmorphic Badge 3 */}
             <div
               ref={badge3Ref}
-              className="absolute bottom-6 sm:bottom-12 left-4 sm:left-12 lg:left-16 z-50 p-5 sm:p-7 rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-3"
+              className="absolute bottom-3 sm:bottom-12 left-3 right-3 sm:right-auto sm:left-12 lg:left-16 z-50 p-3.5 sm:p-7 rounded-xl sm:rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-1.5 sm:space-y-3"
             >
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider">
-                  <Users className="w-3.5 h-3.5 text-[#e5be6b]" />
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+                  <Users className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#e5be6b]" />
                   03 / 05 • Educational & Campuses
                 </span>
-                <span className="inline-flex items-center gap-1 text-[11px] text-slate-300 bg-white/10 px-2.5 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] text-slate-300 bg-white/10 px-2 sm:px-2.5 py-0.5 rounded-full">
                   <MapPin className="w-3 h-3 text-[#c5a059]" /> Sirpur Town, Telangana
                 </span>
               </div>
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-tight">
+              <h3 className="text-base sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-snug sm:leading-tight">
                 Government High School Academic Campus & Assembly
               </h3>
-              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+              <p className="text-[11px] sm:text-sm text-slate-200 leading-relaxed font-normal line-clamp-2 sm:line-clamp-none">
                 Multi-wing academic campus featuring modern classrooms, shaded assembly courtyards, faculty wings, and sports grounds serving regional student education.
               </p>
-              <div className="pt-1 flex items-center gap-4">
+              <div className="pt-0.5 sm:pt-1 flex items-center gap-4">
                 <button
                   onClick={() => handleNavigate('projects')}
-                  className="inline-flex items-center gap-2 text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group cursor-pointer"
                 >
                   <span>Explore Project Records</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-3.5 sm:w-4 h-3.5 sm:h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </div>
@@ -997,37 +1003,34 @@ export default function App() {
               alt="Institutional Dining Hall & Campus Mess Facility"
               className="w-full h-full object-cover object-center"
             />
-            {/* Cinematic Gradient Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/30 to-[#07132c]/40 pointer-events-none" />
-            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#07132c]/80 to-transparent pointer-events-none" />
             
             {/* Floating Glassmorphic Badge 4 */}
             <div
               ref={badge4Ref}
-              className="absolute bottom-6 sm:bottom-12 left-4 sm:left-12 lg:left-16 z-50 p-5 sm:p-7 rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-3"
+              className="absolute bottom-3 sm:bottom-12 left-3 right-3 sm:right-auto sm:left-12 lg:left-16 z-50 p-3.5 sm:p-7 rounded-xl sm:rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-1.5 sm:space-y-3"
             >
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider">
-                  <Award className="w-3.5 h-3.5 text-[#e5be6b]" />
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+                  <Award className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#e5be6b]" />
                   04 / 05 • Institutional Dining
                 </span>
-                <span className="inline-flex items-center gap-1 text-[11px] text-slate-300 bg-white/10 px-2.5 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] text-slate-300 bg-white/10 px-2 sm:px-2.5 py-0.5 rounded-full">
                   <MapPin className="w-3 h-3 text-[#c5a059]" /> KB Asifabad Dist, Telangana
                 </span>
               </div>
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-tight">
+              <h3 className="text-base sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-snug sm:leading-tight">
                 Institutional Dining Hall & Nutrition Facility
               </h3>
-              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+              <p className="text-[11px] sm:text-sm text-slate-200 leading-relaxed font-normal line-clamp-2 sm:line-clamp-none">
                 Dedicated large-format campus dining hall facility engineered with hygienic food prep kitchens, paved approach pathways, ventilation, and landscaped facades.
               </p>
-              <div className="pt-1 flex items-center gap-4">
+              <div className="pt-0.5 sm:pt-1 flex items-center gap-4">
                 <button
                   onClick={() => handleNavigate('projects')}
-                  className="inline-flex items-center gap-2 text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group cursor-pointer"
                 >
                   <span>Explore Project Records</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-3.5 sm:w-4 h-3.5 sm:h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </div>
@@ -1043,37 +1046,34 @@ export default function App() {
               alt="Modern Student Dormitory & Residential Quarters"
               className="w-full h-full object-cover object-center"
             />
-            {/* Cinematic Gradient Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/30 to-[#07132c]/40 pointer-events-none" />
-            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#07132c]/80 to-transparent pointer-events-none" />
             
             {/* Floating Glassmorphic Badge 5 */}
             <div
               ref={badge5Ref}
-              className="absolute bottom-6 sm:bottom-12 left-4 sm:left-12 lg:left-16 z-50 p-5 sm:p-7 rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-3"
+              className="absolute bottom-3 sm:bottom-12 left-3 right-3 sm:right-auto sm:left-12 lg:left-16 z-50 p-3.5 sm:p-7 rounded-xl sm:rounded-2xl bg-[#07132c]/90 backdrop-blur-xl border border-[#c5a059]/50 text-white max-w-xl shadow-2xl space-y-1.5 sm:space-y-3"
             >
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider">
-                  <HardHat className="w-3.5 h-3.5 text-[#e5be6b]" />
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#c5a059]/20 border border-[#c5a059]/50 text-[#f3cf7a] text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+                  <HardHat className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#e5be6b]" />
                   05 / 05 • Student Housing & Dormitories
                 </span>
-                <span className="inline-flex items-center gap-1 text-[11px] text-slate-300 bg-white/10 px-2.5 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] text-slate-300 bg-white/10 px-2 sm:px-2.5 py-0.5 rounded-full">
                   <MapPin className="w-3 h-3 text-[#c5a059]" /> KB Asifabad Dist, Telangana
                 </span>
               </div>
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-tight">
+              <h3 className="text-base sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-snug sm:leading-tight">
                 Modern Student Dormitory & Residential Quarters
               </h3>
-              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+              <p className="text-[11px] sm:text-sm text-slate-200 leading-relaxed font-normal line-clamp-2 sm:line-clamp-none">
                 Heavy reinforced concrete student dormitory building engineered with cross-ventilation, student lodging rooms, secure access corridors, and durable weather-resistant joinery.
               </p>
-              <div className="pt-1 flex items-center gap-4">
+              <div className="pt-0.5 sm:pt-1 flex items-center gap-4">
                 <button
                   onClick={() => handleNavigate('projects')}
-                  className="inline-flex items-center gap-2 text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-bold text-[#f3cf7a] hover:text-white transition-colors group cursor-pointer"
                 >
                   <span>Explore Project Records</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-3.5 sm:w-4 h-3.5 sm:h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </div>
@@ -1089,23 +1089,15 @@ export default function App() {
       </section>
 
       {/* 6. SECTION 3: OUR EXPERTISE - FULL IMAGE BACKDROP CARDS (EXACT MATCH TO CLIENT REFERENCE) */}
-      <section id="expertise" className="py-14 sm:py-20 bg-slate-100 border-t border-slate-200">
+      <section id="expertise" className="py-14 sm:py-20 bg-white border-t border-slate-200">
         <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           
-          <div data-aos="fade-up" className="flex flex-col md:flex-row md:items-end justify-between items-center text-center md:text-left gap-6">
-            <div className="w-full text-center md:text-left">
-              <span className="text-xs font-bold text-[#c5a059] uppercase tracking-widest block mb-1">Our Core Disciplines</span>
-              <h2 className="text-2xl sm:text-4xl font-black text-[#0d214a]">Our Expertise</h2>
-            </div>
-            <button onClick={() => handleNavigate('expertise')} className="acc-btn acc-btn--gold text-xs w-full sm:w-auto shrink-0">
-              <span>View All Capabilities</span>
-            </button>
+          <div data-aos="fade-up" className="space-y-2 text-center md:text-left">
+            <span className="text-xs font-bold text-[#c5a059] uppercase tracking-widest block mb-1">Our Core Disciplines</span>
+            <h2 className="text-2xl sm:text-4xl font-black text-[#0d214a]">Our Expertise</h2>
           </div>
 
-          <div className={showAllExpertise 
-            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-5 transition-all duration-500 w-full" 
-            : "grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 transition-all duration-500 w-full"
-          }>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 w-full">
             {[
               {
                 title: "Bridges &\nSubstructures",
@@ -1142,7 +1134,7 @@ export default function App() {
                 desc: "Pre-engineered structural steel sheds (IIT Asifabad) & heavy warehouses.",
                 projects: ["IIT Industrial Sheds (KB Asifabad)", "Structural Steel Fabrication Bays", "Heavy Gantry Crane Runways"]
               }
-            ].slice(0, showAllExpertise ? 5 : 2).map((exp, idx) => (
+            ].slice(0, 2).map((exp, idx) => (
               <div
                 key={idx}
                 onClick={() => handleNavigate('expertise')}
@@ -1150,74 +1142,51 @@ export default function App() {
                 data-aos-delay={idx * 120}
                 className="relative h-[420px] sm:h-[480px] rounded-none overflow-hidden shadow-lg group cursor-pointer border border-slate-200/60 hover:shadow-2xl transition-all duration-500 flex flex-col justify-end"
               >
-                {/* Background Full Cover Image */}
+                {/* Background Full Cover Image (No Shadow Layer) */}
                 <img
                   src={exp.image}
                   alt={exp.title.replace('\n', ' ')}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
 
-                {/* Dark Vignette Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/95 via-[#07132c]/55 to-transparent group-hover:from-[#07132c]/98 group-hover:via-[#07132c]/70 transition-colors duration-500" />
-
-                {/* Content Area */}
-                <div className="relative z-10 p-5 sm:p-7 flex flex-col justify-end h-full">
-                  
-                  {/* Title & Tag */}
-                  <div className="space-y-2 pr-10">
-                    <h3 className="text-xl sm:text-2xl font-serif font-extrabold text-white tracking-tight leading-snug whitespace-pre-line drop-shadow-md group-hover:text-[#f3d38c] transition-colors">
-                      {exp.title}
-                    </h3>
-                    
-                    {/* Gold Line Accent */}
-                    <div className="w-8 h-[2.5px] bg-[#c5a059] group-hover:w-12 transition-all duration-300" />
-                    
-                    <span className="text-[10px] font-extrabold text-slate-200 uppercase tracking-widest block drop-shadow">
+                {/* Content Area in Compact Bottom Container */}
+                <div className="absolute bottom-0 inset-x-0 p-4 sm:p-5 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 z-10 flex items-center justify-between gap-4">
+                  <div className="space-y-1 min-w-0 flex-1">
+                    <span className="text-[10px] font-extrabold text-[#c5a059] uppercase tracking-widest block">
                       {exp.tag}
                     </span>
-
-                    <p className="text-[11px] text-slate-300 line-clamp-2 pt-1 font-normal leading-relaxed">
+                    <h3 className="text-lg sm:text-xl font-sans font-extrabold text-white tracking-tight leading-snug truncate group-hover:text-[#f3d38c] transition-colors">
+                      {exp.title.replace('\n', ' ')}
+                    </h3>
+                    <p className="text-[11px] text-slate-300 line-clamp-1 font-normal">
                       {exp.desc}
                     </p>
-
-                    {/* Preview of Projects Included */}
-                    <div className="pt-2 hidden sm:block">
-                      <span className="text-[9px] font-bold text-[#e5be6b] uppercase tracking-wider block mb-1">
-                        Projects Under This Discipline:
-                      </span>
-                      <div className="flex flex-wrap gap-1">
-                        {exp.projects.slice(0, 3).map((p, pIdx) => (
-                          <span key={pIdx} className="text-[9px] px-2 py-0.5 rounded bg-white/10 text-white/90 border border-white/15 backdrop-blur-sm truncate max-w-[200px]">
-                            • {p}
-                          </span>
-                        ))}
-                        {exp.projects.length > 3 && (
-                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#c5a059]/30 text-[#e5be6b] font-bold">
-                            +{exp.projects.length - 3} more
-                          </span>
-                        )}
-                      </div>
-                    </div>
                   </div>
 
-                  {/* Circular Arrow Button (Bottom Right) */}
-                  <div className="absolute bottom-5 right-5 sm:bottom-7 sm:right-7 w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-white/80 flex items-center justify-center text-white group-hover:border-[#c5a059] group-hover:bg-[#c5a059] group-hover:text-[#07132c] group-hover:scale-110 transition-all duration-300 shadow-md">
-                    <ArrowRight className="w-4 h-4" />
-                  </div>
-
+                  {/* View All Projects Button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleNavigate('projects', { discipline: exp.title.replace('\n', ' ') });
+                    }}
+                    className="px-4 py-2 rounded-full bg-[#c5a059] hover:bg-[#e5be6b] text-[#07132c] text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-md hover:scale-105 transition-all duration-300 cursor-pointer border border-[#d4af37] shrink-0"
+                  >
+                    <span>View All Projects</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* View More / Show Less Toggle Button */}
+          {/* View All Capabilities Button */}
           <div className="flex justify-center pt-2">
             <button
-              onClick={() => setShowAllExpertise(!showAllExpertise)}
+              onClick={() => handleNavigate('expertise')}
               className="acc-btn acc-btn--gold text-xs px-6 sm:px-8 py-3 sm:py-3.5 flex items-center gap-2 shadow-md hover:shadow-xl transition-all duration-300 group cursor-pointer"
             >
-              <span>{showAllExpertise ? "Show Less Expertise" : "View More Expertise"}</span>
-              <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${showAllExpertise ? "rotate-180" : "group-hover:translate-y-0.5"}`} />
+              <span>View All Capabilities</span>
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
             </button>
           </div>
 
@@ -1256,11 +1225,8 @@ export default function App() {
                   onError={(e) => {
                     e.currentTarget.src = "/icon_mro_headquarters.jpg";
                   }}
-                  className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
-                
-                {/* Gradient Overlay for Text Visibility */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
 
                 {/* Top Badges */}
                 <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-10">
@@ -1269,19 +1235,19 @@ export default function App() {
                   </span>
                 </div>
 
-                <div className="absolute top-4 sm:top-6 right-4 sm:right-6 z-10 bg-black/70 backdrop-blur-md px-3 sm:px-3.5 py-1 sm:py-1.5 text-[11px] sm:text-xs font-extrabold text-white">
+                <div className="absolute top-4 sm:top-6 right-4 sm:right-6 z-10 bg-black/80 backdrop-blur-md px-3 sm:px-3.5 py-1 sm:py-1.5 text-[11px] sm:text-xs font-extrabold text-white border border-white/20">
                   {project.year}
                 </div>
 
-                {/* Bottom Overlay Info */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-8 lg:p-10 z-10 space-y-2 sm:space-y-3">
+                {/* Bottom Info Bar (No Full Dark Shadow Layer On Photo) */}
+                <div className="absolute bottom-0 inset-x-0 p-4 sm:p-6 lg:p-8 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 z-10 space-y-1.5 sm:space-y-2">
                   <div className="flex items-center gap-2 text-xs sm:text-sm text-[#e5be6b] font-extrabold">
                     <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-[#c5a059]" />
                     <span className="truncate">{project.location}</span>
                   </div>
 
                   <div className="flex items-center gap-6">
-                    <h3 className="text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-white leading-snug">
+                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-sans font-extrabold text-white leading-snug">
                       {project.title}
                     </h3>
                   </div>
@@ -1317,7 +1283,7 @@ export default function App() {
                   <span className="text-xs font-bold text-[#927027] uppercase tracking-widest block">
                     PROVEN ENGINEERING INTEGRITY
                   </span>
-                  <h2 className="text-xl sm:text-4xl lg:text-5xl font-serif font-black text-[#07132c] tracking-tight leading-tight">
+                  <h2 className="text-xl sm:text-4xl lg:text-5xl font-sans font-black text-[#07132c] tracking-tight leading-tight">
                     Why Choose Icon Constructions?
                   </h2>
                 </div>
@@ -1336,7 +1302,7 @@ export default function App() {
                     <span className="px-2.5 sm:px-3 py-1 rounded-none bg-[#07132c] text-[#e5be6b] text-[9px] sm:text-[10px] font-black uppercase tracking-widest inline-block">
                       Our Promise
                     </span>
-                    <h3 className="text-lg sm:text-2xl font-serif font-bold text-[#07132c] leading-tight">
+                    <h3 className="text-lg sm:text-2xl font-sans font-bold text-[#07132c] leading-tight">
                       Half a century of bonded engineering discipline.
                     </h3>
                     <p className="text-xs text-slate-600 leading-relaxed">
@@ -1440,7 +1406,7 @@ export default function App() {
                     <span className="px-2.5 sm:px-3 py-1 rounded-none bg-[#c5a059] text-[#07132c] text-[9px] sm:text-[10px] font-black uppercase tracking-widest inline-block">
                       Take Action
                     </span>
-                    <h3 className="text-lg sm:text-2xl font-serif font-black text-white leading-tight">
+                    <h3 className="text-lg sm:text-2xl font-sans font-black text-white leading-tight">
                       Ready to build your next capital project?
                     </h3>
                     <p className="text-xs text-slate-300 font-medium leading-relaxed">
@@ -1475,7 +1441,7 @@ export default function App() {
                 <span className="text-xs font-bold text-[#c5a059] uppercase tracking-widest block">
                   AUTHORITY ENDORSEMENTS
                 </span>
-                <h2 className="text-3xl sm:text-5xl font-serif font-black text-[#07132c] tracking-tight leading-tight">
+                <h2 className="text-3xl sm:text-5xl font-sans font-black text-[#07132c] tracking-tight leading-tight">
                   Client Reviews &amp; Testimonials
                 </h2>
                 <p className="text-sm sm:text-base text-slate-600 font-normal">
@@ -1588,7 +1554,7 @@ export default function App() {
                             <Quote className="w-7 h-7 text-[#c5a059]/40" />
                           </div>
 
-                          <p className="text-xs sm:text-sm text-slate-800 italic leading-relaxed font-serif">
+                          <p className="text-xs sm:text-sm text-slate-800 italic leading-relaxed font-sans">
                             "{cur.review}"
                           </p>
                         </div>
@@ -1834,8 +1800,7 @@ export default function App() {
 
             <div className="h-64 relative">
               <img src={selectedProjectModal.image} alt={selectedProjectModal.title} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-6 right-6 text-white">
+              <div className="absolute bottom-0 inset-x-0 p-4 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 text-white">
                 <span className="px-2.5 py-0.5 rounded bg-[#c5a059] text-[#07132c] text-[10px] font-black uppercase tracking-widest">
                   {selectedProjectModal.categoryName}
                 </span>

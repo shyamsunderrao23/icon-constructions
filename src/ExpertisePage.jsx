@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import {
-  Building2, Globe, ShieldCheck, CheckCircle2,
-  ArrowRight, ArrowLeft, Sparkles, Sliders, X, ChevronRight, Menu,
-  MapPin, Phone, Mail, Wrench, Layers, Award, Hammer
+  MapPin, ArrowLeft, Building2, CheckCircle2,
+  ChevronDown, ChevronRight, ArrowRight, ArrowUpRight, Search, X, Sliders, Menu,
+  Eye, Filter, Sparkles, Phone, Mail, ShieldCheck, Globe, Layers, Award, HardHat
 } from 'lucide-react';
 
 const expertiseSectors = [
@@ -13,6 +13,7 @@ const expertiseSectors = [
     sectorNumber: '01',
     title: 'Multi-Span Highway River Bridges & Pile Foundations',
     tagline: 'Heavy Infrastructure & Hydraulic Crossings',
+    categoryName: 'Bridges & Substructures',
     image: '/icon_tonkini_10span_bridge.jpg',
     description: 'Icon Constructions specializes in high-capacity highway river crossings, pre-stressed concrete girder installations, and deep underwater pile foundations engineered to withstand peak seasonal monsoon currents.',
     capabilities: [
@@ -38,6 +39,7 @@ const expertiseSectors = [
     sectorNumber: '02',
     title: 'Educational Campuses, 100-Column Structures & Hostels',
     tagline: 'Institutional & Welfare Infrastructure',
+    categoryName: 'Educational & Campuses',
     image: '/icon_school_assembly.jpg',
     description: 'High-capacity institutional complexes engineered for generational durability, including 100-column heavy structural concrete frames, multi-story government high schools, and KGBV tribal residential hostels.',
     capabilities: [
@@ -63,6 +65,7 @@ const expertiseSectors = [
     sectorNumber: '03',
     title: 'Government & Civic Administrative Headquarters',
     tagline: 'Public Administration & Municipal Facilities',
+    categoryName: 'Government & Civic',
     image: '/icon_tahasildar_mro.jpg',
     description: 'Official Mandal Revenue Office (MRO) headquarters, sub-collectorate executive wings, integrated municipal wholesale markets, and forest department command centers built to rigorous government specifications.',
     capabilities: [
@@ -85,6 +88,7 @@ const expertiseSectors = [
     sectorNumber: '04',
     title: 'Hydraulic Infrastructure, Check Dams & Box Culverts',
     tagline: 'Water Resource Management & Flood Protection',
+    categoryName: 'Hydraulic Infrastructure',
     image: '/icon_overflow_check_dam.jpg',
     description: 'Specialized hydraulic civil engineering including stream check dams for groundwater recharge, flood-mitigation retaining walls, and reinforced concrete box culvert networks across highway corridors.',
     capabilities: [
@@ -105,6 +109,7 @@ const expertiseSectors = [
     sectorNumber: '05',
     title: 'Industrial Heavy Sheds & Manufacturing Megahubs',
     tagline: 'Pre-Engineered Structures & High-Bay Facilities',
+    categoryName: 'Industrial Sheds & Steel',
     image: '/icon_industrial_steel_sheds.jpg',
     description: 'Pre-engineered industrial steel complexes featuring clear-span trusses, high-clearance overhead gantry crane tracks, and heavy-load concrete floor aprons designed for continuous heavy machinery operations.',
     capabilities: [
@@ -122,10 +127,14 @@ const expertiseSectors = [
 
 export default function ExpertisePage({ onNavigate, onBack }) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
+  const [selectedSectorModal, setSelectedSectorModal] = useState(null);
 
-  const navigate = (page) => {
+  const navigate = (page, params) => {
     if (onNavigate) {
-      onNavigate(page);
+      onNavigate(page, params);
     } else if (onBack) {
       onBack();
     }
@@ -136,8 +145,37 @@ export default function ExpertisePage({ onNavigate, onBack }) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  // Filtered Sectors
+  const filteredSectors = useMemo(() => {
+    return expertiseSectors.filter((sector) => {
+      // Search matching
+      const matchesSearch =
+        !searchQuery.trim() ||
+        sector.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        sector.tagline.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        sector.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        sector.capabilities.some((c) => c.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        sector.projectsUnderDiscipline.some((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+      // Category matching
+      const matchesCategory =
+        selectedCategory === 'ALL' || sector.id === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchQuery, selectedCategory]);
+
+  const categoryTabs = [
+    { id: 'ALL', label: 'View All' },
+    { id: 'bridges', label: 'Bridges & Substructures' },
+    { id: 'educational', label: 'Educational & Hostels' },
+    { id: 'civic', label: 'Government & Civic' },
+    { id: 'hydraulic', label: 'Hydraulic Infrastructure' },
+    { id: 'industrial', label: 'Industrial & Steel' }
+  ];
+
   return (
-    <div className="min-h-screen bg-[#FBFBFA] text-[#07132c] font-sans antialiased selection:bg-[#c5a059] selection:text-white">
+    <div className="min-h-screen bg-white text-[#07132c] font-sans antialiased selection:bg-[#c5a059] selection:text-white">
 
       {/* ── TOP NOTICE BAR ─── */}
       <div className="bg-[#c5a059] text-white text-xs py-2 sm:py-2.5 px-4 sm:px-8 shadow-sm font-medium border-b border-[#b88f44]">
@@ -155,7 +193,7 @@ export default function ExpertisePage({ onNavigate, onBack }) {
       </div>
 
       {/* ── HEADER / NAVBAR ─── */}
-      <header className="sticky top-0 z-40 bg-[#F8F7F3] shadow-sm border-b border-slate-200 transition-all duration-300">
+      <header className="sticky top-0 z-40 bg-white shadow-sm border-b border-slate-200 transition-all duration-300">
         <div className="w-full px-6 sm:px-10 lg:px-14 h-16 sm:h-18 flex items-center justify-between gap-6 relative">
 
           {/* Logo */}
@@ -209,7 +247,6 @@ export default function ExpertisePage({ onNavigate, onBack }) {
           mobileNavOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
-        {/* Backdrop Overlay */}
         <div 
           className={`fixed inset-0 bg-[#07132c]/75 backdrop-blur-sm transition-opacity duration-300 ${
             mobileNavOpen ? 'opacity-100' : 'opacity-0'
@@ -217,56 +254,39 @@ export default function ExpertisePage({ onNavigate, onBack }) {
           onClick={() => setMobileNavOpen(false)}
         />
 
-        {/* Drawer Panel (Left Slide-in) */}
         <div 
-          className={`fixed top-0 left-0 bottom-0 w-[340px] sm:w-[380px] max-w-[90vw] bg-[#F8F7F3] text-[#07132c] shadow-2xl z-50 flex flex-col justify-between transform transition-transform duration-300 ease-out border-r border-slate-300 ${
+          className={`fixed inset-y-0 left-0 w-[280px] sm:w-[320px] bg-white shadow-2xl z-50 flex flex-col justify-between transform transition-transform duration-300 ease-out border-r border-slate-200 ${
             mobileNavOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
-          {/* Drawer Header */}
-          <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-[#F8F7F3]">
-            <div className="flex items-center gap-3">
-              <img
-                src="/logo.png"
-                alt="Icon Constructions Logo"
-                className="h-10 w-auto object-contain"
-              />
-              <div>
-                <span className="text-[#07132c] font-serif text-sm font-black tracking-wider block">ICON</span>
-                <span className="text-[#c5a059] text-[9px] font-bold tracking-widest uppercase block -mt-0.5">CONSTRUCTIONS</span>
-              </div>
-            </div>
+          <div className="p-6 border-b border-slate-200 flex items-center justify-between bg-white">
+            <img src="/logo.png" alt="Icon Constructions Logo" className="h-9 w-auto object-contain" />
             <button 
-              onClick={() => setMobileNavOpen(false)}
-              className="w-8 h-8 flex items-center justify-center text-slate-600 hover:text-[#07132c] border border-slate-300 hover:border-[#c5a059] transition-colors cursor-pointer bg-white"
-              aria-label="Close menu"
+              onClick={() => setMobileNavOpen(false)} 
+              className="p-1.5 rounded-lg text-slate-500 hover:text-[#07132c] hover:bg-slate-100 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Nav Links */}
-          <div className="p-5 space-y-2 flex-1 overflow-y-auto">
-            <div className="text-[10px] font-black uppercase tracking-widest text-[#c5a059] mb-3 px-1">
-              Menu Navigation
-            </div>
+          <div className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
             <button 
               onClick={() => { navigate('home'); setMobileNavOpen(false); }}
-              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-200/60 border border-transparent hover:border-[#c5a059]/30 transition-all text-left cursor-pointer"
+              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-50 transition-all text-left cursor-pointer"
             >
               <span>Home</span>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </button>
             <button 
               onClick={() => { navigate('about'); setMobileNavOpen(false); }}
-              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-200/60 border border-transparent hover:border-[#c5a059]/30 transition-all text-left cursor-pointer"
+              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-50 transition-all text-left cursor-pointer"
             >
               <span>About Us</span>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </button>
             <button 
               onClick={() => { navigate('projects'); setMobileNavOpen(false); }}
-              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-200/60 border border-transparent hover:border-[#c5a059]/30 transition-all text-left cursor-pointer"
+              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-50 transition-all text-left cursor-pointer"
             >
               <span>Projects</span>
               <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -280,15 +300,14 @@ export default function ExpertisePage({ onNavigate, onBack }) {
             </button>
             <button 
               onClick={() => { navigate('contact'); setMobileNavOpen(false); }}
-              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-200/60 border border-transparent hover:border-[#c5a059]/30 transition-all text-left cursor-pointer"
+              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-50 transition-all text-left cursor-pointer"
             >
               <span>Contact Us</span>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </button>
           </div>
 
-          {/* Drawer Footer & Fast Action */}
-          <div className="p-5 border-t border-slate-200 bg-[#EFECE6] space-y-3">
+          <div className="p-5 border-t border-slate-200 bg-slate-50 space-y-3">
             <button 
               onClick={() => { navigate('contact'); setMobileNavOpen(false); }}
               className="w-full bg-[#07132c] hover:bg-[#0b1e3d] text-[#e5be6b] font-black uppercase tracking-widest text-xs py-3.5 px-4 shadow-md transition-all cursor-pointer border border-[#c5a059]/40 flex items-center justify-center gap-2"
@@ -296,165 +315,386 @@ export default function ExpertisePage({ onNavigate, onBack }) {
               <span>Get In Touch</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
-            
-            <div className="text-[11px] text-slate-600 space-y-0.5 pt-1">
-              <p className="font-bold text-[#07132c] text-[11px]">Class-1 Empaneled Contractor</p>
-              <p className="text-[10px] text-slate-500">50+ Years Engineering Legacy</p>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* ── HERO BANNER ─── */}
-      <section className="relative w-full overflow-hidden bg-white pt-16 pb-14 px-4 sm:px-6 lg:px-8 border-b border-slate-200">
-        <div className="max-w-4xl mx-auto text-center space-y-4">
-          <h1 data-aos="fade-up" className="text-4xl sm:text-6xl lg:text-7xl font-serif font-black text-[#07132c] tracking-tight leading-tight">
+      {/* ── 1. HERO BANNER WITH SEARCH & CATEGORY FILTER (z-30 ensures floating dropdown is always on top) ─── */}
+      <section className="relative z-30 w-full overflow-visible bg-white pt-16 pb-10 px-4 sm:px-6 lg:px-8 border-b border-slate-200">
+        <div className="w-full max-w-5xl mx-auto text-center space-y-6">
+
+          {/* Top Tagline */}
+          <div data-aos="fade-up" className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-[#c5a059] text-xs font-bold uppercase tracking-widest">
+            <HardHat className="w-3.5 h-3.5 text-[#c5a059]" />
+            <span>CORE ENGINEERING DISCIPLINES</span>
+          </div>
+
+          {/* Centered Main Title */}
+          <h1 data-aos="fade-up" className="text-3xl sm:text-5xl lg:text-6xl font-sans font-black text-[#07132c] tracking-tight leading-tight">
             Our Expertise
           </h1>
 
-          <p data-aos="fade-up" data-aos-delay="100" className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <p data-aos="fade-up" data-aos-delay="50" className="text-xs sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
             Delivering multidisciplinary civil and structural engineering solutions across heavy transport infrastructure, educational campuses, government headquarters, and industrial megastructures.
           </p>
+
+          {/* ── 2. SEARCH BAR & DISCIPLINE TABS ─── */}
+          <div data-aos="fade-up" data-aos-delay="100" className="pt-2 w-full space-y-4">
+            
+            {/* Search Input Box */}
+            <div className="max-w-4xl mx-auto relative flex items-center bg-white border border-slate-300 hover:border-[#c5a059] focus-within:border-[#c5a059] focus-within:ring-2 focus-within:ring-[#c5a059]/15 rounded-none shadow-xs transition-all duration-300 px-5 py-2.5">
+              <Search className="w-5 h-5 text-[#c5a059] shrink-0 mr-3" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search disciplines by keyword, capabilities, or projects..."
+                className="w-full bg-transparent text-[#07132c] placeholder-slate-400 text-sm sm:text-base outline-none py-1 font-normal"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="p-1 rounded-full text-slate-400 hover:text-[#07132c] hover:bg-slate-100 transition-colors mr-2 cursor-pointer bg-transparent border-0"
+                  title="Clear search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+              <div className="hidden sm:flex items-center gap-1.5 pl-3 border-l border-slate-200 text-xs sm:text-sm text-slate-500 shrink-0">
+                <span className="font-mono bg-slate-100 px-2.5 py-0.5 rounded-none text-[#07132c] font-medium">
+                  {filteredSectors.length}
+                </span>
+                <span>sectors</span>
+              </div>
+            </div>
+
+            {/* ── DISCIPLINE CATEGORY FILTER (RESPONSIVE MOBILE SELECTOR + DESKTOP TABS) ─── */}
+            <div className="pt-1 w-full">
+              {/* Custom Filter Dropdown ONLY for Responsive / Mobile (< md) */}
+              <div className="md:hidden w-full text-left relative z-40">
+                <div className="flex items-center justify-between px-1 mb-1.5">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-[#07132c] flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#c5a059]" />
+                    <span>Filter by Sector:</span>
+                  </span>
+                  <span className="text-[10px] font-bold text-[#c5a059] bg-[#07132c] px-2.5 py-0.5 border border-[#c5a059]/40">
+                    {filteredSectors.length} Sectors
+                  </span>
+                </div>
+
+                {/* Dropdown Trigger Button */}
+                <button
+                  type="button"
+                  onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
+                  className="w-full bg-white text-[#07132c] text-sm font-bold border-2 border-[#c5a059] py-3.5 px-4 flex items-center justify-between shadow-sm cursor-pointer transition-all relative z-50"
+                >
+                  <div className="flex items-center gap-2.5 truncate">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#c5a059] shrink-0" />
+                    <span className="truncate font-black text-[#07132c]">
+                      {categoryTabs.find((c) => c.id === selectedCategory)?.label || 'All Sectors (5 Core)'}
+                    </span>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-[#c5a059] transition-transform duration-300 shrink-0 ${mobileDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Backdrop Click Outside to Smoothly Close */}
+                {mobileDropdownOpen && (
+                  <div
+                    className="fixed inset-0 z-40 bg-black/25 backdrop-blur-[1px] transition-opacity duration-300"
+                    onClick={() => setMobileDropdownOpen(false)}
+                  />
+                )}
+
+                {/* Custom Dropdown Floating Overlay Menu (Overlaps Sector List Smoothly without Moving Content) */}
+                <div
+                  className={`absolute top-full left-0 right-0 z-50 mt-1.5 bg-white border-2 border-[#c5a059] shadow-2xl divide-y divide-slate-100 transition-all duration-300 origin-top ease-out ${
+                    mobileDropdownOpen
+                      ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto visible'
+                      : 'opacity-0 -translate-y-2 scale-95 pointer-events-none invisible'
+                  }`}
+                >
+                  {categoryTabs.map((item) => {
+                    const isSelected = selectedCategory === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedCategory(item.id);
+                          setMobileDropdownOpen(false);
+                        }}
+                        className={`w-full px-4 py-3.5 text-left text-xs sm:text-sm font-bold transition-all flex items-center justify-between cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#07132c] text-[#e5be6b]'
+                            : 'bg-white text-slate-800 hover:bg-slate-50 hover:text-[#07132c]'
+                        }`}
+                      >
+                        <span>{item.label}</span>
+                        {isSelected && <CheckCircle2 className="w-4 h-4 text-[#e5be6b] shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Desktop Filter Tabs (>= md) */}
+              <div className="hidden md:block w-full">
+                <div className="flex items-stretch justify-start w-full border border-slate-200 rounded-none overflow-hidden bg-white shadow-xs">
+                  {categoryTabs.map((tab) => {
+                    const isActive = selectedCategory === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setSelectedCategory(tab.id)}
+                        className={`flex-1 h-[46px] sm:h-[48px] px-3 sm:px-4 rounded-none text-xs sm:text-sm font-semibold transition-all duration-150 flex items-center justify-center cursor-pointer border-r border-slate-200 last:border-r-0 whitespace-nowrap ${
+                          isActive
+                            ? 'bg-[#07132c] text-[#e5be6b] font-black border-2 border-[#c5a059] shadow-sm relative z-10'
+                            : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-[#07132c]'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
-      {/* ── 5 EXPERTISE SECTORS DEEP DIVE ─── */}
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-24">
-        {expertiseSectors.map((sec, idx) => {
-          const isEven = idx % 2 === 0;
-          return (
-            <div
-              key={sec.id}
-              data-aos="fade-up"
-              className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center"
+      {/* ── 3. FULL-BLEED EDGE-TO-EDGE 0-BORDER-RADIUS 0-GAP GRID (WHITE BACKGROUND) ─── */}
+      <div className="w-full px-0 py-0 overflow-hidden bg-white relative z-10">
+
+        {/* Empty State */}
+        {filteredSectors.length === 0 ? (
+          <div className="py-20 text-center space-y-4 max-w-md mx-auto bg-white p-8 my-10 rounded-none border border-slate-200 shadow-sm">
+            <div className="w-16 h-16 rounded-none bg-slate-100 border-2 border-[#c5a059]/40 flex items-center justify-center mx-auto text-[#c5a059]">
+              <Search className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-xl font-bold text-[#07132c]">No Disciplines Found</h3>
+              <p className="text-xs text-slate-500">
+                No expertise sectors match your current search query.
+              </p>
+            </div>
+            <button
+              onClick={() => { setSearchQuery(''); setSelectedCategory('ALL'); }}
+              className="bg-gradient-to-r from-[#d4af37] via-[#c5a059] to-[#a8813a] text-[#07132c] text-xs font-black uppercase tracking-widest px-6 py-2.5 rounded-none shadow-md hover:scale-105 transition-all cursor-pointer border border-[#d4af37]"
             >
-              {/* Media Card */}
-              <div className={`lg:col-span-6 ${!isEven ? 'lg:order-2' : ''}`}>
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white group">
-                  <img
-                    src={sec.image}
-                    alt={sec.title}
-                    onError={(e) => {
-                      e.currentTarget.src = "/icon_mro_headquarters.jpg";
-                    }}
-                    className="w-full h-[400px] sm:h-[480px] object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/90 via-black/30 to-transparent" />
-                  
-                  <div className="absolute top-6 left-6">
-                    <span className="px-4 py-2 rounded-xl bg-[#07132c]/90 text-[#e5be6b] text-xs font-black uppercase tracking-widest border border-[#c5a059]/40 backdrop-blur-md">
-                      Sector {sec.sectorNumber}
-                    </span>
+              Reset Filters
+            </button>
+          </div>
+        ) : (
+          /* Full-Bleed 2-Column Edge-to-Edge Grid (0 Gap, 0 Border Radius, Pure White Background) */
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full px-0 bg-white">
+            {filteredSectors.map((sec) => (
+              <div
+                key={sec.id}
+                onClick={() => navigate('projects', { discipline: sec.categoryName })}
+                className="relative h-[440px] sm:h-[520px] lg:h-[600px] rounded-none overflow-hidden group shadow-none border-0 transition-all duration-500 bg-white cursor-pointer"
+              >
+                {/* Full Background Image (No Shadow Layer) */}
+                <img
+                  src={sec.image}
+                  alt={sec.title}
+                  onError={(e) => {
+                    e.currentTarget.src = "/icon_mro_headquarters.jpg";
+                  }}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+
+                {/* Top Badges */}
+                <div className="absolute top-6 left-6 z-10 flex items-center gap-2">
+                  <span className="px-3 py-2 rounded-none bg-[#c5a059] text-[#07132c] text-xs font-black tracking-wider uppercase shadow-md">
+                    Sector {sec.sectorNumber}
+                  </span>
+                  <span className="px-4 py-2 rounded-none bg-[#07132c]/90 text-[#e5be6b] text-xs font-black uppercase tracking-widest border border-[#c5a059]/40 backdrop-blur-md">
+                    {sec.categoryName}
+                  </span>
+                </div>
+
+                <div className="absolute top-6 right-6 z-10 bg-black/80 backdrop-blur-md px-3.5 py-1.5 text-xs font-extrabold text-white border border-white/20">
+                  {sec.projectsUnderDiscipline.length} Projects
+                </div>
+
+                {/* Bottom Overlay Info in crisp bottom container */}
+                <div className="absolute bottom-0 inset-x-0 p-6 sm:p-8 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 z-10 space-y-2">
+                  {/* Location / Tagline */}
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-[#e5be6b] font-extrabold">
+                    <ShieldCheck className="w-4 h-4 shrink-0 text-[#c5a059]" />
+                    <span className="truncate">{sec.tagline}</span>
                   </div>
 
-                  <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">
-                    <span className="text-[11px] font-bold text-[#e5be6b] uppercase tracking-wider block">Key Benchmark Project</span>
-                    <h4 className="text-lg font-bold text-white">{sec.highlightProject}</h4>
+                  {/* Main Title & Action Button */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-sans font-extrabold text-white leading-snug group-hover:text-[#f3d38c] transition-colors">
+                      {sec.title}
+                    </h3>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate('projects', { discipline: sec.categoryName });
+                      }}
+                      className="px-5 py-2.5 rounded-full bg-[#c5a059] hover:bg-[#e5be6b] text-[#07132c] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-md hover:scale-105 transition-all duration-300 cursor-pointer border border-[#d4af37] shrink-0 self-start sm:self-center"
+                    >
+                      <span>View All Projects</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
               </div>
+            ))}
+          </div>
+        )}
 
-              {/* Content Details */}
-              <div className={`lg:col-span-6 space-y-6 ${!isEven ? 'lg:order-1' : ''}`}>
-                <div className="space-y-2">
-                  <span className="text-xs font-black text-[#927027] uppercase tracking-widest block">
-                    {sec.tagline}
+      </div>
+
+      {/* ── 4. SECTOR DETAILS MODAL (MATCHING PROJECT MODAL PATTERN) ─── */}
+      {selectedSectorModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-4xl bg-white border border-slate-200 rounded-none shadow-2xl overflow-hidden max-h-[90vh] flex flex-col text-[#07132c]">
+            
+            {/* Modal Image Header */}
+            <div className="relative h-64 sm:h-80 w-full overflow-hidden shrink-0">
+              <img
+                src={selectedSectorModal.image}
+                alt={selectedSectorModal.title}
+                onError={(e) => {
+                  e.currentTarget.src = "/icon_mro_headquarters.jpg";
+                }}
+                className="w-full h-full object-cover"
+              />
+              
+              <button
+                onClick={() => setSelectedSectorModal(null)}
+                className="absolute top-4 right-4 z-10 p-2 rounded-none bg-black/70 text-white hover:bg-[#c5a059] hover:text-[#07132c] transition-colors cursor-pointer border border-white/20"
+                title="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="absolute bottom-0 inset-x-0 p-5 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 text-white space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 rounded-none bg-[#c5a059] text-[#07132c] text-xs font-black tracking-wider uppercase">
+                    Sector {selectedSectorModal.sectorNumber}
                   </span>
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-black text-[#07132c] leading-tight">
-                    {sec.title}
-                  </h2>
+                  <span className="px-3 py-1 rounded-none bg-white text-[#07132c] text-xs font-black uppercase tracking-widest">
+                    {selectedSectorModal.categoryName}
+                  </span>
                 </div>
+                <h3 className="text-xl sm:text-2xl font-sans font-black text-white mt-1 leading-tight">
+                  {selectedSectorModal.title}
+                </h3>
+              </div>
+            </div>
 
-                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                  {sec.description}
+            {/* Modal Content Body */}
+            <div className="p-6 sm:p-8 space-y-6 overflow-y-auto">
+              
+              {/* Highlight Benchmark */}
+              <div className="p-4 rounded-none bg-amber-50/80 border border-[#c5a059]/40 flex items-center gap-3">
+                <Award className="w-6 h-6 text-[#c5a059] shrink-0" />
+                <div>
+                  <span className="text-[10px] font-black text-[#927027] uppercase tracking-wider block">Key Landmark Execution</span>
+                  <p className="text-sm font-bold text-[#07132c]">{selectedSectorModal.highlightProject}</p>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="space-y-2">
+                <h4 className="text-xs font-black text-[#07132c] uppercase tracking-wider border-b border-slate-200 pb-2">
+                  Discipline Overview
+                </h4>
+                <p className="text-sm text-slate-700 leading-relaxed font-medium">
+                  {selectedSectorModal.description}
                 </p>
+              </div>
 
-                <div className="space-y-3 pt-2">
-                  <h4 className="text-xs font-bold text-[#07132c] uppercase tracking-wider">Core Technical Capabilities:</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {sec.capabilities.map((cap, cIdx) => (
-                      <div key={cIdx} className="flex items-start gap-2.5 p-3 rounded-xl bg-white border border-slate-200 shadow-sm text-xs font-medium text-slate-700">
-                        <CheckCircle2 className="w-4 h-4 text-[#c5a059] shrink-0 mt-0.5" />
-                        <span>{cap}</span>
+              {/* Core Technical Capabilities */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-black text-[#07132c] uppercase tracking-wider border-b border-slate-200 pb-2">
+                  Core Technical Capabilities
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {selectedSectorModal.capabilities.map((cap, cIdx) => (
+                    <div key={cIdx} className="flex items-start gap-2.5 p-3 rounded-none bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700">
+                      <CheckCircle2 className="w-4 h-4 text-[#c5a059] shrink-0 mt-0.5" />
+                      <span>{cap}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Projects Under This Discipline */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-black text-[#07132c] uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center justify-between">
+                  <span>Official Projects Executed Under This Discipline ({selectedSectorModal.projectsUnderDiscipline.length})</span>
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {selectedSectorModal.projectsUnderDiscipline.map((proj, pIdx) => (
+                    <div
+                      key={pIdx}
+                      className="flex items-start gap-3 p-3 rounded-none bg-slate-50 border border-slate-200"
+                    >
+                      <span className="shrink-0 px-2 py-0.5 rounded-none text-[10px] font-black bg-[#c5a059]/20 text-[#84631d]">
+                        #{proj.sno}
+                      </span>
+                      <div className="space-y-0.5 min-w-0">
+                        <h5 className="text-xs font-bold text-[#07132c] truncate">
+                          {proj.name}
+                        </h5>
+                        <p className="text-[10px] text-slate-500 truncate flex items-center gap-1">
+                          <MapPin className="w-2.5 h-2.5 text-[#c5a059] shrink-0" />
+                          <span>{proj.location}</span>
+                        </p>
                       </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Projects Executed Under This Expertise */}
-                {sec.projectsUnderDiscipline && sec.projectsUnderDiscipline.length > 0 && (
-                  <div className="space-y-3 pt-3">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-bold text-[#07132c] uppercase tracking-wider flex items-center gap-2">
-                        <Building2 className="w-4 h-4 text-[#c5a059]" />
-                        <span>Official Projects Executed Under This Discipline ({sec.projectsUnderDiscipline.length}):</span>
-                      </h4>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {sec.projectsUnderDiscipline.map((proj, pIdx) => (
-                        <div
-                          key={pIdx}
-                          onClick={() => navigate('projects')}
-                          className="group/item flex items-start gap-3 p-3 rounded-xl bg-slate-50 hover:bg-[#07132c] hover:text-white border border-slate-200/80 hover:border-[#c5a059] transition-all duration-200 cursor-pointer shadow-sm"
-                        >
-                          <span className="shrink-0 px-2 py-0.5 rounded text-[10px] font-black bg-[#c5a059]/20 text-[#84631d] group-hover/item:bg-[#c5a059] group-hover/item:text-[#07132c] transition-colors">
-                            #{proj.sno}
-                          </span>
-                          <div className="space-y-0.5 min-w-0">
-                            <h5 className="text-xs font-bold text-[#07132c] group-hover/item:text-white truncate">
-                              {proj.name}
-                            </h5>
-                            <p className="text-[10px] text-slate-500 group-hover/item:text-slate-300 truncate flex items-center gap-1">
-                              <MapPin className="w-2.5 h-2.5 text-[#c5a059] shrink-0" />
-                              <span>{proj.location}</span>
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="pt-4 flex items-center gap-4">
-                  <button
-                    onClick={() => navigate('projects')}
-                    className="inline-flex items-center gap-2 bg-[#07132c] text-white text-xs font-bold uppercase tracking-wider px-6 py-3.5 rounded-xl hover:bg-[#0b1e3d] transition-colors cursor-pointer border-0 shadow-md"
-                  >
-                    <span>Explore All Projects</span>
-                    <ArrowRight className="w-4 h-4 text-[#c5a059]" />
-                  </button>
-
-                  <button
-                    onClick={() => navigate('contact')}
-                    className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#927027] hover:underline cursor-pointer bg-transparent border-0"
-                  >
-                    <span>Request Technical RFP</span>
-                  </button>
+                  ))}
                 </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <button
+                  onClick={() => { setSelectedSectorModal(null); navigate('projects'); }}
+                  className="w-full sm:w-auto px-6 py-3 rounded-none bg-[#07132c] hover:bg-[#0b1e3d] text-[#e5be6b] font-black uppercase tracking-wider text-xs transition-colors cursor-pointer border border-[#c5a059]/40 flex items-center justify-center gap-2"
+                >
+                  <span>Explore All Projects</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+
+                <button
+                  onClick={() => { setSelectedSectorModal(null); navigate('contact'); }}
+                  className="w-full sm:w-auto px-6 py-3 rounded-none bg-gradient-to-r from-[#d4af37] via-[#c5a059] to-[#a8813a] text-[#07132c] text-xs font-black uppercase tracking-wider hover:scale-105 transition-transform cursor-pointer border border-[#d4af37] shadow-md text-center"
+                >
+                  Request Technical Consultation
+                </button>
               </div>
 
             </div>
-          );
-        })}
-      </div>
+          </div>
+        </div>
+      )}
 
-      {/* ── TECHNICAL EXCELLENCE BANNER ─── */}
-      <section className="bg-slate-100 py-20 border-y border-slate-200">
+      {/* ── 5. TECHNICAL EXCELLENCE BANNER ─── */}
+      <section className="bg-white py-16 sm:py-20 border-t border-slate-200">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center">
+            <div className="bg-white p-6 sm:p-8 rounded-none border border-slate-200 shadow-sm space-y-3">
               <Layers className="w-8 h-8 text-[#c5a059] mx-auto" />
-              <h3 className="text-lg font-bold text-[#07132c]">Heavy Heavy Machinery Fleet</h3>
+              <h3 className="text-lg font-bold text-[#07132c]">Heavy Machinery Fleet</h3>
               <p className="text-xs text-slate-600 leading-relaxed">In-house inventory of hydraulic piling rigs, transit mixers, mobile batching plants, and tower cranes.</p>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md space-y-3">
+            <div className="bg-white p-6 sm:p-8 rounded-none border border-slate-200 shadow-sm space-y-3">
               <ShieldCheck className="w-8 h-8 text-[#c5a059] mx-auto" />
               <h3 className="text-lg font-bold text-[#07132c]">Rigorous QA/QC Testing</h3>
               <p className="text-xs text-slate-600 leading-relaxed">On-site destructive &amp; non-destructive concrete cube testing, ultrasonic rebar scans, and soil compaction verification.</p>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md space-y-3">
+            <div className="bg-white p-6 sm:p-8 rounded-none border border-slate-200 shadow-sm space-y-3">
               <Award className="w-8 h-8 text-[#c5a059] mx-auto" />
               <h3 className="text-lg font-bold text-[#07132c]">Government Certified Class-1</h3>
               <p className="text-xs text-slate-600 leading-relaxed">Fully certified and empaneled with major Telangana state infrastructure corporations and municipal bodies.</p>
@@ -463,14 +703,14 @@ export default function ExpertisePage({ onNavigate, onBack }) {
         </div>
       </section>
 
-      {/* ── BOTTOM CTA ─── */}
+      {/* ── 6. BOTTOM CTA ─── */}
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         <div data-aos="fade-up" className="bg-[#07132c] text-white rounded-none p-6 sm:p-14 flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8 shadow-2xl relative overflow-hidden">
           <div className="space-y-2 sm:space-y-3 relative z-10 text-center md:text-left">
             <span className="text-xs sm:text-sm font-semibold text-[#e5be6b] tracking-wide block uppercase">
               Looking for tailored structural execution?
             </span>
-            <h3 className="text-xl sm:text-4xl lg:text-5xl font-serif font-bold text-white leading-tight">
+            <h3 className="text-xl sm:text-4xl lg:text-5xl font-sans font-bold text-white leading-tight">
               Consult with our principal civil engineers today.
             </h3>
           </div>
@@ -494,7 +734,7 @@ export default function ExpertisePage({ onNavigate, onBack }) {
         </div>
       </div>
 
-      {/* ── FOOTER (MODERN UPGRADED 4-COLUMN) ─── */}
+      {/* ── 7. FOOTER (MODERN UPGRADED 4-COLUMN) ─── */}
       <footer className="bg-[#050e1f] text-white border-t border-slate-800 pt-20 pb-12 font-sans">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
           

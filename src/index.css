@@ -28,16 +28,10 @@
     letter-spacing: -0.015em;
   }
 
-  .font-serif {
-    font-family: 'Playfair Display', 'Cinzel', serif !important;
-  }
-
-  .font-display {
-    font-family: 'Cinzel', 'Playfair Display', serif !important;
-  }
-
+  .font-serif,
+  .font-display,
   .font-sans {
-    font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif !important;
+    font-family: 'Plus Jakarta Sans', 'Outfit', system-ui, -apple-system, sans-serif !important;
   }
 }
 

@@ -7,8 +7,18 @@ import {
   ChevronDown, ChevronRight, X, Sliders, Menu, MessageSquare, FileText, Globe
 } from 'lucide-react';
 
+const sectorOptions = [
+  { id: 'civic', label: 'Government & Civic Complex' },
+  { id: 'bridges', label: 'Multi-Span Highway River Bridges' },
+  { id: 'educational', label: 'Educational & Residential Hostels' },
+  { id: 'hydraulic', label: 'Hydraulic Dams & Box Culverts' },
+  { id: 'industrial', label: 'Industrial Sheds & Fabrication' },
+  { id: 'other', label: 'Other Civil Infrastructure' }
+];
+
 export default function ContactPage({ onNavigate, onBack }) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [sectorDropdownOpen, setSectorDropdownOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -135,7 +145,7 @@ export default function ContactPage({ onNavigate, onBack }) {
                 className="h-10 w-auto object-contain"
               />
               <div>
-                <span className="text-[#07132c] font-serif text-sm font-black tracking-wider block">ICON</span>
+                <span className="text-[#07132c] font-sans text-sm font-black tracking-wider block">ICON</span>
                 <span className="text-[#c5a059] text-[9px] font-bold tracking-widest uppercase block -mt-0.5">CONSTRUCTIONS</span>
               </div>
             </div>
@@ -211,7 +221,7 @@ export default function ContactPage({ onNavigate, onBack }) {
       {/* ── HERO BANNER ─── */}
       <section className="relative w-full overflow-hidden bg-white pt-16 pb-14 px-4 sm:px-6 lg:px-8 border-b border-slate-200">
         <div className="max-w-4xl mx-auto text-center space-y-4">
-          <h1 data-aos="fade-up" className="text-4xl sm:text-6xl lg:text-7xl font-serif font-black text-[#07132c] tracking-tight leading-tight">
+          <h1 data-aos="fade-up" className="text-4xl sm:text-6xl lg:text-7xl font-sans font-black text-[#07132c] tracking-tight leading-tight">
             Contact Us
           </h1>
 
@@ -233,7 +243,7 @@ export default function ContactPage({ onNavigate, onBack }) {
 
               <div className="space-y-2">
                 <span className="text-xs font-black text-[#e5be6b] uppercase tracking-widest">Headquarters &amp; Executive Office</span>
-                <h3 className="text-xl sm:text-2xl font-serif font-bold text-white">Icon Constructions</h3>
+                <h3 className="text-xl sm:text-2xl font-sans font-bold text-white">Icon Constructions</h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
                   Registered civil engineering contractor serving government departments, municipal corporations, and private commercial enterprises.
                 </p>
@@ -303,7 +313,7 @@ export default function ContactPage({ onNavigate, onBack }) {
               
               <div className="space-y-2">
                 <span className="text-xs font-black text-[#927027] uppercase tracking-widest block">Direct Tender &amp; Project Inquiry</span>
-                <h2 className="text-2xl sm:text-3xl font-serif font-black text-[#07132c]">Request Proposal or Consultation</h2>
+                <h2 className="text-2xl sm:text-3xl font-sans font-black text-[#07132c]">Request Proposal or Consultation</h2>
                 <p className="text-xs sm:text-sm text-slate-600">
                   Fill in the project requirements below and our Chief Project Engineer will respond within 24 business hours.
                 </p>
@@ -388,22 +398,66 @@ export default function ContactPage({ onNavigate, onBack }) {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div>
-                      <label className="text-xs font-bold text-[#07132c] uppercase tracking-wider block mb-2">
-                        Project Sector
+                    {/* Custom Project Sector Dropdown */}
+                    <div className="relative">
+                      <label className="text-xs font-bold text-[#07132c] uppercase tracking-wider block mb-2 flex items-center justify-between">
+                        <span>Project Sector</span>
+                        <span className="text-[10px] text-[#c5a059] font-bold lowercase tracking-normal">select sector</span>
                       </label>
-                      <select
-                        value={formData.projectSector}
-                        onChange={(e) => setFormData({ ...formData, projectSector: e.target.value })}
-                        className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm focus:border-[#c5a059] focus:bg-white focus:ring-2 focus:ring-[#c5a059]/20 outline-none transition-all cursor-pointer"
+
+                      {/* Dropdown Trigger Button */}
+                      <button
+                        type="button"
+                        onClick={() => setSectorDropdownOpen(!sectorDropdownOpen)}
+                        className="w-full bg-slate-50 border-2 border-slate-300 hover:border-[#c5a059] focus:border-[#c5a059] focus:bg-white rounded-xl px-4 py-3 text-sm text-[#07132c] font-semibold flex items-center justify-between shadow-xs transition-all cursor-pointer relative z-30"
                       >
-                        <option value="civic">Government &amp; Civic Complex</option>
-                        <option value="bridges">Multi-Span Highway River Bridges</option>
-                        <option value="educational">Educational &amp; Residential Hostels</option>
-                        <option value="hydraulic">Hydraulic Dams &amp; Box Culverts</option>
-                        <option value="industrial">Industrial Sheds &amp; Fabrication</option>
-                        <option value="other">Other Civil Infrastructure</option>
-                      </select>
+                        <div className="flex items-center gap-2 truncate">
+                          <span className="w-2 h-2 rounded-full bg-[#c5a059] shrink-0" />
+                          <span className="truncate">
+                            {sectorOptions.find((s) => s.id === formData.projectSector)?.label || 'Select Project Sector'}
+                          </span>
+                        </div>
+                        <ChevronDown className={`w-4 h-4 text-[#c5a059] transition-transform duration-300 shrink-0 ${sectorDropdownOpen ? 'rotate-180' : ''}`} />
+                      </button>
+
+                      {/* Backdrop Click Outside to Close */}
+                      {sectorDropdownOpen && (
+                        <div
+                          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[1px] transition-opacity duration-300"
+                          onClick={() => setSectorDropdownOpen(false)}
+                        />
+                      )}
+
+                      {/* Floating Dropdown Overlay Menu */}
+                      <div
+                        className={`absolute top-full left-0 right-0 z-50 mt-1.5 bg-white border-2 border-[#c5a059] rounded-xl shadow-2xl divide-y divide-slate-100 overflow-hidden transition-all duration-300 origin-top ease-out ${
+                          sectorDropdownOpen
+                            ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto visible'
+                            : 'opacity-0 -translate-y-2 scale-95 pointer-events-none invisible'
+                        }`}
+                      >
+                        {sectorOptions.map((opt) => {
+                          const isSelected = formData.projectSector === opt.id;
+                          return (
+                            <button
+                              key={opt.id}
+                              type="button"
+                              onClick={() => {
+                                setFormData({ ...formData, projectSector: opt.id });
+                                setSectorDropdownOpen(false);
+                              }}
+                              className={`w-full px-4 py-3 text-left text-xs sm:text-sm font-semibold transition-all flex items-center justify-between cursor-pointer ${
+                                isSelected
+                                  ? 'bg-[#07132c] text-[#e5be6b] font-bold'
+                                  : 'bg-white text-slate-800 hover:bg-slate-50 hover:text-[#07132c]'
+                              }`}
+                            >
+                              <span>{opt.label}</span>
+                              {isSelected && <CheckCircle2 className="w-4 h-4 text-[#e5be6b] shrink-0" />}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
 
                     <div>
