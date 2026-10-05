@@ -15,13 +15,34 @@
     --logo-navy-light: #16336e;
   }
 
+  html {
+    overflow-x: hidden !important;
+    max-width: 100vw;
+    width: 100%;
+  }
+
   body {
     margin: 0;
     padding: 0;
     background-color: #ffffff;
     color: #0d214a;
     font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
-    overflow-x: hidden;
+    overflow-x: hidden !important;
+    max-width: 100vw;
+    width: 100%;
+    position: relative;
+  }
+
+  #root {
+    overflow-x: hidden !important;
+    max-width: 100vw;
+    width: 100%;
+    position: relative;
+  }
+
+  /* Prevent any AOS offscreen transforms from expanding page width */
+  [data-aos] {
+    max-width: 100%;
   }
 
   h1, h2, h3, h4, h5, h6 {

@@ -39,7 +39,8 @@ import {
   Quote,
   HardHat,
   Clock,
-  Layers
+  Layers,
+  Eye
 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -52,12 +53,15 @@ export default function App() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [selectedProjectModal, setSelectedProjectModal] = useState(null);
+  const [activeOngoingModal, setActiveOngoingModal] = useState(null);
+  const [chilakapallyPhoto, setChilakapallyPhoto] = useState(0);
+  const [goribkapellyPhoto, setGoribkapellyPhoto] = useState(0);
   const [activeReviewIndex, setActiveReviewIndex] = useState(0);
   const getInitialPage = () => {
     try {
-      const hash = window.location.hash.replace('#', '').toLowerCase();
-      if (['projects', 'about', 'expertise', 'contact', 'home'].includes(hash)) {
-        return hash;
+      const cleanHash = window.location.hash.replace(/[#/]/g, '').toLowerCase();
+      if (['projects', 'about', 'expertise', 'contact', 'home'].includes(cleanHash)) {
+        return cleanHash;
       }
       const saved = localStorage.getItem('icon_page');
       if (['projects', 'about', 'expertise', 'contact', 'home'].includes(saved)) {
@@ -73,9 +77,11 @@ export default function App() {
 
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '').toLowerCase();
-      if (['projects', 'about', 'expertise', 'contact', 'home'].includes(hash)) {
-        setCurrentPage(hash);
+      const cleanHash = window.location.hash.replace(/[#/]/g, '').toLowerCase();
+      if (['projects', 'about', 'expertise', 'contact', 'home'].includes(cleanHash)) {
+        setCurrentPage(cleanHash);
+      } else if (!cleanHash) {
+        setCurrentPage('home');
       }
     };
     window.addEventListener('hashchange', handleHashChange);
@@ -87,7 +93,7 @@ export default function App() {
   const [slideDirection, setSlideDirection] = useState('next'); // 'next' | 'prev'
   const [isPlaying, setIsPlaying] = useState(true);
 
-  // GSAP ScrollTrigger Refs for Section 2 Pinned Showcase (5 Expertise Images)
+  // GSAP ScrollTrigger Refs for Section 2 Pinned Showcase (5 Expertise Images) - Desktop/Laptop
   const section2PinRef = useRef(null);
   const image1Ref = useRef(null);
   const image2Ref = useRef(null);
@@ -145,17 +151,20 @@ export default function App() {
     AOS.refresh();
   }, [currentSlide]);
 
-  // GSAP ScrollTrigger Pinned 5-Image Expertise Slide-Up Sequence for Section 2
+  // GSAP ScrollTrigger Sequence for Section 2 (Desktop & Laptop only, hidden on Mobile & Tablet)
   // Re-initializes reliably whenever user navigates back to 'home'
   useEffect(() => {
     if (currentPage !== 'home') return;
 
-    let ctx;
+    let mm;
     const initTimer = setTimeout(() => {
-      if (!section2PinRef.current) return;
+      mm = gsap.matchMedia();
 
-      ctx = gsap.context(() => {
-        // Prevent initial subpixel peeking on mobile viewports
+      // DESKTOP & LAPTOP (>= 1024px): Vertical Slide-Up Pinned Sequence
+      mm.add("(min-width: 1024px)", () => {
+        if (!section2PinRef.current || !image1Ref.current) return;
+
+        // Prevent initial subpixel peeking on viewports
         gsap.set([image2Ref.current, image3Ref.current, image4Ref.current, image5Ref.current], { yPercent: 100.1 });
 
         const tl = gsap.timeline({
@@ -273,16 +282,15 @@ export default function App() {
           image5Ref.current,
           { scale: 1.08, duration: 1.2, ease: 'none' }
         );
+      });
 
-        ScrollTrigger.refresh();
-      }, section2PinRef);
-
+      ScrollTrigger.refresh();
       AOS.refresh();
-    }, 60);
+    }, 80);
 
     return () => {
       clearTimeout(initTimer);
-      if (ctx) ctx.revert();
+      if (mm) mm.revert();
     };
   }, [currentPage]);
 
@@ -484,7 +492,7 @@ export default function App() {
 
   const [selectedDisciplineForProjects, setSelectedDisciplineForProjects] = useState('ALL');
 
-  const currentHero = heroSlides[currentSlide];
+  const currentHero = heroSlides[currentSlide] || heroSlides[0];
 
   const handleNavigate = (page, params = {}) => {
     if (params?.discipline) {
@@ -528,7 +536,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-[#0d214a] font-sans antialiased selection:bg-[#c5a059] selection:text-white">
+    <div className="min-h-screen bg-white text-[#0d214a] font-sans antialiased selection:bg-[#c5a059] selection:text-white overflow-x-hidden w-full max-w-full relative">
       
       {/* 1. Metallic Golden Top Notice Bar */}
       <div className="bg-[#c5a059] text-white text-xs py-2 sm:py-2.5 px-4 sm:px-8 shadow-sm font-medium border-b border-[#b88f44]">
@@ -748,10 +756,10 @@ export default function App() {
       )}
 
       {/* 3. EXACT ACC GROUP 50/50 SPLIT HERO VIDEO BANNER WITH SMOOTH SWIPE & LOADER */}
-      <section className="relative w-full h-[calc(100vh-108px)] min-h-[560px] bg-[#07132c] overflow-hidden flex flex-col lg:flex-row items-stretch">
+      <section className="relative w-full h-auto min-h-0 lg:h-[calc(100vh-108px)] lg:min-h-[560px] bg-[#07132c] flex flex-col lg:flex-row items-stretch">
         
         {/* LEFT SIDE (50% WIDTH): Solid Deep Icon Navy Card */}
-        <div className="w-full lg:w-1/2 bg-[#07132c] text-white px-8 sm:px-14 lg:px-20 py-12 lg:py-16 flex flex-col justify-between relative z-10">
+        <div className="w-full lg:w-1/2 bg-[#07132c] text-white px-6 sm:px-12 lg:px-20 py-10 sm:py-12 lg:py-16 flex flex-col justify-between relative z-10 space-y-8 lg:space-y-0">
           
           {/* Subtle Watermarked Logo Monogram Background Pattern */}
           <div className="absolute inset-0 pointer-events-none opacity-10 flex items-center justify-center overflow-hidden">
@@ -763,12 +771,12 @@ export default function App() {
           {/* Swipe Container for Left Text Content */}
           <div
             key={`hero-text-${currentSlide}`}
-            className={`space-y-6 relative z-10 max-w-xl my-auto ${
+            className={`space-y-4 sm:space-y-6 relative z-10 max-w-xl my-auto ${
               slideDirection === 'next' ? 'animate-hero-swipe-next' : 'animate-hero-swipe-prev'
             }`}
           >
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-[1.18] tracking-tight">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-[1.2] tracking-tight">
               {currentHero.title}
             </h1>
 
@@ -778,7 +786,7 @@ export default function App() {
             </p>
 
             {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-4">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2 sm:pt-4">
               <button
                 onClick={() => {
                   const target = currentHero.btn1Link.replace('#', '');
@@ -786,7 +794,7 @@ export default function App() {
                     handleNavigate(target);
                   }
                 }}
-                className="px-8 py-3 rounded-none border-2 border-white text-white font-bold text-sm hover:bg-white hover:text-[#07132c] transition-all cursor-pointer inline-flex items-center justify-center min-w-[130px]"
+                className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-none border-2 border-white text-white font-bold text-xs sm:text-sm hover:bg-white hover:text-[#07132c] transition-all cursor-pointer inline-flex items-center justify-center min-w-[120px]"
               >
                 {currentHero.btn1Text}
               </button>
@@ -798,7 +806,7 @@ export default function App() {
                     handleNavigate(target);
                   }
                 }}
-                className="px-8 py-3 rounded-none bg-[#c5a059] text-white font-bold text-sm hover:bg-[#b58f45] transition-all cursor-pointer inline-flex items-center justify-center min-w-[130px]"
+                className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-none bg-[#c5a059] text-white font-bold text-xs sm:text-sm hover:bg-[#b58f45] transition-all cursor-pointer inline-flex items-center justify-center min-w-[120px]"
               >
                 {currentHero.btn2Text}
               </button>
@@ -807,7 +815,7 @@ export default function App() {
           </div>
 
           {/* Slider Controls: Prev -- Animated Progress Line Loader -- Next */}
-          <div className="pt-8 border-t border-white/20 flex items-center justify-between text-sm font-semibold text-white relative z-10">
+          <div className="pt-6 sm:pt-8 border-t border-white/20 flex items-center justify-between text-sm font-semibold text-white relative z-10">
             <button
               onClick={handlePrevSlide}
               className="hover:text-[#c5a059] transition-colors font-bold uppercase text-xs tracking-widest cursor-pointer"
@@ -816,7 +824,7 @@ export default function App() {
             </button>
 
             {/* Dynamic Smooth Animated Progress Line Loader */}
-            <div className="flex-grow mx-8 h-[3px] bg-white/25 relative overflow-hidden rounded-full max-w-[220px]">
+            <div className="flex-grow mx-4 sm:mx-8 h-[3px] bg-white/25 relative overflow-hidden rounded-full max-w-[220px]">
               <div
                 key={`progress-${currentSlide}`}
                 className="h-full bg-white animate-progress-fill"
@@ -836,19 +844,19 @@ export default function App() {
         {/* RIGHT SIDE (50% WIDTH): 100% Height HD Image with Clean Border Separator (Zero Shadow) */}
         <div
           key={`hero-img-${currentSlide}`}
-          className={`w-full lg:w-1/2 relative h-[380px] sm:h-[460px] lg:h-auto min-h-[420px] overflow-hidden group border-t lg:border-t-0 lg:border-l border-slate-700/80 bg-slate-950 ${
+          className={`w-full lg:w-1/2 relative h-[360px] sm:h-[460px] md:h-[520px] lg:h-auto min-h-[340px] sm:min-h-[440px] lg:min-h-0 overflow-hidden group border-t lg:border-t-0 lg:border-l border-slate-700/80 bg-slate-950 ${
             slideDirection === 'next' ? 'animate-hero-swipe-next' : 'animate-hero-swipe-prev'
           }`}
         >
           <img
             src={currentHero.image}
             alt={currentHero.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
           />
 
           {/* Location Badge Pill */}
           {currentHero.location && (
-            <div className="absolute bottom-6 left-6 z-10 flex items-center gap-2 px-4 py-2 bg-[#07132c]/90 backdrop-blur-md border border-[#c5a059]/40 text-white text-xs font-semibold shadow-md">
+            <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 z-10 flex items-center gap-2 px-3.5 sm:px-4 py-1.5 sm:py-2 bg-[#07132c]/90 backdrop-blur-md border border-[#c5a059]/40 text-white text-[11px] sm:text-xs font-semibold shadow-md">
               <MapPin className="w-3.5 h-3.5 text-[#c5a059] shrink-0" />
               <span className="tracking-wide">{currentHero.location}</span>
             </div>
@@ -857,10 +865,10 @@ export default function App() {
 
       </section>
 
-      {/* 4. SECTION 2: GSAP SCROLLTRIGGER PINNED 5-IMAGE FULLSCREEN PROJECT SHOWCASE */}
+      {/* 4. SECTION 2: GSAP SCROLLTRIGGER PINNED 5-IMAGE FULLSCREEN PROJECT SHOWCASE (DESKTOP & LAPTOP ONLY, HIDDEN ON MOBILE & TABLET) */}
       <section
         ref={section2PinRef}
-        className="relative w-full h-screen h-[100dvh] min-h-[100dvh] max-h-[100dvh] bg-[#07132c] overflow-hidden flex items-center justify-center select-none"
+        className="hidden lg:flex relative w-full h-screen h-[100dvh] min-h-[100dvh] max-h-[100dvh] bg-[#07132c] overflow-hidden items-center justify-center select-none"
       >
         <div className="relative w-full h-full">
           
@@ -1193,6 +1201,450 @@ export default function App() {
         </div>
       </section>
 
+      {/* ── 6.5 ONGOING PROJECTS SECTION (STACKED: CHILAKAPALLY THEN GORIBKAPELLY) ─── */}
+      <section id="ongoing" className="py-14 sm:py-20 bg-white text-[#07132c] border-t border-slate-200 w-full overflow-hidden relative">
+        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
+          
+          {/* Header */}
+          <div data-aos="fade-up" className="border-b border-slate-200 pb-4">
+            <div className="space-y-2 text-center md:text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-[11px] font-bold uppercase tracking-wider">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+                </span>
+                <span>Active On-Site Developments</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-sans font-black text-[#0d214a] tracking-tight leading-tight">
+                Ongoing Projects
+              </h2>
+            </div>
+          </div>
+
+          {/* PROJECT 1: CHILAKAPALLY */}
+          <div data-aos="fade-up" className="space-y-6 bg-slate-50/70 p-5 sm:p-8 rounded-none border border-slate-200 shadow-sm hover:border-[#c5a059] transition-all">
+            
+            {/* Top Images: Left Image 1, Right Image 2 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              
+              {/* Image 1 */}
+              <div
+                onClick={() => setActiveOngoingModal({
+                  title: "Chilakapally Project Site",
+                  subName: "Chilakapally",
+                  image: '/ongoing_chilakapally_1.jpg',
+                  caption: "Image 1: Overview of Reinforced Concrete Plinth & Foundation Grid Casting",
+                  location: "Chilakapally, Telangana"
+                })}
+                className="relative h-[260px] sm:h-[340px] lg:h-[380px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
+              >
+                <img
+                  src="/ongoing_chilakapally_1.jpg"
+                  alt="Chilakapally Project - Image 1"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+                
+                {/* Top Badge */}
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
+                    Image 1 • Site Overview
+                  </span>
+                </div>
+
+                {/* Bottom View Pill */}
+                <div className="absolute bottom-3 right-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Expand Photo</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Image 2 */}
+              <div
+                onClick={() => setActiveOngoingModal({
+                  title: "Chilakapally Project Site",
+                  subName: "Chilakapally",
+                  image: '/ongoing_chilakapally_2.jpg',
+                  caption: "Image 2: Structural Rebar Layout & Trench Foundation Grid",
+                  location: "Chilakapally, Telangana"
+                })}
+                className="relative h-[260px] sm:h-[340px] lg:h-[380px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
+              >
+                <img
+                  src="/ongoing_chilakapally_2.jpg"
+                  alt="Chilakapally Project - Image 2"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+                
+                {/* Top Badge */}
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
+                    Image 2 • Foundation Grid
+                  </span>
+                </div>
+
+                {/* Bottom View Pill */}
+                <div className="absolute bottom-3 right-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Expand Photo</span>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Bottom Project Names & Details */}
+            <div className="bg-white p-6 sm:p-8 border border-slate-200 space-y-4 shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-3 py-1 bg-[#07132c] text-[#e5be6b] text-xs font-black uppercase tracking-wider">
+                    Sub Name: Chilakapally
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold uppercase tracking-wider">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Phase 1 • Under Construction
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5 text-xs text-slate-600 font-semibold">
+                  <MapPin className="w-3.5 h-3.5 text-[#c5a059]" />
+                  <span>Chilakapally, Telangana</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="text-xl sm:text-2xl font-sans font-black text-[#0d214a] tracking-tight">
+                  Chilakapally Project
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-4xl">
+                  Comprehensive civil development featuring heavy reinforced concrete raft foundation casting, perimeter ground beam shuttering, and structural rebar layout across the Chilakapally site.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-100">
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
+                    Raft Foundation Grid
+                  </span>
+                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
+                    High-Grade Rebar Layout
+                  </span>
+                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
+                    Plinth Superstructure
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => setInquiryModalOpen(true)}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#07132c] hover:bg-[#c5a059] text-white hover:text-[#07132c] text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                >
+                  <span>Inquire for Site Specifications</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          {/* PROJECT 2: GORIBKAPELLY (BELOW CHILAKAPALLY) */}
+          <div data-aos="fade-up" className="space-y-6 bg-slate-50/70 p-5 sm:p-8 rounded-none border border-slate-200 shadow-sm hover:border-[#c5a059] transition-all">
+            
+            {/* Top Images: Left Image 3, Right Image 4 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              
+              {/* Image 3 */}
+              <div
+                onClick={() => setActiveOngoingModal({
+                  title: "Goribkapelly Project Site",
+                  subName: "Goribkapelly",
+                  image: '/ongoing_goribkapelly_1.jpg',
+                  caption: "Image 3: Column Footing Grid & Formwork Shuttering Execution",
+                  location: "Goribkapelly, Telangana"
+                })}
+                className="relative h-[260px] sm:h-[340px] lg:h-[380px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
+              >
+                <img
+                  src="/ongoing_goribkapelly_1.jpg"
+                  alt="Goribkapelly Project - Image 3"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+                
+                {/* Top Badge */}
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
+                    Image 3 • Footing Grid
+                  </span>
+                </div>
+
+                {/* Bottom View Pill */}
+                <div className="absolute bottom-3 right-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Expand Photo</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Image 4 */}
+              <div
+                onClick={() => setActiveOngoingModal({
+                  title: "Goribkapelly Project Site",
+                  subName: "Goribkapelly",
+                  image: '/ongoing_goribkapelly_2.jpg',
+                  caption: "Image 4: Column Pedestals Elevation & Subgrade Works",
+                  location: "Goribkapelly, Telangana"
+                })}
+                className="relative h-[260px] sm:h-[340px] lg:h-[380px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
+              >
+                <img
+                  src="/ongoing_goribkapelly_2.jpg"
+                  alt="Goribkapelly Project - Image 4"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+                
+                {/* Top Badge */}
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
+                    Image 4 • Column Pedestals
+                  </span>
+                </div>
+
+                {/* Bottom View Pill */}
+                <div className="absolute bottom-3 right-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Expand Photo</span>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Bottom Project Names & Details */}
+            <div className="bg-white p-6 sm:p-8 border border-slate-200 space-y-4 shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-3 py-1 bg-[#07132c] text-[#e5be6b] text-xs font-black uppercase tracking-wider">
+                    Sub Name: Goribkapelly
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold uppercase tracking-wider">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Phase 1 • Under Construction
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5 text-xs text-slate-600 font-semibold">
+                  <MapPin className="w-3.5 h-3.5 text-[#c5a059]" />
+                  <span>Goribkapelly, Telangana</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="text-xl sm:text-2xl font-sans font-black text-[#0d214a] tracking-tight">
+                  Goribkapelly Project
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-4xl">
+                  Deep foundation excavation, precision column footings layout, shuttering formwork erection, and reinforced concrete column pedestals elevation at Goribkapelly site.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-100">
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
+                    Column Footing Grid
+                  </span>
+                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
+                    Formwork Shuttering
+                  </span>
+                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
+                    Subgrade Compaction
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => setInquiryModalOpen(true)}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#07132c] hover:bg-[#c5a059] text-white hover:text-[#07132c] text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                >
+                  <span>Inquire for Site Specifications</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          {/* PROJECT 3: NEMALIPALLE (BELOW GORIBKAPELLY) */}
+          <div data-aos="fade-up" className="space-y-6 bg-slate-50/70 p-5 sm:p-8 rounded-none border border-slate-200 shadow-sm hover:border-[#c5a059] transition-all">
+            
+            {/* Top Images: 3 Images Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              
+              {/* Image 1 */}
+              <div
+                onClick={() => setActiveOngoingModal({
+                  title: "Nemalipalle Project Site",
+                  subName: "Nemalipalle",
+                  image: '/ongoing_nemalipalle_1.jpg',
+                  caption: "Image 1: Plinth Wall Casting & Vertical Starter Reinforcement",
+                  location: "Nemalipalle, Telangana"
+                })}
+                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
+              >
+                <img
+                  src="/ongoing_nemalipalle_1.jpg"
+                  alt="Nemalipalle Project - Image 1"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+                
+                {/* Top Badge */}
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
+                    Image 1 • Plinth Casting
+                  </span>
+                </div>
+
+                {/* Bottom View Pill */}
+                <div className="absolute bottom-3 right-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Expand Photo</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Image 2 */}
+              <div
+                onClick={() => setActiveOngoingModal({
+                  title: "Nemalipalle Project Site",
+                  subName: "Nemalipalle",
+                  image: '/ongoing_nemalipalle_2.jpg',
+                  caption: "Image 2: Modular Formwork Shuttering & Structural Rebar Cages",
+                  location: "Nemalipalle, Telangana"
+                })}
+                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
+              >
+                <img
+                  src="/ongoing_nemalipalle_2.jpg"
+                  alt="Nemalipalle Project - Image 2"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+                
+                {/* Top Badge */}
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
+                    Image 2 • Modular Formwork
+                  </span>
+                </div>
+
+                {/* Bottom View Pill */}
+                <div className="absolute bottom-3 right-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Expand Photo</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Image 3 */}
+              <div
+                onClick={() => setActiveOngoingModal({
+                  title: "Nemalipalle Project Site",
+                  subName: "Nemalipalle",
+                  image: '/ongoing_nemalipalle_3.jpg',
+                  caption: "Image 3: Extensive Foundation Slabs & Grade Beam Grid",
+                  location: "Nemalipalle, Telangana"
+                })}
+                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md sm:col-span-2 lg:col-span-1"
+              >
+                <img
+                  src="/ongoing_nemalipalle_3.jpg"
+                  alt="Nemalipalle Project - Image 3"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+                
+                {/* Top Badge */}
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
+                    Image 3 • Foundation Grid
+                  </span>
+                </div>
+
+                {/* Bottom View Pill */}
+                <div className="absolute bottom-3 right-3 z-10">
+                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Expand Photo</span>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Bottom Project Names & Details */}
+            <div className="bg-white p-6 sm:p-8 border border-slate-200 space-y-4 shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-3 py-1 bg-[#07132c] text-[#e5be6b] text-xs font-black uppercase tracking-wider">
+                    Sub Name: Nemalipalle
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold uppercase tracking-wider">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Phase 1 • Under Construction
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5 text-xs text-slate-600 font-semibold">
+                  <MapPin className="w-3.5 h-3.5 text-[#c5a059]" />
+                  <span>Nemalipalle, Telangana</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="text-xl sm:text-2xl font-sans font-black text-[#0d214a] tracking-tight">
+                  Nemalipalle Project
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-4xl">
+                  Extensive civil development featuring precision modular formwork shuttering, reinforced plinth wall casting, heavy column rebar cages, and grade foundation slabs across the Nemalipalle site.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-100">
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
+                    Modular Formwork Shuttering
+                  </span>
+                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
+                    Plinth Wall Casting
+                  </span>
+                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
+                    Heavy Column Rebar
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => setInquiryModalOpen(true)}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#07132c] hover:bg-[#c5a059] text-white hover:text-[#07132c] text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                >
+                  <span>Inquire for Site Specifications</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
       {/* 7. SECTION 4: OUR PROJECTS - FULL BLEED EDGE-TO-EDGE DISPLAY */}
       <section id="projects" className="py-14 sm:py-20 bg-[#07132c] text-white relative border-t border-slate-800 w-full overflow-hidden">
         <div className="w-full space-y-8 sm:space-y-12">
@@ -1261,8 +1713,7 @@ export default function App() {
             <button
               id="view-more-projects-btn"
               onClick={() => {
-                setCurrentPage('projects');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                handleNavigate('projects');
               }}
               className="group flex items-center justify-center gap-3 sm:gap-4 bg-gradient-to-r from-[#d4af37] via-[#c5a059] to-[#a8813a] text-[#07132c] text-xs sm:text-base font-black uppercase tracking-widest px-8 sm:px-14 py-4 sm:py-6 rounded-xl sm:rounded-2xl shadow-2xl hover:scale-105 hover:shadow-[#d4af37]/40 hover:from-[#e5be6b] hover:to-[#d4af37] transition-all duration-300 cursor-pointer border-2 border-[#d4af37] w-full sm:w-auto text-center"
             >
@@ -1824,6 +2275,64 @@ export default function App() {
                   <strong className="text-[#c5a059]">{selectedProjectModal.year}</strong>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ONGOING PROJECT IMAGE LIGHTBOX MODAL */}
+      {activeOngoingModal && (
+        <div 
+          onClick={() => setActiveOngoingModal(null)}
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 cursor-pointer"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="bg-[#07132c] border border-slate-700 max-w-4xl w-full overflow-hidden shadow-2xl relative flex flex-col cursor-default"
+          >
+            <button
+              onClick={() => setActiveOngoingModal(null)}
+              className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/70 hover:bg-[#c5a059] text-white hover:text-[#07132c] transition-all cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="relative max-h-[70vh] bg-black flex items-center justify-center overflow-hidden">
+              <img
+                src={activeOngoingModal.image}
+                alt={activeOngoingModal.title}
+                className="max-h-[70vh] w-auto max-w-full object-contain"
+              />
+            </div>
+
+            <div className="p-5 sm:p-6 bg-[#07132c] border-t border-slate-700/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 bg-[#c5a059] text-[#07132c] text-[10px] font-black uppercase tracking-wider">
+                    {activeOngoingModal.subName}
+                  </span>
+                  <span className="text-xs text-slate-300 flex items-center gap-1">
+                    <MapPin className="w-3 h-3 text-[#c5a059]" />
+                    {activeOngoingModal.location}
+                  </span>
+                </div>
+                <h3 className="text-base sm:text-lg font-bold text-white">
+                  {activeOngoingModal.title}
+                </h3>
+                <p className="text-xs text-slate-300">
+                  {activeOngoingModal.caption}
+                </p>
+              </div>
+
+              <button
+                onClick={() => {
+                  setActiveOngoingModal(null);
+                  setInquiryModalOpen(true);
+                }}
+                className="px-5 py-2.5 bg-[#c5a059] hover:bg-[#e5be6b] text-[#07132c] text-xs font-bold uppercase tracking-wider transition-all shrink-0 cursor-pointer"
+              >
+                Inquire Project
+              </button>
             </div>
           </div>
         </div>

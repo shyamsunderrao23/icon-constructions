@@ -50,7 +50,7 @@ export default function ContactPage({ onNavigate, onBack }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBFBFA] text-[#07132c] font-sans antialiased selection:bg-[#c5a059] selection:text-white">
+    <div className="min-h-screen bg-[#FBFBFA] text-[#07132c] font-sans antialiased selection:bg-[#c5a059] selection:text-white overflow-x-hidden w-full max-w-full relative">
 
       {/* ── TOP NOTICE BAR ─── */}
       <div className="bg-[#c5a059] text-white text-xs py-2 sm:py-2.5 px-4 sm:px-8 shadow-sm font-medium border-b border-[#b88f44]">

@@ -454,7 +454,9 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true, easing: 'ease-out-cubic', offset: 30 });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }, []);
 
   // Filter projects based on Discipline, Search Query and Alphabet Letter
@@ -526,7 +528,7 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#07132c] font-sans antialiased selection:bg-[#c5a059] selection:text-white">
+    <div className="min-h-screen bg-white text-[#07132c] font-sans antialiased selection:bg-[#c5a059] selection:text-white overflow-x-hidden w-full max-w-full relative">
 
       {/* ── TOP NOTICE BAR ─── */}
       <div className="bg-[#c5a059] text-white text-xs py-2 sm:py-2.5 px-4 sm:px-8 shadow-sm font-medium border-b border-[#b88f44]">
