@@ -52,33 +52,35 @@ export default function ContactPage({ onNavigate, onBack }) {
   return (
     <div className="min-h-screen bg-[#FBFBFA] text-[#07132c] font-sans antialiased selection:bg-[#c5a059] selection:text-white overflow-x-hidden w-full max-w-full relative">
 
-      {/* ── TOP NOTICE BAR ─── */}
-      <div className="bg-[#c5a059] text-white text-xs py-2 sm:py-2.5 px-4 sm:px-8 shadow-sm font-medium border-b border-[#b88f44]">
-        <div className="w-full flex items-center justify-center text-center">
-          <p className="text-white text-xs sm:text-[13px] font-semibold tracking-wide">
-            <span className="opacity-95">Class-1 Government Empaneled Contractor</span>
-            <span className="mx-2 opacity-60">•</span>
-            <span className="opacity-95">50+ Years Engineering Legacy</span>
-            <span className="mx-2 opacity-60">•</span>
-            <span className="opacity-95">ISO 9001 Quality Certified</span>
-            <span className="hidden md:inline mx-2 opacity-60">•</span>
-            <span className="hidden md:inline opacity-95">Official Portal: iconconstructions.com</span>
-          </p>
+      {/* ── FIXED PERMANENT HEADER & TOP BAR ─── */}
+      <header className="fixed top-0 inset-x-0 z-40 w-full transition-all duration-300 shadow-md">
+        {/* Top Notice Bar */}
+        <div className="bg-[#c5a059] text-white text-xs py-2 sm:py-2.5 px-4 sm:px-8 shadow-sm font-medium border-b border-[#b88f44]">
+          <div className="w-full flex items-center justify-center text-center">
+            <p className="text-white text-xs sm:text-[13px] font-semibold tracking-wide">
+              <span className="opacity-95">Class-1 Government Empaneled Contractor</span>
+              <span className="mx-2 opacity-60">•</span>
+              <span className="opacity-95">50+ Years Engineering Legacy</span>
+              <span className="mx-2 opacity-60">•</span>
+              <span className="opacity-95">ISO 9001 Quality Certified</span>
+              <span className="hidden md:inline mx-2 opacity-60">•</span>
+              <span className="hidden md:inline opacity-95">Official Portal: iconconstructions.com</span>
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* ── HEADER / NAVBAR ─── */}
-      <header className="sticky top-0 z-40 bg-[#F8F7F3] shadow-sm border-b border-slate-200 transition-all duration-300">
-        <div className="w-full px-6 sm:px-10 lg:px-14 h-16 sm:h-18 flex items-center justify-between gap-6 relative">
+        {/* Header Navbar */}
+        <div className="bg-[#F8F7F3] border-b border-slate-200">
+          <div className="w-full px-6 sm:px-10 lg:px-14 h-16 sm:h-18 flex items-center justify-between gap-6 relative">
 
-          {/* Logo */}
-          <button onClick={() => navigate('home')} className="flex items-center shrink-0 py-0.5 cursor-pointer bg-transparent border-0" title="Return to Home">
-            <img
-              src="/logo.png"
-              alt="Icon Constructions Logo"
-              className="h-10 sm:h-12 lg:h-14 w-auto object-contain transition-transform duration-300 hover:scale-105"
-            />
-          </button>
+            {/* Logo */}
+            <button onClick={() => navigate('home')} className="flex items-center shrink-0 py-0.5 cursor-pointer bg-transparent border-0" title="Return to Home">
+              <img
+                src="/logo.png"
+                alt="Icon Constructions Logo"
+                className="h-10 sm:h-12 lg:h-14 w-auto object-contain transition-transform duration-300 hover:scale-105"
+              />
+            </button>
 
           {/* Desktop Nav */}
           <div className="flex items-center gap-6 xl:gap-8">
@@ -114,7 +116,11 @@ export default function ContactPage({ onNavigate, onBack }) {
             </button>
           </div>
         </div>
-      </header>
+      </div>
+    </header>
+
+      {/* Header Height Spacer for Fixed Header */}
+      <div className="h-[96px] sm:h-[104px] lg:h-[108px] w-full shrink-0" aria-hidden="true" />
 
       {/* ── LEFT SIDEBAR MOBILE DRAWER ─── */}
       <div 

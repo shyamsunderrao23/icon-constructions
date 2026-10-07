@@ -530,54 +530,56 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
   return (
     <div className="min-h-screen bg-white text-[#07132c] font-sans antialiased selection:bg-[#c5a059] selection:text-white overflow-x-hidden w-full max-w-full relative">
 
-      {/* ── TOP NOTICE BAR ─── */}
-      <div className="bg-[#c5a059] text-white text-xs py-2 sm:py-2.5 px-4 sm:px-8 shadow-sm font-medium border-b border-[#b88f44]">
-        <div className="w-full flex items-center justify-center text-center">
-          <p className="text-white text-xs sm:text-[13px] font-semibold tracking-wide">
-            <span className="opacity-95">Class-1 Government Empaneled Contractor</span>
-            <span className="mx-2 opacity-60">•</span>
-            <span className="opacity-95">50+ Years Engineering Legacy</span>
-            <span className="mx-2 opacity-60">•</span>
-            <span className="opacity-95">ISO 9001 Quality Certified</span>
-            <span className="hidden md:inline mx-2 opacity-60">•</span>
-            <span className="hidden md:inline opacity-95">Official Portal: iconconstructions.com</span>
-          </p>
+      {/* ── FIXED PERMANENT HEADER & TOP BAR ─── */}
+      <header className="fixed top-0 inset-x-0 z-40 w-full transition-all duration-300 shadow-md">
+        {/* Top Notice Bar */}
+        <div className="bg-[#c5a059] text-white text-xs py-2 sm:py-2.5 px-4 sm:px-8 shadow-sm font-medium border-b border-[#b88f44]">
+          <div className="w-full flex items-center justify-center text-center">
+            <p className="text-white text-xs sm:text-[13px] font-semibold tracking-wide">
+              <span className="opacity-95">Class-1 Government Empaneled Contractor</span>
+              <span className="mx-2 opacity-60">•</span>
+              <span className="opacity-95">50+ Years Engineering Legacy</span>
+              <span className="mx-2 opacity-60">•</span>
+              <span className="opacity-95">ISO 9001 Quality Certified</span>
+              <span className="hidden md:inline mx-2 opacity-60">•</span>
+              <span className="hidden md:inline opacity-95">Official Portal: iconconstructions.com</span>
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* ── HEADER / NAVBAR (Clean White Theme) ─── */}
-      <header className="sticky top-0 z-40 bg-white shadow-sm border-b border-slate-200 transition-all duration-300">
-        <div className="w-full px-6 sm:px-10 lg:px-14 h-16 sm:h-18 flex items-center justify-between gap-6 relative">
+        {/* Header Navbar (Warm Ivory Theme #F8F7F3) */}
+        <div className="bg-[#F8F7F3] border-b border-slate-200">
+          <div className="w-full px-6 sm:px-10 lg:px-14 h-16 sm:h-18 flex items-center justify-between gap-6 relative">
 
-          {/* Logo */}
-          <button onClick={() => navigate('home')} className="flex items-center shrink-0 py-0.5 cursor-pointer bg-transparent border-0" title="Return to Home">
-            <img
-              src="/logo.png"
-              alt="Icon Constructions Logo"
-              className="h-10 sm:h-12 lg:h-14 w-auto object-contain transition-transform duration-300 hover:scale-105"
-            />
-          </button>
+            {/* Logo */}
+            <button onClick={() => navigate('home')} className="flex items-center shrink-0 py-0.5 cursor-pointer bg-transparent border-0" title="Return to Home">
+              <img
+                src="/logo.png"
+                alt="Icon Constructions Logo"
+                className="h-10 sm:h-12 lg:h-14 w-auto object-contain transition-transform duration-300 hover:scale-105"
+              />
+            </button>
 
-          {/* Desktop Nav */}
-          <div className="flex items-center gap-6 xl:gap-8">
-            <nav className="hidden lg:flex items-center gap-1 xl:gap-6">
-              <button
-                onClick={() => navigate('about')}
-                className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0"
-              >
-                About Us
-              </button>
+            {/* Desktop Nav */}
+            <div className="flex items-center gap-6 xl:gap-8">
+              <nav className="hidden lg:flex items-center gap-1 xl:gap-6">
+                <button
+                  onClick={() => navigate('about')}
+                  className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0"
+                >
+                  About Us
+                </button>
 
-              <button className="px-3 py-2 text-xs xl:text-sm font-bold tracking-wide text-[#c5a059] cursor-pointer bg-transparent border-0 border-b-2 border-[#c5a059]">
-                Projects
-              </button>
+                <button className="px-3 py-2 text-xs xl:text-sm font-bold tracking-wide text-[#c5a059] cursor-pointer bg-transparent border-0 border-b-2 border-[#c5a059]">
+                  Projects
+                </button>
 
-              <button
-                onClick={() => navigate('expertise')}
-                className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0"
-              >
-                Expertise
-              </button>
+                <button
+                  onClick={() => navigate('expertise')}
+                  className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0"
+                >
+                  Expertise
+                </button>
 
               <button onClick={() => navigate('contact')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0">
                 Contact Us
@@ -603,7 +605,11 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
             </button>
           </div>
         </div>
-      </header>
+      </div>
+    </header>
+
+      {/* Header Height Spacer for Fixed Header */}
+      <div className="h-[96px] sm:h-[104px] lg:h-[108px] w-full shrink-0" aria-hidden="true" />
 
       {/* ── LEFT SIDEBAR MOBILE DRAWER ─── */}
       <div 
@@ -940,8 +946,7 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
             </button>
           </div>
         ) : (
-          /* Full-Bleed 2-Column Edge-to-Edge Grid (0 Gap, 0 Border Radius, Left-to-Right Full Width) */
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full px-0 bg-white">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[1%] gap-y-[1vw] w-full px-[1%] bg-white">
             {filteredProjects.map((project) => (
               <div
                 key={project.id}
@@ -974,20 +979,18 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
                   {project.year}
                 </div>
 
-                {/* Bottom Overlay Info in crisp bottom container */}
-                <div className="absolute bottom-0 inset-x-0 p-6 sm:p-8 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 z-10 space-y-2">
+                {/* Bottom Overlay Info in compact sleek container */}
+                <div className="absolute bottom-0 inset-x-0 px-4 sm:px-6 py-2.5 sm:py-3.5 lg:py-4 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 z-10 space-y-1">
                   {/* Location with Pin */}
-                  <div className="flex items-center gap-2 text-xs sm:text-sm text-[#e5be6b] font-extrabold">
-                    <MapPin className="w-4 h-4 shrink-0 text-[#c5a059]" />
+                  <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-[#e5be6b] font-bold">
+                    <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 text-[#c5a059]" />
                     <span className="truncate">{project.location}</span>
                   </div>
 
                   {/* Main Title */}
-                  <div className="flex items-center gap-6">
-                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-sans font-extrabold text-white leading-snug group-hover:text-[#f3d38c] transition-colors">
-                      {project.title}
-                    </h3>
-                  </div>
+                  <h3 className="text-base sm:text-lg lg:text-xl font-sans font-extrabold text-white leading-tight group-hover:text-[#f3d38c] transition-colors truncate">
+                    {project.title}
+                  </h3>
                 </div>
               </div>
             ))}
