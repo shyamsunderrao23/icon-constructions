@@ -344,14 +344,14 @@ export default function App() {
   const heroSlides = [
     {
       id: 1,
-      title: "Engaging, elevating and empowering our people",
-      subtitle: "Our strength lies in our people, driving growth, innovation, and Icon's legacy of performance.",
+      title: "Engineering landmark residential & civic towers",
+      subtitle: "Delivering modern multi-tower residential complexes, high-rise townships, and institutional infrastructure with Class-1 execution standards.",
       btn1Text: "About Us",
       btn1Link: "#about",
       btn2Text: "Our Projects",
       btn2Link: "#projects",
-      image: "/icon_tonkini_10span_bridge.jpg",
-      location: "Tonkini 10-Span River Bridge, Sirpur",
+      image: "/icon_ramagundam_panorama.jpg",
+      location: "Ramagundam Multi-Tower Residential Complex, Telangana",
       tealBg: "bg-[#07132c]" // Deep Icon Navy
     },
     {
@@ -376,6 +376,18 @@ export default function App() {
       btn2Link: "#expertise",
       image: "/icon_tahasildar_mro.jpg",
       location: "Mandal Revenue Office Headquarters, Sirpur Town",
+      tealBg: "bg-[#07132c]"
+    },
+    {
+      id: 4,
+      title: "Constructing premier educational campuses & academic wings",
+      subtitle: "Empaneled Class-1 contractor specializing in modern institutional complexes, academic faculties, and student welfare facilities.",
+      btn1Text: "Projects",
+      btn1Link: "#projects",
+      btn2Text: "Expertise",
+      btn2Link: "#expertise",
+      image: "/icon_tswrs_campus.jpg",
+      location: "TSWR Residential Campus, Sirpur Town",
       tealBg: "bg-[#07132c]"
     },
   ];
