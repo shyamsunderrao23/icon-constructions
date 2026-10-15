@@ -20,6 +20,7 @@ export default function ContactPage({ onNavigate, onBack }) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [sectorDropdownOpen, setSectorDropdownOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [whatsappRedirectUrl, setWhatsappRedirectUrl] = useState('');
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -46,7 +47,33 @@ export default function ContactPage({ onNavigate, onBack }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    const sectorName = sectorOptions.find((s) => s.id === formData.projectSector)?.label || formData.projectSector;
+    
+    const text = 
+`*NEW PROJECT / TENDER INQUIRY - ICON CONSTRUCTIONS*
+----------------------------------------
+*Name:* ${formData.fullName || 'Not specified'}
+*Phone:* ${formData.phone || 'Not specified'}
+*Email:* ${formData.email || 'Not specified'}
+*Department / Company:* ${formData.department || 'Not specified'}
+*Project Sector:* ${sectorName}
+*Location:* ${formData.location || 'Telangana'}
+*Estimated Timeline:* ${formData.estimatedTimeline || 'Immediate'}
+*Project Requirements:*
+${formData.message || 'Please consult with our team.'}
+----------------------------------------
+_Sent from Icon Constructions Website_`;
+
+    const waUrl = `https://api.whatsapp.com/send?phone=919966180827&text=${encodeURIComponent(text)}`;
+    setWhatsappRedirectUrl(waUrl);
     setSubmitted(true);
+
+    try {
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      // fallback
+    }
   };
 
   return (
@@ -93,6 +120,9 @@ export default function ContactPage({ onNavigate, onBack }) {
               </button>
               <button onClick={() => navigate('expertise')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0">
                 Expertise
+              </button>
+              <button onClick={() => navigate('careers')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0">
+                Careers
               </button>
               <button className="px-3 py-2 text-xs xl:text-sm font-bold tracking-wide text-[#c5a059] cursor-pointer bg-transparent border-0 border-b-2 border-[#c5a059]">
                 Contact Us
@@ -198,6 +228,13 @@ export default function ContactPage({ onNavigate, onBack }) {
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </button>
             <button 
+              onClick={() => { navigate('careers'); setMobileNavOpen(false); }}
+              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-200/60 border border-transparent hover:border-[#c5a059]/30 transition-all text-left cursor-pointer"
+            >
+              <span>Careers (11 Openings)</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </button>
+            <button 
               onClick={() => setMobileNavOpen(false)}
               className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#c5a059] bg-[#c5a059]/10 border border-[#c5a059]/40 text-left cursor-pointer"
             >
@@ -271,8 +308,9 @@ export default function ContactPage({ onNavigate, onBack }) {
                     <Phone className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="text-slate-400 block font-semibold text-[11px] uppercase tracking-wider">Direct Phone &amp; Tenders</span>
-                    <p className="text-white font-medium">+91 (800) 555-ICON / +91 94400 12345</p>
+                    <span className="text-slate-400 block font-semibold text-[11px] uppercase tracking-wider">Direct WhatsApp &amp; Tenders</span>
+                    <p className="text-white font-bold text-sm">+91 9966180827</p>
+                    <p className="text-[#e5be6b] text-xs font-medium mt-0.5">Instant WhatsApp Response Active</p>
                   </div>
                 </div>
 
@@ -326,20 +364,39 @@ export default function ContactPage({ onNavigate, onBack }) {
               </div>
 
               {submitted ? (
-                <div className="py-12 text-center space-y-4 bg-emerald-50 border border-emerald-200 rounded-none p-6 sm:p-8">
+                <div className="py-10 text-center space-y-5 bg-emerald-50/80 border-2 border-emerald-300 rounded-2xl p-6 sm:p-10 shadow-lg">
                   <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h3 className="text-2xl font-bold text-[#07132c]">Inquiry Submitted Successfully!</h3>
-                  <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-                    Thank you, <strong className="text-[#07132c]">{formData.fullName || 'Valued Client'}</strong>. Our senior engineering executive has received your submission and will review the specifications immediately.
-                  </p>
-                  <button
-                    onClick={() => setSubmitted(false)}
-                    className="mt-4 px-6 py-2.5 rounded-xl bg-[#07132c] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#0b1e3d] transition-colors cursor-pointer border-0"
-                  >
-                    Submit Another Inquiry
-                  </button>
+                  
+                  <div className="space-y-2">
+                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-black tracking-wider uppercase">
+                      <span>✓ Dispatched to WhatsApp (+91 9966180827)</span>
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-[#07132c]">Inquiry Sent to WhatsApp!</h3>
+                    <p className="text-sm text-slate-600 max-w-lg mx-auto leading-relaxed">
+                      Thank you, <strong className="text-[#07132c]">{formData.fullName || 'Valued Client'}</strong>. Your project details have been formatted and dispatched directly to Icon Constructions' executive WhatsApp line at <strong className="text-emerald-700 font-bold">+91 9966180827</strong>.
+                    </p>
+                  </div>
+
+                  <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <a
+                      href={whatsappRedirectUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black uppercase tracking-wider shadow-lg hover:scale-105 transition-all text-center"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                      <span>Open WhatsApp Chat (9966180827)</span>
+                    </a>
+
+                    <button
+                      onClick={() => setSubmitted(false)}
+                      className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#07132c] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#0b1e3d] transition-colors cursor-pointer border-0"
+                    >
+                      Submit Another Inquiry
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -498,12 +555,12 @@ export default function ContactPage({ onNavigate, onBack }) {
                     type="submit"
                     className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-[#d4af37] via-[#c5a059] to-[#a8813a] text-[#07132c] font-black uppercase tracking-widest text-sm py-4 rounded-xl shadow-xl hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#c5a059]/30 transition-all duration-300 cursor-pointer border border-[#d4af37]"
                   >
-                    <Send className="w-4 h-4 text-[#07132c]" />
-                    <span>Submit Official Proposal Request</span>
+                    <MessageSquare className="w-5 h-5 text-[#07132c]" />
+                    <span>Send Inquiry to WhatsApp (+91 9966180827)</span>
                   </button>
 
                   <p className="text-[11px] text-center text-slate-500">
-                    Your inquiry is protected by corporate non-disclosure protocols and reviewed directly by senior engineering partners.
+                    Your proposal is formatted and sent directly to WhatsApp: <strong className="text-slate-700 font-semibold">+91 9966180827</strong> for instant review by our chief engineers.
                   </p>
                 </form>
               )}
@@ -559,6 +616,11 @@ export default function ContactPage({ onNavigate, onBack }) {
                 <li>
                   <button onClick={() => navigate('expertise')} className="hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 text-inherit font-medium">
                     Expertise &amp; Capabilities
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate('careers')} className="hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 text-inherit font-medium">
+                    Careers (11 Openings)
                   </button>
                 </li>
                 <li>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import ProjectsPage from './ProjectsPage';
 import AboutPage from './AboutPage';
 import ExpertisePage from './ExpertisePage';
+import CareersPage from './CareersPage';
 import ContactPage from './ContactPage';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -40,7 +41,8 @@ import {
   HardHat,
   Clock,
   Layers,
-  Eye
+  Eye,
+  Briefcase
 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -60,11 +62,11 @@ export default function App() {
   const getInitialPage = () => {
     try {
       const cleanHash = window.location.hash.replace(/[#/]/g, '').toLowerCase();
-      if (['projects', 'about', 'expertise', 'contact', 'home'].includes(cleanHash)) {
+      if (['projects', 'about', 'expertise', 'careers', 'contact', 'home'].includes(cleanHash)) {
         return cleanHash;
       }
       const saved = localStorage.getItem('icon_page');
-      if (['projects', 'about', 'expertise', 'contact', 'home'].includes(saved)) {
+      if (['projects', 'about', 'expertise', 'careers', 'contact', 'home'].includes(saved)) {
         return saved;
       }
     } catch (e) {
@@ -78,7 +80,7 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const cleanHash = window.location.hash.replace(/[#/]/g, '').toLowerCase();
-      if (['projects', 'about', 'expertise', 'contact', 'home'].includes(cleanHash)) {
+      if (['projects', 'about', 'expertise', 'careers', 'contact', 'home'].includes(cleanHash)) {
         setCurrentPage(cleanHash);
       } else if (!cleanHash) {
         setCurrentPage('home');
@@ -398,8 +400,19 @@ export default function App() {
     return () => clearInterval(timer);
   }, [heroSlides.length, isPlaying, currentSlide]);
 
-  // Real Client Project Execution Record (Top 6 Signature Projects Featured on Home Page)
+  // Real Client Project Execution Record (Top Signature Projects Featured on Home Page - Buildings on Top, Bridges Down)
   const projects = [
+    {
+      id: 101,
+      title: "Ramagundam Multi-Tower Residential Complex – Towers 1, 2 & 3",
+      category: "civic",
+      categoryName: "Residential & Civic Towers",
+      image: "/icon_ramagundam_panorama.jpg",
+      location: "Ramagundam, Peddapalli District, Telangana",
+      scale: "G+5 Multi-Tower High-Rise Residential Township",
+      year: "2026 (Active Execution)",
+      description: "Flagship multi-tower township project comprising Tower-1, Tower-2, and Tower-3. Engineered with heavy reinforced concrete framed structures, G+5 residential storeys, deep pile foundations, internal core stairwells, cantilevered balconies, and modern exterior architectural facade finishing."
+    },
     {
       id: 1,
       title: "MRO Office Building – Tahasildar Karyalayam",
@@ -413,17 +426,6 @@ export default function App() {
     },
     {
       id: 2,
-      title: "Tonkini 10-Span High-Level Major River Bridge",
-      category: "infrastructure",
-      categoryName: "Hydraulic Infrastructure",
-      image: "/icon_tonkini_10span_bridge.jpg",
-      location: "Tonkini River Crossing, Sirpur Region, Telangana",
-      scale: "10-Span Major Pre-Stressed Concrete Bridge",
-      year: "Completed",
-      description: "Critical regional arterial river bridge spanning 10 heavy prestressed concrete spans over the Tonkini riverbed, engineered on deep pile foundations."
-    },
-    {
-      id: 3,
       title: "TSWR Residential School & Junior College (Boys)",
       category: "educational",
       categoryName: "Educational & Campuses",
@@ -434,7 +436,7 @@ export default function App() {
       description: "Telangana Social Welfare Residential School and Junior College for Boys campus with grand entrance portico, administrative offices, and academic wings."
     },
     {
-      id: 4,
+      id: 3,
       title: "KGBV CM School of Excellence – Circular Campus",
       category: "educational",
       categoryName: "Educational & Campuses",
@@ -443,6 +445,17 @@ export default function App() {
       scale: "Monumental Circular Architectural Wing",
       year: "Completed",
       description: "Award-winning circular institutional building designed with grand colonnaded facade, circular academic atrium, manicured planters, and sports grounds."
+    },
+    {
+      id: 4,
+      title: "TSWR Residential School & College (Girls) – Grand Arch",
+      category: "educational",
+      categoryName: "Educational & Campuses",
+      image: "/icon_tswrdc_girls_arch.jpg",
+      location: "Narketpally, Nalgonda District, Telangana",
+      scale: "Grand Entrance Arch & Campus Perimeter",
+      year: "Completed",
+      description: "Signature monumental entrance arch, security gatehouse, and perimeter enclosure engineered for the Telangana Social Welfare Residential Girls College campus."
     },
     {
       id: 5,
@@ -457,14 +470,14 @@ export default function App() {
     },
     {
       id: 6,
-      title: "TSWR Residential School & College (Girls) – Grand Arch",
-      category: "educational",
-      categoryName: "Educational & Campuses",
-      image: "/icon_tswrdc_girls_arch.jpg",
-      location: "Narketpally, Nalgonda District, Telangana",
-      scale: "Grand Entrance Arch & Campus Perimeter",
+      title: "Tonkini 10-Span High-Level Major River Bridge",
+      category: "infrastructure",
+      categoryName: "Hydraulic Infrastructure",
+      image: "/icon_tonkini_10span_bridge.jpg",
+      location: "Tonkini River Crossing, Sirpur Region, Telangana",
+      scale: "10-Span Major Pre-Stressed Concrete Bridge",
       year: "Completed",
-      description: "Signature monumental entrance arch, security gatehouse, and perimeter enclosure engineered for the Telangana Social Welfare Residential Girls College campus."
+      description: "Critical regional arterial river bridge spanning 10 heavy prestressed concrete spans over the Tonkini riverbed, engineered on deep pile foundations."
     }
   ];
 
@@ -531,6 +544,10 @@ export default function App() {
     return <ExpertisePage onNavigate={handleNavigate} onBack={() => handleNavigate('home')} />;
   }
 
+  if (currentPage === 'careers') {
+    return <CareersPage onNavigate={handleNavigate} onBack={() => handleNavigate('home')} />;
+  }
+
   if (currentPage === 'contact') {
     return <ContactPage onNavigate={handleNavigate} onBack={() => handleNavigate('home')} />;
   }
@@ -579,6 +596,9 @@ export default function App() {
                 </button>
                 <button onClick={() => handleNavigate('expertise')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0">
                   Expertise
+                </button>
+                <button onClick={() => handleNavigate('careers')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0">
+                  Careers
                 </button>
                 <button onClick={() => handleNavigate('contact')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0">
                   Contact Us
@@ -681,6 +701,13 @@ export default function App() {
               className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-200/60 border border-transparent hover:border-[#c5a059]/30 transition-all text-left cursor-pointer"
             >
               <span>Expertise</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </button>
+            <button 
+              onClick={() => { handleNavigate('careers'); setMobileNavOpen(false); }}
+              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-200/60 border border-transparent hover:border-[#c5a059]/30 transition-all text-left cursor-pointer"
+            >
+              <span>Careers (11 Openings)</span>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </button>
             <button 
@@ -1114,13 +1141,6 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 w-full">
             {[
               {
-                title: "Bridges &\nSubstructures",
-                tag: "STRONGER CONNECTIONS",
-                image: "/icon_tonkini_10span_bridge.jpg",
-                desc: "Tonkini & Sirpur 10-span river bridges, pile foundations, pier jacketing & 25 box bridges.",
-                projects: ["Tonkini 10-Span Bridge", "Sirpur 10-Span Bridge", "Rasply 7-Span Bridge", "Kondapally 6-Span Bridge", "Dubbaguda 3-Span Bridge", "25 Box Bridges (Porsa)"]
-              },
-              {
                 title: "Educational &\nHostels",
                 tag: "SPACES FOR BRIGHTER FUTURES",
                 image: "/icon_school_assembly.jpg",
@@ -1135,18 +1155,25 @@ export default function App() {
                 projects: ["MRO Office Building – 2008", "Agriculture Building (Mancherial)", "Forest Range Office (Penchikalpet)", "Integrated Market Buildings (5 Nos.)", "Three-Floor Buildings (16 Nos.)"]
               },
               {
-                title: "Hydraulic\nInfrastructure",
-                tag: "SUSTAINABLE WATER SOLUTIONS",
-                image: "/icon_overflow_check_dam.jpg",
-                desc: "Sirpur stream diversion check dams & 45+ reinforced highway box culverts.",
-                projects: ["Sirpur Stream Check Dam", "10-Unit Culverts Network", "20 Box Culverts (Gadchiroli)", "High-Discharge Box Culverts"]
-              },
-              {
                 title: "Industrial Sheds\n& Steel",
                 tag: "PRECISION ENGINEERING",
                 image: "/icon_industrial_steel_sheds.jpg",
                 desc: "Pre-engineered structural steel sheds (IIT Asifabad) & heavy warehouses.",
                 projects: ["IIT Industrial Sheds (KB Asifabad)", "Structural Steel Fabrication Bays", "Heavy Gantry Crane Runways"]
+              },
+              {
+                title: "Bridges &\nSubstructures",
+                tag: "STRONGER CONNECTIONS",
+                image: "/icon_tonkini_10span_bridge.jpg",
+                desc: "Tonkini & Sirpur 10-span river bridges, pile foundations, pier jacketing & 25 box bridges.",
+                projects: ["Tonkini 10-Span Bridge", "Sirpur 10-Span Bridge", "Rasply 7-Span Bridge", "Kondapally 6-Span Bridge", "Dubbaguda 3-Span Bridge", "25 Box Bridges (Porsa)"]
+              },
+              {
+                title: "Hydraulic\nInfrastructure",
+                tag: "SUSTAINABLE WATER SOLUTIONS",
+                image: "/icon_overflow_check_dam.jpg",
+                desc: "Sirpur stream diversion check dams & 45+ reinforced highway box culverts.",
+                projects: ["Sirpur Stream Check Dam", "10-Unit Culverts Network", "20 Box Culverts (Gadchiroli)", "High-Discharge Box Culverts"]
               }
             ].slice(0, 2).map((exp, idx) => (
               <div
@@ -1227,7 +1254,208 @@ export default function App() {
             </div>
           </div>
 
-          {/* PROJECT 1: CHILAKAPALLY */}
+          {/* ── PROJECT 1 (BUILDINGS ON TOP): RAMAGUNDAM MULTI-TOWER TOWNSHIP ── */}
+          <div data-aos="fade-up" className="space-y-6 bg-slate-50/70 p-5 sm:p-8 rounded-none border-2 border-[#c5a059]/40 shadow-sm hover:border-[#c5a059] transition-all">
+            
+            {/* Top Panorama Master View */}
+            <div
+              onClick={() => setActiveOngoingModal({
+                title: "Ramagundam Multi-Tower Residential Complex – Master Township",
+                subName: "Ramagundam Multi-Tower Complex",
+                image: '/icon_ramagundam_panorama.jpg',
+                caption: "Panoramic Master View of Tower-1, Tower-2, and Tower-3 Multi-Story High-Rise Residential Complex",
+                location: "Ramagundam, Peddapalli District, Telangana"
+              })}
+              className="relative h-[260px] sm:h-[380px] lg:h-[440px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
+            >
+              <img
+                src="/icon_ramagundam_panorama.jpg"
+                alt="Ramagundam Multi-Tower Complex Panorama"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20 pointer-events-none" />
+              
+              {/* Top Badges */}
+              <div className="absolute top-3 left-3 z-10 flex flex-wrap items-center gap-2">
+                <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-black uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
+                  Master Overview • Tower-1, Tower-2 &amp; Tower-3
+                </span>
+                <span className="px-3 py-1 bg-emerald-600 text-white text-[11px] font-bold uppercase tracking-wider shadow-md">
+                  G+5 High-Rise Complex
+                </span>
+              </div>
+
+              {/* Bottom Expand Pill */}
+              <div className="absolute bottom-3 right-3 z-10">
+                <span className="px-3.5 py-1.5 bg-[#07132c]/90 text-white text-xs font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
+                  <Eye className="w-4 h-4" />
+                  <span>Expand Panorama</span>
+                </span>
+              </div>
+
+              {/* Bottom Caption Overlay */}
+              <div className="absolute bottom-3 left-3 z-10 hidden sm:block max-w-lg">
+                <p className="text-white text-xs font-medium drop-shadow-md bg-black/50 backdrop-blur-xs px-3 py-1 border border-white/20">
+                  Ramagundam Tri-Tower Township: Full G+5 structural framework &amp; exterior architectural facade execution.
+                </p>
+              </div>
+            </div>
+
+            {/* Sub-Images Grid: Tower-1, Tower-2, Tower-3, and Structural Framing */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+              
+              {/* Tower-1 Card */}
+              <div
+                onClick={() => setActiveOngoingModal({
+                  title: "Ramagundam Tower-1 – Completed Elevation",
+                  subName: "Ramagundam Tower-1",
+                  image: '/icon_ramagundam_tower1.jpg',
+                  caption: "Tower-1: G+5 Multi-Story High-Rise Residential Tower with finished architectural plastering, safety balustrades, and external paint.",
+                  location: "Ramagundam, Peddapalli District, Telangana"
+                })}
+                className="relative h-[220px] sm:h-[260px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200 shadow-xs hover:border-[#c5a059] transition-all"
+              >
+                <img
+                  src="/icon_ramagundam_tower1.jpg"
+                  alt="Ramagundam Tower-1"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute top-2.5 left-2.5 z-10">
+                  <span className="px-2.5 py-0.5 bg-[#07132c]/90 text-[#f3cf7a] text-[10px] font-black uppercase tracking-wider border border-[#c5a059]/40">
+                    Tower-1 • Finished Facade
+                  </span>
+                </div>
+                <div className="absolute bottom-2.5 inset-x-2.5 z-10 flex items-center justify-between text-white text-[11px] font-bold">
+                  <span>G+5 Residential Tower</span>
+                  <Eye className="w-3.5 h-3.5 text-[#e5be6b]" />
+                </div>
+              </div>
+
+              {/* Tower-2 Card */}
+              <div
+                onClick={() => setActiveOngoingModal({
+                  title: "Ramagundam Tower-2 – Completed Elevation",
+                  subName: "Ramagundam Tower-2",
+                  image: '/icon_ramagundam_tower2.jpg',
+                  caption: "Tower-2: G+5 Residential Tower elevation with central landscaped courtyard, modern balcony railings, and finished porticos.",
+                  location: "Ramagundam, Peddapalli District, Telangana"
+                })}
+                className="relative h-[220px] sm:h-[260px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200 shadow-xs hover:border-[#c5a059] transition-all"
+              >
+                <img
+                  src="/icon_ramagundam_tower2.jpg"
+                  alt="Ramagundam Tower-2"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute top-2.5 left-2.5 z-10">
+                  <span className="px-2.5 py-0.5 bg-[#07132c]/90 text-[#f3cf7a] text-[10px] font-black uppercase tracking-wider border border-[#c5a059]/40">
+                    Tower-2 • Modern Facade
+                  </span>
+                </div>
+                <div className="absolute bottom-2.5 inset-x-2.5 z-10 flex items-center justify-between text-white text-[11px] font-bold">
+                  <span>G+5 Residential Tower</span>
+                  <Eye className="w-3.5 h-3.5 text-[#e5be6b]" />
+                </div>
+              </div>
+
+              {/* Tower-3 Card */}
+              <div
+                onClick={() => setActiveOngoingModal({
+                  title: "Ramagundam Tower-3 – Structural Framing & Scaffolding",
+                  subName: "Ramagundam Tower-3",
+                  image: '/icon_ramagundam_tower3.jpg',
+                  caption: "Tower-3: Heavy multi-tier structural scaffolding, AAC block masonry work, core stairwell shafts, and floor slab casting.",
+                  location: "Ramagundam, Peddapalli District, Telangana"
+                })}
+                className="relative h-[220px] sm:h-[260px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200 shadow-xs hover:border-[#c5a059] transition-all"
+              >
+                <img
+                  src="/icon_ramagundam_tower3.jpg"
+                  alt="Ramagundam Tower-3"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute top-2.5 left-2.5 z-10">
+                  <span className="px-2.5 py-0.5 bg-[#07132c]/90 text-[#f3cf7a] text-[10px] font-black uppercase tracking-wider border border-[#c5a059]/40">
+                    Tower-3 • Structural Stage
+                  </span>
+                </div>
+                <div className="absolute bottom-2.5 inset-x-2.5 z-10 flex items-center justify-between text-white text-[11px] font-bold">
+                  <span>Scaffolding &amp; Masonry</span>
+                  <Eye className="w-3.5 h-3.5 text-[#e5be6b]" />
+                </div>
+              </div>
+
+              {/* Structural Frame Progress Card */}
+              <div
+                onClick={() => setActiveOngoingModal({
+                  title: "Ramagundam Multi-Tower Structural Framework",
+                  subName: "Ramagundam Structural Progress",
+                  image: '/icon_ramagundam_structural.jpg',
+                  caption: "Tri-Tower RCC Structural Execution: Sequential concrete framing and masonry staging across Tower-1, Tower-2, and Tower-3.",
+                  location: "Ramagundam, Peddapalli District, Telangana"
+                })}
+                className="relative h-[220px] sm:h-[260px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200 shadow-xs hover:border-[#c5a059] transition-all"
+              >
+                <img
+                  src="/icon_ramagundam_structural.jpg"
+                  alt="Ramagundam Structural Progress"
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute top-2.5 left-2.5 z-10">
+                  <span className="px-2.5 py-0.5 bg-[#07132c]/90 text-[#f3cf7a] text-[10px] font-black uppercase tracking-wider border border-[#c5a059]/40">
+                    Structural Execution
+                  </span>
+                </div>
+                <div className="absolute bottom-2.5 inset-x-2.5 z-10 flex items-center justify-between text-white text-[11px] font-bold">
+                  <span>Tri-Tower RCC Frame</span>
+                  <Eye className="w-3.5 h-3.5 text-[#e5be6b]" />
+                </div>
+              </div>
+
+            </div>
+
+            {/* Bottom Project Names & Details */}
+            <div className="bg-white p-6 sm:p-8 border border-slate-200 space-y-4 shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-3.5 py-1 bg-[#07132c] text-[#e5be6b] text-xs font-black uppercase tracking-wider">
+                    Project: Ramagundam Multi-Tower Complex
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold uppercase tracking-wider">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Active Development • 3 Towers (G+5)
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5 text-xs text-slate-700 font-bold">
+                  <MapPin className="w-4 h-4 text-[#c5a059]" />
+                  <span>Ramagundam, Peddapalli District, Telangana</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div className="p-3 bg-slate-50 border border-slate-200 space-y-1">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#927027]">Structural Scope</span>
+                  <p className="font-bold text-[#07132c]">3 High-Rise Multi-Story Reinforced Concrete Towers (Tower 1, 2 &amp; 3)</p>
+                </div>
+                <div className="p-3 bg-slate-50 border border-slate-200 space-y-1">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#927027]">Current Milestone</span>
+                  <p className="font-bold text-[#07132c]">Towers 1 &amp; 2 Facades &amp; Balconies Complete • Tower 3 Scaffolding &amp; Masonry</p>
+                </div>
+                <div className="p-3 bg-slate-50 border border-slate-200 space-y-1">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#927027]">Engineering Standards</span>
+                  <p className="font-bold text-[#07132c]">Heavy RCC Earthquake-Resistant Frame, Core Shafts &amp; Deep Pile Grid</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* PROJECT 2: CHILAKAPALLY */}
           <div data-aos="fade-up" className="space-y-6 bg-slate-50/70 p-5 sm:p-8 rounded-none border border-slate-200 shadow-sm hover:border-[#c5a059] transition-all">
             
             {/* Top Images: Left Image 1, Right Image 2 */}
@@ -2620,6 +2848,11 @@ export default function App() {
                   </button>
                 </li>
                 <li>
+                  <button onClick={() => handleNavigate('careers')} className="hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 text-inherit font-medium">
+                    Careers (11 Openings)
+                  </button>
+                </li>
+                <li>
                   <button onClick={() => handleNavigate('contact')} className="hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 text-inherit font-medium">
                     Contact &amp; Tender Inquiries
                   </button>
@@ -2718,7 +2951,24 @@ export default function App() {
               <h3 className="text-2xl font-black text-[#0d214a]">Request a Capital Proposal</h3>
             </div>
 
-            <form onSubmit={(e) => { e.preventDefault(); alert('Inquiry submitted! Our engineering team will reach out within 24 hours.'); setInquiryModalOpen(false); }} className="space-y-4">
+            <form onSubmit={(e) => { 
+              e.preventDefault(); 
+              const name = e.target.elements[0]?.value || '';
+              const email = e.target.elements[1]?.value || '';
+              const overview = e.target.elements[2]?.value || '';
+              const waText = 
+`*NEW CAPITAL PROPOSAL INQUIRY - ICON CONSTRUCTIONS*
+----------------------------------------
+*Name:* ${name || 'Not specified'}
+*Email:* ${email || 'Not specified'}
+*Overview:* ${overview || 'General technical consultation requested.'}
+----------------------------------------
+_Sent from Icon Constructions Website_`;
+              const waUrl = `https://api.whatsapp.com/send?phone=919966180827&text=${encodeURIComponent(waText)}`;
+              window.open(waUrl, '_blank', 'noopener,noreferrer');
+              alert('Inquiry formatted and dispatched to WhatsApp (+91 9966180827)!'); 
+              setInquiryModalOpen(false); 
+            }} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-bold text-[#0d214a] block mb-1">Full Name</label>
@@ -2735,9 +2985,9 @@ export default function App() {
                 <textarea rows={3} placeholder="Provide details regarding estimated area, location, timeline..." className="w-full bg-slate-50 border border-slate-300 rounded-lg p-3 text-xs focus:border-[#c5a059] outline-none"></textarea>
               </div>
 
-              <button type="submit" className="w-full acc-btn acc-btn--gold py-3.5 text-xs font-bold uppercase tracking-wider">
+              <button type="submit" className="w-full acc-btn acc-btn--gold py-3.5 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
                 <Send className="w-4 h-4" />
-                <span>Submit Request</span>
+                <span>Send via WhatsApp (+91 9966180827)</span>
               </button>
             </form>
           </div>

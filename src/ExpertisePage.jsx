@@ -9,34 +9,8 @@ import {
 
 const expertiseSectors = [
   {
-    id: 'bridges',
-    sectorNumber: '01',
-    title: 'Multi-Span Highway River Bridges & Pile Foundations',
-    tagline: 'Heavy Infrastructure & Hydraulic Crossings',
-    categoryName: 'Bridges & Substructures',
-    image: '/icon_tonkini_10span_bridge.jpg',
-    description: 'Icon Constructions specializes in high-capacity highway river crossings, pre-stressed concrete girder installations, and deep underwater pile foundations engineered to withstand peak seasonal monsoon currents.',
-    capabilities: [
-      'Multi-span pre-stressed concrete (PSC) girder erection',
-      'Deep bored cast-in-situ concrete pile foundations',
-      'Hydraulic scour analysis & riverbank gabion wall protection',
-      'Heavy load-bearing abutments & elastomeric bridge bearings'
-    ],
-    highlightProject: 'Tonkini & Sirpur 10-Span Highway River Bridges',
-    projectsUnderDiscipline: [
-      { sno: '08', name: 'Tonkini – 10 Span Bridge', location: 'Sirpur Town, KB Asifabad District, Telangana' },
-      { sno: '13', name: 'Sirpur – 10 Span Bridge', location: 'Sirpur Town, KB Asifabad District, Telangana' },
-      { sno: '12', name: 'Rasply – 7 Span Bridge', location: 'Kumuram Bheem Asifabad District, Telangana' },
-      { sno: '14', name: 'Bridge with 6 Spans – Kondapally', location: 'Kondapally, KB Asifabad District, Telangana' },
-      { sno: '07', name: 'Dubbaguda – 3 Span Bridge', location: 'Sirpur Town, KB Asifabad District, Telangana' },
-      { sno: '09', name: 'Navegaon – 2 Span Bridge', location: 'Sirpur Town, KB Asifabad District, Telangana' },
-      { sno: '10', name: 'Pile Foundation & Jacketing – Gudem Bridge', location: 'Gudem, Telangana' },
-      { sno: '22', name: 'Box Bridges – 25 Nos.', location: 'Porsa, Maharashtra' }
-    ]
-  },
-  {
     id: 'educational',
-    sectorNumber: '02',
+    sectorNumber: '01',
     title: 'Educational Campuses, 100-Column Structures & Hostels',
     tagline: 'Institutional & Welfare Infrastructure',
     categoryName: 'Educational & Campuses',
@@ -62,7 +36,7 @@ const expertiseSectors = [
   },
   {
     id: 'civic',
-    sectorNumber: '03',
+    sectorNumber: '02',
     title: 'Government & Civic Administrative Headquarters',
     tagline: 'Public Administration & Municipal Facilities',
     categoryName: 'Government & Civic',
@@ -76,6 +50,7 @@ const expertiseSectors = [
     ],
     highlightProject: 'MRO Administrative Headquarters & Integrated Markets',
     projectsUnderDiscipline: [
+      { sno: 'RG', name: 'Ramagundam Multi-Tower Complex (Towers 1, 2 & 3)', location: 'Ramagundam, Peddapalli District, Telangana' },
       { sno: '01', name: 'MRO Office Building – 2008', location: 'Sirpur Town, KB Asifabad District, Telangana' },
       { sno: '25', name: 'Agriculture Building', location: 'Mancherial, Telangana' },
       { sno: '23', name: 'Forest Office Building', location: 'Penchikalpet, KB Asifabad District, Telangana' },
@@ -84,8 +59,53 @@ const expertiseSectors = [
     ]
   },
   {
-    id: 'hydraulic',
+    id: 'industrial',
+    sectorNumber: '03',
+    title: 'Industrial Heavy Sheds & Manufacturing Megahubs',
+    tagline: 'Pre-Engineered Structures & High-Bay Facilities',
+    categoryName: 'Industrial Sheds & Steel',
+    image: '/icon_industrial_steel_sheds.jpg',
+    description: 'Pre-engineered industrial steel complexes featuring clear-span trusses, high-clearance overhead gantry crane tracks, and heavy-load concrete floor aprons designed for continuous heavy machinery operations.',
+    capabilities: [
+      'Pre-engineered structural steel (PEB) fabrication & erection',
+      'Overhead traveling gantry crane runways & support columns',
+      'Heavy industrial laser-leveled concrete flooring with epoxy coating',
+      'Industrial ventilation, fire-suppression networks & loading docks'
+    ],
+    highlightProject: 'Sirpur Industrial Fabrication Sheds & Modern Megahub',
+    projectsUnderDiscipline: [
+      { sno: '17', name: 'IIT Sheds', location: 'Kumuram Bheem Asifabad District, Telangana' }
+    ]
+  },
+  {
+    id: 'bridges',
     sectorNumber: '04',
+    title: 'Multi-Span Highway River Bridges & Pile Foundations',
+    tagline: 'Heavy Infrastructure & Hydraulic Crossings',
+    categoryName: 'Bridges & Substructures',
+    image: '/icon_tonkini_10span_bridge.jpg',
+    description: 'Icon Constructions specializes in high-capacity highway river crossings, pre-stressed concrete girder installations, and deep underwater pile foundations engineered to withstand peak seasonal monsoon currents.',
+    capabilities: [
+      'Multi-span pre-stressed concrete (PSC) girder erection',
+      'Deep bored cast-in-situ concrete pile foundations',
+      'Hydraulic scour analysis & riverbank gabion wall protection',
+      'Heavy load-bearing abutments & elastomeric bridge bearings'
+    ],
+    highlightProject: 'Tonkini & Sirpur 10-Span Highway River Bridges',
+    projectsUnderDiscipline: [
+      { sno: '08', name: 'Tonkini – 10 Span Bridge', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '13', name: 'Sirpur – 10 Span Bridge', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '12', name: 'Rasply – 7 Span Bridge', location: 'Kumuram Bheem Asifabad District, Telangana' },
+      { sno: '14', name: 'Bridge with 6 Spans – Kondapally', location: 'Kondapally, KB Asifabad District, Telangana' },
+      { sno: '07', name: 'Dubbaguda – 3 Span Bridge', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '09', name: 'Navegaon – 2 Span Bridge', location: 'Sirpur Town, KB Asifabad District, Telangana' },
+      { sno: '10', name: 'Pile Foundation & Jacketing – Gudem Bridge', location: 'Gudem, Telangana' },
+      { sno: '22', name: 'Box Bridges – 25 Nos.', location: 'Porsa, Maharashtra' }
+    ]
+  },
+  {
+    id: 'hydraulic',
+    sectorNumber: '05',
     title: 'Hydraulic Infrastructure, Check Dams & Box Culverts',
     tagline: 'Water Resource Management & Flood Protection',
     categoryName: 'Hydraulic Infrastructure',
@@ -103,26 +123,16 @@ const expertiseSectors = [
       { sno: '04', name: 'Culverts – 10 Nos.', location: 'Kumuram Bheem Asifabad District, Telangana' },
       { sno: '21', name: 'Box Culverts – 20 Nos.', location: 'Gadchiroli, Maharashtra' }
     ]
-  },
-  {
-    id: 'industrial',
-    sectorNumber: '05',
-    title: 'Industrial Heavy Sheds & Manufacturing Megahubs',
-    tagline: 'Pre-Engineered Structures & High-Bay Facilities',
-    categoryName: 'Industrial Sheds & Steel',
-    image: '/icon_industrial_steel_sheds.jpg',
-    description: 'Pre-engineered industrial steel complexes featuring clear-span trusses, high-clearance overhead gantry crane tracks, and heavy-load concrete floor aprons designed for continuous heavy machinery operations.',
-    capabilities: [
-      'Pre-engineered structural steel (PEB) fabrication & erection',
-      'Overhead traveling gantry crane runways & support columns',
-      'Heavy industrial laser-leveled concrete flooring with epoxy coating',
-      'Industrial ventilation, fire-suppression networks & loading docks'
-    ],
-    highlightProject: 'Sirpur Industrial Fabrication Sheds & Modern Megahub',
-    projectsUnderDiscipline: [
-      { sno: '17', name: 'IIT Sheds', location: 'Kumuram Bheem Asifabad District, Telangana' }
-    ]
   }
+];
+
+const sectorOptions = [
+  { id: 'educational', label: 'Educational & Residential Hostels' },
+  { id: 'civic', label: 'Government & Civic Complex' },
+  { id: 'industrial', label: 'Industrial Sheds & Fabrication' },
+  { id: 'bridges', label: 'Multi-Span Highway River Bridges' },
+  { id: 'hydraulic', label: 'Hydraulic Dams & Box Culverts' },
+  { id: 'other', label: 'Other Civil Infrastructure' }
 ];
 
 export default function ExpertisePage({ onNavigate, onBack }) {
@@ -167,11 +177,11 @@ export default function ExpertisePage({ onNavigate, onBack }) {
 
   const categoryTabs = [
     { id: 'ALL', label: 'View All' },
-    { id: 'bridges', label: 'Bridges & Substructures' },
     { id: 'educational', label: 'Educational & Hostels' },
     { id: 'civic', label: 'Government & Civic' },
-    { id: 'hydraulic', label: 'Hydraulic Infrastructure' },
-    { id: 'industrial', label: 'Industrial & Steel' }
+    { id: 'industrial', label: 'Industrial & Steel' },
+    { id: 'bridges', label: 'Bridges & Substructures' },
+    { id: 'hydraulic', label: 'Hydraulic Infrastructure' }
   ];
 
   return (
@@ -218,6 +228,9 @@ export default function ExpertisePage({ onNavigate, onBack }) {
               </button>
               <button className="px-3 py-2 text-xs xl:text-sm font-bold tracking-wide text-[#c5a059] cursor-pointer bg-transparent border-0 border-b-2 border-[#c5a059]">
                 Expertise
+              </button>
+              <button onClick={() => navigate('careers')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0">
+                Careers
               </button>
               <button onClick={() => navigate('contact')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0">
                 Contact Us
@@ -303,6 +316,13 @@ export default function ExpertisePage({ onNavigate, onBack }) {
             >
               <span className="font-bold">Expertise</span>
               <ChevronRight className="w-4 h-4 text-[#c5a059]" />
+            </button>
+            <button 
+              onClick={() => { navigate('careers'); setMobileNavOpen(false); }}
+              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-50 transition-all text-left cursor-pointer"
+            >
+              <span>Careers (11 Openings)</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
             </button>
             <button 
               onClick={() => { navigate('contact'); setMobileNavOpen(false); }}
@@ -471,7 +491,7 @@ export default function ExpertisePage({ onNavigate, onBack }) {
       </section>
 
       {/* ── 3. FULL-BLEED EDGE-TO-EDGE 0-BORDER-RADIUS 0-GAP GRID (WHITE BACKGROUND) ─── */}
-      <div className="w-full px-0 py-0 overflow-hidden bg-white relative z-10">
+      <div className="w-full px-0 pt-2 pb-16 sm:pb-20 lg:pb-24 overflow-hidden bg-white relative z-10">
 
         {/* Empty State */}
         {filteredSectors.length === 0 ? (
@@ -493,8 +513,8 @@ export default function ExpertisePage({ onNavigate, onBack }) {
             </button>
           </div>
         ) : (
-          /* Full-Bleed 2-Column Edge-to-Edge Grid (0 Gap, 0 Border Radius, Pure White Background) */
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full px-0 bg-white">
+          /* Matching Projects Page Grid with left/right padding and column/row gaps */
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[1%] gap-y-[1vw] w-full px-[1%] bg-white">
             {filteredSectors.map((sec) => (
               <div
                 key={sec.id}
@@ -552,6 +572,19 @@ export default function ExpertisePage({ onNavigate, onBack }) {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* End of Disciplines Catalog Space & Status Marker */}
+        {filteredSectors.length > 0 && (
+          <div className="mt-12 sm:mt-16 mb-4 text-center max-w-xl mx-auto px-4">
+            <div className="flex items-center justify-center gap-3 text-slate-400">
+              <span className="h-[1px] w-12 sm:w-16 bg-slate-300"></span>
+              <span className="text-[11px] sm:text-xs uppercase tracking-widest font-extrabold text-slate-500">
+                {filteredSectors.length} Core Engineering Disciplines • Certified Capabilities
+              </span>
+              <span className="h-[1px] w-12 sm:w-16 bg-slate-300"></span>
+            </div>
           </div>
         )}
 
@@ -710,7 +743,7 @@ export default function ExpertisePage({ onNavigate, onBack }) {
       </section>
 
       {/* ── 6. BOTTOM CTA ─── */}
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div data-aos="fade-up" className="bg-[#07132c] text-white rounded-none p-6 sm:p-14 flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8 shadow-2xl relative overflow-hidden">
           <div className="space-y-2 sm:space-y-3 relative z-10 text-center md:text-left">
             <span className="text-xs sm:text-sm font-semibold text-[#e5be6b] tracking-wide block uppercase">
@@ -785,6 +818,11 @@ export default function ExpertisePage({ onNavigate, onBack }) {
                 <li>
                   <button onClick={() => navigate('expertise')} className="hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 text-inherit font-bold text-[#c5a059]">
                     Expertise &amp; Capabilities
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate('careers')} className="hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 text-inherit font-medium">
+                    Careers (11 Openings)
                   </button>
                 </li>
                 <li>

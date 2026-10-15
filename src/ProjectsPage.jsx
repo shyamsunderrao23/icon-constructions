@@ -8,7 +8,108 @@ import {
 } from 'lucide-react';
 
 const allProjectsData = [
-  // ── OFFICIAL 25 CLIENT BENCHMARK PROJECTS (EXACT S.NO. 1 TO 25) ──
+
+  // ── 1. CIVIC, RESIDENTIAL, EDUCATIONAL & INDUSTRIAL BUILDINGS (ON TOP) ──
+  {
+    id: 101,
+    officialSno: "RG-00",
+    title: "Ramagundam Multi-Tower Complex – Master Township",
+    alphabetLetter: "R",
+    category: "civic",
+    categoryName: "Residential & Civic Towers",
+    image: "/icon_ramagundam_panorama.jpg",
+    gallery: [
+      "/icon_ramagundam_panorama.jpg",
+      "/icon_ramagundam_tower1.jpg",
+      "/icon_ramagundam_tower2.jpg",
+      "/icon_ramagundam_tower3.jpg",
+      "/icon_ramagundam_structural.jpg"
+    ],
+    galleryLabels: [
+      "Tri-Tower Panoramic Master View",
+      "Tower-1 Finished Facade & Balconies",
+      "Tower-2 Completed Elevation & Palms",
+      "Tower-3 Scaffolding & Structural Frame",
+      "Tri-Tower Concrete Framework Progress"
+    ],
+    location: "Ramagundam, Peddapalli District, Telangana",
+    scale: "G+5 Multi-Tower High-Rise Residential Township (Towers 1, 2 & 3)",
+    year: "Ongoing / 2026",
+    status: "Active Execution",
+    description: "Flagship multi-tower township project comprising Tower-1, Tower-2, and Tower-3. Engineered with heavy reinforced concrete framed structures, G+5 residential storeys, deep pile foundations, internal core stairwells, cantilevered balconies, and modern exterior architectural facade finishing."
+  },
+  {
+    id: 102,
+    officialSno: "RG-01",
+    title: "Ramagundam Tower-1 – Multi-Story Residential Tower",
+    alphabetLetter: "R",
+    category: "civic",
+    categoryName: "Residential & Civic Towers",
+    image: "/icon_ramagundam_tower1.jpg",
+    gallery: [
+      "/icon_ramagundam_tower1.jpg",
+      "/icon_ramagundam_tower1_raw.jpg",
+      "/icon_ramagundam_panorama.jpg"
+    ],
+    galleryLabels: [
+      "Completed Modern Facade & Railings",
+      "Raw Structural Frame Construction",
+      "Master Township Context"
+    ],
+    location: "Ramagundam, Peddapalli District, Telangana",
+    scale: "G+5 Reinforced Concrete Residential Tower",
+    year: "2026",
+    status: "Facade & Balconies Completed",
+    description: "Full elevation of Tower-1 featuring G+5 storeys, heavy reinforced concrete frame, modern architectural dual-tone grey and white facade treatment, safety balustrades, and multi-unit living spaces."
+  },
+  {
+    id: 103,
+    officialSno: "RG-02",
+    title: "Ramagundam Tower-2 – Multi-Story Residential Tower",
+    alphabetLetter: "R",
+    category: "civic",
+    categoryName: "Residential & Civic Towers",
+    image: "/icon_ramagundam_tower2.jpg",
+    gallery: [
+      "/icon_ramagundam_tower2.jpg",
+      "/icon_ramagundam_tower2_raw.jpg",
+      "/icon_ramagundam_panorama.jpg"
+    ],
+    galleryLabels: [
+      "Completed Modern Elevation & Palms",
+      "Raw Structural Frame Construction",
+      "Master Township Context"
+    ],
+    location: "Ramagundam, Peddapalli District, Telangana",
+    scale: "G+5 Reinforced Concrete Residential Tower",
+    year: "2026",
+    status: "Facade & Balconies Completed",
+    description: "Tower-2 modern residential high-rise with premium exterior plastering, glass/metal balcony railings, integrated courtyard landscaping, and all-weather exterior weatherproofing."
+  },
+  {
+    id: 104,
+    officialSno: "RG-03",
+    title: "Ramagundam Tower-3 – Multi-Story Residential Tower",
+    alphabetLetter: "R",
+    category: "civic",
+    categoryName: "Residential & Civic Towers",
+    image: "/icon_ramagundam_tower3.jpg",
+    gallery: [
+      "/icon_ramagundam_tower3.jpg",
+      "/icon_ramagundam_tower3_raw.jpg",
+      "/icon_ramagundam_panorama.jpg"
+    ],
+    galleryLabels: [
+      "Scaffolding & Structural Frame Execution",
+      "AAC Block Masonry & Core Stairwell",
+      "Master Township Context"
+    ],
+    location: "Ramagundam, Peddapalli District, Telangana",
+    scale: "G+5 Structural Framing & Scaffolding Execution",
+    year: "2026",
+    status: "Structural Framing & Masonry",
+    description: "Tower-3 advanced structural execution stage featuring full-height steel scaffolding, precision AAC block masonry, reinforced slab castings, and core stairwell integration."
+  },
   {
     id: 1,
     officialSno: "01",
@@ -52,20 +153,6 @@ const allProjectsData = [
     description: "Multi-story government high school academic building featuring modern laboratories, central assembly courtyard, ventilated lecture halls, and all-weather exterior weatherproofing."
   },
   {
-    id: 4,
-    officialSno: "04",
-    title: "Culverts – 10 Nos.",
-    alphabetLetter: "C",
-    category: "infrastructure",
-    categoryName: "Hydraulic Infrastructure",
-    image: "/icon_4cell_box_culvert.jpg",
-    location: "Kumuram Bheem Asifabad District, Telangana",
-    scale: "10 Reinforced Concrete Box Culverts Network",
-    year: "Completed",
-    status: "Completed",
-    description: "Strategic hydraulic engineering consisting of 10 heavy reinforced box culverts constructed to withstand torrential monsoon flash floods across the district highway network."
-  },
-  {
     id: 5,
     officialSno: "05",
     title: "Boys Residential School – 100 Columns",
@@ -92,6 +179,204 @@ const allProjectsData = [
     year: "Completed",
     status: "Completed",
     description: "State-of-the-art government residential campus for girls, providing secure lodging, study lounges, modern dining hall, and hygiene sanitation systems."
+  },
+  {
+    id: 15,
+    officialSno: "15",
+    title: "Jyotiba Phule Building",
+    alphabetLetter: "J",
+    category: "educational",
+    categoryName: "Educational & Campuses",
+    image: "/icon_mjp_residential_school.jpg",
+    location: "Kagaznagar, Kumuram Bheem Asifabad District, Telangana",
+    scale: "Three-Story Model Residential Campus",
+    year: "Completed",
+    status: "Completed",
+    description: "Mahatma Jyotiba Phule (MJP) three-story government residential educational complex with entrance portico, academic lecture wings, science laboratories, and student lodging."
+  },
+  {
+    id: 16,
+    officialSno: "16",
+    title: "Minority Residential Building",
+    alphabetLetter: "M",
+    category: "educational",
+    categoryName: "Educational & Campuses",
+    image: "/icon_minority_residential_school.jpg",
+    location: "Balagalla, Kumuram Bheem Asifabad District, Telangana",
+    scale: "Three-Story Multi-Wing Residential Campus",
+    year: "Completed",
+    status: "Completed",
+    description: "Telangana Minority Residential Educational Society institutional campus with entrance portico, boundary enclosure, student classrooms, laboratories, and hostel wings."
+  },
+  {
+    id: 17,
+    officialSno: "17",
+    title: "IIT Sheds",
+    alphabetLetter: "I",
+    category: "industrial",
+    categoryName: "Industrial Sheds & Steel",
+    image: "/icon_industrial_steel_sheds.jpg",
+    location: "Kumuram Bheem Asifabad District, Telangana",
+    scale: "Pre-Engineered Structural Steel Workshop Sheds",
+    year: "Completed",
+    status: "Completed",
+    description: "Heavy-duty structural steel workshop sheds featuring multi-bay open entries, overhead gantry crane tracks, concrete aprons, and industrial machinery bays."
+  },
+  {
+    id: 18,
+    officialSno: "18",
+    title: "Three-Floor Buildings – 16 Nos.",
+    alphabetLetter: "T",
+    category: "residential",
+    categoryName: "Government & Civic / Residential",
+    image: "/icon_staff_quarters_apartments.jpg",
+    location: "Ramagundam, Telangana",
+    scale: "16 Blocks of G+2 Multi-Story Residential Quarters",
+    year: "Completed",
+    status: "Completed",
+    description: "16 blocks of three-floor (G+2) residential staff apartments featuring external stairwells, private balconies, gated boundary walls, and durable RCC construction."
+  },
+  {
+    id: 19,
+    officialSno: "19",
+    title: "Integrated Market Buildings – 5 Nos.",
+    alphabetLetter: "I",
+    category: "civic",
+    categoryName: "Government & Civic",
+    image: "/icon_administrative_block.jpg",
+    location: "Mancherial, Mancherial District, Telangana",
+    scale: "5 Municipal Integrated Market Complexes",
+    year: "Completed",
+    status: "Completed",
+    description: "5 comprehensive integrated vegetable and meat municipal wholesale market facilities featuring segregated zones, underground drainage systems, and loading bays."
+  },
+  {
+    id: 20,
+    officialSno: "20",
+    title: "Kasturba KGBV Building",
+    alphabetLetter: "K",
+    category: "educational",
+    categoryName: "Educational & Hostels",
+    image: "/icon_kgbv_residential_campus.jpg",
+    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
+    scale: "Kasturba Gandhi Balika Vidyalaya Residential Complex",
+    year: "Completed",
+    status: "Completed",
+    description: "KGBV residential school and dormitory complex with architectural detailing, paved courtyard approaches, student recreation grounds, and high-security perimeter."
+  },
+  {
+    id: 23,
+    officialSno: "23",
+    title: "Forest Office Building",
+    alphabetLetter: "F",
+    category: "civic",
+    categoryName: "Government & Civic",
+    image: "/icon_forest_range_office.jpg",
+    location: "Penchikalpet, Kumuram Bheem Asifabad District, Telangana",
+    scale: "Forest Range Administrative Office Headquarters",
+    year: "Completed",
+    status: "Completed",
+    description: "Official administrative headquarters and forest range office for the Telangana Forest Department (అటవీ రేంజ్ అధికారి కార్యాలయం), engineered with public service desks and security markers."
+  },
+  {
+    id: 24,
+    officialSno: "24",
+    title: "Girls School Buildings – 2 Nos.",
+    alphabetLetter: "G",
+    category: "educational",
+    categoryName: "Educational & Campuses",
+    image: "/icon_tswrdc_girls_arch.jpg",
+    location: "Kumuram Bheem Asifabad District, Telangana",
+    scale: "2 Signature Institutional Academic Wings & Grand Porticos",
+    year: "Completed",
+    status: "Completed",
+    description: "2 government institutional girls school academic complexes engineered with monumental entrance arches, ventilated lecture halls, science labs, and secure boundary perimeter."
+  },
+  {
+    id: 25,
+    officialSno: "25",
+    title: "Agriculture Building",
+    alphabetLetter: "A",
+    category: "civic",
+    categoryName: "Government & Civic",
+    image: "/icon_agriculture_dept_mancherial.jpg",
+    location: "Mancherial, Telangana",
+    scale: "Agriculture Department Administrative Headquarters",
+    year: "Completed",
+    status: "Completed",
+    description: "Official district agricultural department headquarters complex (వ్యవసాయశాఖ కార్యాలయం) featuring farmer service halls, administrative chambers, and security perimeter."
+  },
+
+  // ── ADDITIONAL SIGNATURE LANDMARK ACADEMIC & CIVIC EXTENSIONS ──
+,
+  {
+    id: 26,
+    title: "TSWR Residential School & Junior College (Boys)",
+    alphabetLetter: "T",
+    category: "educational",
+    categoryName: "Educational & Campuses",
+    image: "/icon_tswrs_campus.jpg",
+    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
+    scale: "TSWRS/JC(B) Institutional Campus",
+    year: "2012",
+    status: "Completed",
+    description: "Telangana Social Welfare Residential School and Junior College for Boys campus with grand entrance portico, administrative chambers, and student academic wings."
+  },
+  {
+    id: 27,
+    title: "Academic Classroom Corridor & Art Education Wing",
+    alphabetLetter: "A",
+    category: "educational",
+    categoryName: "Educational & Campuses",
+    image: "/icon_corridor_academic.jpg",
+    location: "Sirpur Town Educational Complex, Telangana",
+    scale: "Dual-Wing Academic Corridor & Art Department",
+    year: "Completed",
+    status: "Completed",
+    description: "Spacious tiled institutional classroom corridors with tri-color pillars, natural ventilation, art education department, and landscaped inner courtyard."
+  },
+  {
+    id: 28,
+    title: "School Main Academic Quadrangle & Campus Facade",
+    alphabetLetter: "S",
+    category: "educational",
+    categoryName: "Educational & Campuses",
+    image: "/icon_school_front_campus.jpg",
+    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
+    scale: "Full-Length Institutional Academic Wing",
+    year: "Completed",
+    status: "Completed",
+    description: "Long-span institutional school facade with green perimeter canopy, student gathering grounds, and integrated administrative chambers."
+  },
+  {
+    id: 29,
+    title: "New Dormitory Block & Residential Facility",
+    alphabetLetter: "N",
+    category: "educational",
+    categoryName: "Educational & Hostels",
+    image: "/icon_new_dormitory_block.jpg",
+    location: "Kumuram Bheem Asifabad District, Telangana",
+    scale: "Reinforced RCC Dormitory Wing",
+    year: "Completed",
+    status: "Completed",
+    description: "Modern single-story residential dormitory block engineered with weatherproofing, cross-ventilation, student living quarters, and landscaped approach."
+  },
+
+
+  // ── 2. HIGH-CAPACITY BRIDGES, SUBSTRUCTURES & HYDRAULIC INFRASTRUCTURE (DOWN) ──
+  {
+    id: 4,
+    officialSno: "04",
+    title: "Culverts – 10 Nos.",
+    alphabetLetter: "C",
+    category: "infrastructure",
+    categoryName: "Hydraulic Infrastructure",
+    image: "/icon_4cell_box_culvert.jpg",
+    location: "Kumuram Bheem Asifabad District, Telangana",
+    scale: "10 Reinforced Concrete Box Culverts Network",
+    year: "Completed",
+    status: "Completed",
+    description: "Strategic hydraulic engineering consisting of 10 heavy reinforced box culverts constructed to withstand torrential monsoon flash floods across the district highway network."
   },
   {
     id: 7,
@@ -206,90 +491,6 @@ const allProjectsData = [
     description: "6-span composite steel and concrete bridge with heavy stone-pitched embankment retaining walls, riprap scour protection, and heavy pier substructures."
   },
   {
-    id: 15,
-    officialSno: "15",
-    title: "Jyotiba Phule Building",
-    alphabetLetter: "J",
-    category: "educational",
-    categoryName: "Educational & Campuses",
-    image: "/icon_mjp_residential_school.jpg",
-    location: "Kagaznagar, Kumuram Bheem Asifabad District, Telangana",
-    scale: "Three-Story Model Residential Campus",
-    year: "Completed",
-    status: "Completed",
-    description: "Mahatma Jyotiba Phule (MJP) three-story government residential educational complex with entrance portico, academic lecture wings, science laboratories, and student lodging."
-  },
-  {
-    id: 16,
-    officialSno: "16",
-    title: "Minority Residential Building",
-    alphabetLetter: "M",
-    category: "educational",
-    categoryName: "Educational & Campuses",
-    image: "/icon_minority_residential_school.jpg",
-    location: "Balagalla, Kumuram Bheem Asifabad District, Telangana",
-    scale: "Three-Story Multi-Wing Residential Campus",
-    year: "Completed",
-    status: "Completed",
-    description: "Telangana Minority Residential Educational Society institutional campus with entrance portico, boundary enclosure, student classrooms, laboratories, and hostel wings."
-  },
-  {
-    id: 17,
-    officialSno: "17",
-    title: "IIT Sheds",
-    alphabetLetter: "I",
-    category: "industrial",
-    categoryName: "Industrial Sheds & Steel",
-    image: "/icon_industrial_steel_sheds.jpg",
-    location: "Kumuram Bheem Asifabad District, Telangana",
-    scale: "Pre-Engineered Structural Steel Workshop Sheds",
-    year: "Completed",
-    status: "Completed",
-    description: "Heavy-duty structural steel workshop sheds featuring multi-bay open entries, overhead gantry crane tracks, concrete aprons, and industrial machinery bays."
-  },
-  {
-    id: 18,
-    officialSno: "18",
-    title: "Three-Floor Buildings – 16 Nos.",
-    alphabetLetter: "T",
-    category: "residential",
-    categoryName: "Government & Civic / Residential",
-    image: "/icon_staff_quarters_apartments.jpg",
-    location: "Ramagundam, Telangana",
-    scale: "16 Blocks of G+2 Multi-Story Residential Quarters",
-    year: "Completed",
-    status: "Completed",
-    description: "16 blocks of three-floor (G+2) residential staff apartments featuring external stairwells, private balconies, gated boundary walls, and durable RCC construction."
-  },
-  {
-    id: 19,
-    officialSno: "19",
-    title: "Integrated Market Buildings – 5 Nos.",
-    alphabetLetter: "I",
-    category: "civic",
-    categoryName: "Government & Civic",
-    image: "/icon_administrative_block.jpg",
-    location: "Mancherial, Mancherial District, Telangana",
-    scale: "5 Municipal Integrated Market Complexes",
-    year: "Completed",
-    status: "Completed",
-    description: "5 comprehensive integrated vegetable and meat municipal wholesale market facilities featuring segregated zones, underground drainage systems, and loading bays."
-  },
-  {
-    id: 20,
-    officialSno: "20",
-    title: "Kasturba KGBV Building",
-    alphabetLetter: "K",
-    category: "educational",
-    categoryName: "Educational & Hostels",
-    image: "/icon_kgbv_residential_campus.jpg",
-    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
-    scale: "Kasturba Gandhi Balika Vidyalaya Residential Complex",
-    year: "Completed",
-    status: "Completed",
-    description: "KGBV residential school and dormitory complex with architectural detailing, paved courtyard approaches, student recreation grounds, and high-security perimeter."
-  },
-  {
     id: 21,
     officialSno: "21",
     title: "Box Culverts – 20 Nos.",
@@ -318,102 +519,6 @@ const allProjectsData = [
     description: "25 reinforced concrete box bridges engineered for highway cross-drainage, extreme hydraulic discharge, and long-term structural durability across regional corridors."
   },
   {
-    id: 23,
-    officialSno: "23",
-    title: "Forest Office Building",
-    alphabetLetter: "F",
-    category: "civic",
-    categoryName: "Government & Civic",
-    image: "/icon_forest_range_office.jpg",
-    location: "Penchikalpet, Kumuram Bheem Asifabad District, Telangana",
-    scale: "Forest Range Administrative Office Headquarters",
-    year: "Completed",
-    status: "Completed",
-    description: "Official administrative headquarters and forest range office for the Telangana Forest Department (అటవీ రేంజ్ అధికారి కార్యాలయం), engineered with public service desks and security markers."
-  },
-  {
-    id: 24,
-    officialSno: "24",
-    title: "Girls School Buildings – 2 Nos.",
-    alphabetLetter: "G",
-    category: "educational",
-    categoryName: "Educational & Campuses",
-    image: "/icon_tswrdc_girls_arch.jpg",
-    location: "Kumuram Bheem Asifabad District, Telangana",
-    scale: "2 Signature Institutional Academic Wings & Grand Porticos",
-    year: "Completed",
-    status: "Completed",
-    description: "2 government institutional girls school academic complexes engineered with monumental entrance arches, ventilated lecture halls, science labs, and secure boundary perimeter."
-  },
-  {
-    id: 25,
-    officialSno: "25",
-    title: "Agriculture Building",
-    alphabetLetter: "A",
-    category: "civic",
-    categoryName: "Government & Civic",
-    image: "/icon_agriculture_dept_mancherial.jpg",
-    location: "Mancherial, Telangana",
-    scale: "Agriculture Department Administrative Headquarters",
-    year: "Completed",
-    status: "Completed",
-    description: "Official district agricultural department headquarters complex (వ్యవసాయశాఖ కార్యాలయం) featuring farmer service halls, administrative chambers, and security perimeter."
-  },
-
-  // ── ADDITIONAL SIGNATURE LANDMARK ACADEMIC & CIVIC EXTENSIONS ──
-  {
-    id: 26,
-    title: "TSWR Residential School & Junior College (Boys)",
-    alphabetLetter: "T",
-    category: "educational",
-    categoryName: "Educational & Campuses",
-    image: "/icon_tswrs_campus.jpg",
-    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
-    scale: "TSWRS/JC(B) Institutional Campus",
-    year: "2012",
-    status: "Completed",
-    description: "Telangana Social Welfare Residential School and Junior College for Boys campus with grand entrance portico, administrative chambers, and student academic wings."
-  },
-  {
-    id: 27,
-    title: "Academic Classroom Corridor & Art Education Wing",
-    alphabetLetter: "A",
-    category: "educational",
-    categoryName: "Educational & Campuses",
-    image: "/icon_corridor_academic.jpg",
-    location: "Sirpur Town Educational Complex, Telangana",
-    scale: "Dual-Wing Academic Corridor & Art Department",
-    year: "Completed",
-    status: "Completed",
-    description: "Spacious tiled institutional classroom corridors with tri-color pillars, natural ventilation, art education department, and landscaped inner courtyard."
-  },
-  {
-    id: 28,
-    title: "School Main Academic Quadrangle & Campus Facade",
-    alphabetLetter: "S",
-    category: "educational",
-    categoryName: "Educational & Campuses",
-    image: "/icon_school_front_campus.jpg",
-    location: "Sirpur Town, Kumuram Bheem Asifabad District, Telangana",
-    scale: "Full-Length Institutional Academic Wing",
-    year: "Completed",
-    status: "Completed",
-    description: "Long-span institutional school facade with green perimeter canopy, student gathering grounds, and integrated administrative chambers."
-  },
-  {
-    id: 29,
-    title: "New Dormitory Block & Residential Facility",
-    alphabetLetter: "N",
-    category: "educational",
-    categoryName: "Educational & Hostels",
-    image: "/icon_new_dormitory_block.jpg",
-    location: "Kumuram Bheem Asifabad District, Telangana",
-    scale: "Reinforced RCC Dormitory Wing",
-    year: "Completed",
-    status: "Completed",
-    description: "Modern single-story residential dormitory block engineered with weatherproofing, cross-ventilation, student living quarters, and landscaped approach."
-  },
-  {
     id: 30,
     title: "Campus Central Avenue & Infrastructure Pathway",
     alphabetLetter: "C",
@@ -437,6 +542,7 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
   const [selectedLetter, setSelectedLetter] = useState('ALL');
   const [selectedDiscipline, setSelectedDiscipline] = useState(initialDiscipline);
   const [selectedProjectModal, setSelectedProjectModal] = useState(null);
+  const [modalPhotoIndex, setModalPhotoIndex] = useState(0);
 
   const navigate = (page, params) => {
     if (onNavigate) {
@@ -473,8 +579,8 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
           matchesDiscipline = cat.includes('bridge') || pCat.includes('bridge') || pCat.includes('infra');
         } else if (d.includes('educat') || d.includes('hostel') || d.includes('school') || d.includes('campus')) {
           matchesDiscipline = cat.includes('educat') || cat.includes('hostel') || cat.includes('campus') || pCat.includes('educat');
-        } else if (d.includes('civic') || d.includes('gov') || d.includes('mro')) {
-          matchesDiscipline = cat.includes('gov') || cat.includes('civic') || pCat.includes('civic');
+        } else if (d.includes('civic') || d.includes('gov') || d.includes('mro') || d.includes('resident') || d.includes('tower')) {
+          matchesDiscipline = cat.includes('gov') || cat.includes('civic') || cat.includes('resident') || cat.includes('tower') || pCat.includes('civic');
         } else if (d.includes('hydraul') || d.includes('water') || d.includes('dam') || d.includes('culvert')) {
           matchesDiscipline = cat.includes('hydraul') || cat.includes('culvert') || cat.includes('dam');
         } else if (d.includes('industr') || d.includes('steel') || d.includes('shed')) {
@@ -581,6 +687,13 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
                   Expertise
                 </button>
 
+                <button
+                  onClick={() => navigate('careers')}
+                  className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0"
+                >
+                  Careers
+                </button>
+
               <button onClick={() => navigate('contact')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0">
                 Contact Us
               </button>
@@ -684,6 +797,13 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
               className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-200/60 border border-transparent hover:border-[#c5a059]/30 transition-all text-left cursor-pointer"
             >
               <span>Expertise</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </button>
+            <button 
+              onClick={() => { navigate('careers'); setMobileNavOpen(false); }}
+              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-200/60 border border-transparent hover:border-[#c5a059]/30 transition-all text-left cursor-pointer"
+            >
+              <span>Careers (11 Openings)</span>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </button>
             <button 
@@ -802,11 +922,11 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
                 >
                   {[
                     { id: 'ALL', label: 'All Projects (Complete Portfolio)' },
-                    { id: 'Bridges & Substructures', label: 'Bridges & Substructures' },
                     { id: 'Educational & Hostels', label: 'Educational & Hostels' },
                     { id: 'Government & Civic', label: 'Government & Civic' },
-                    { id: 'Hydraulic Infrastructure', label: 'Hydraulic Infrastructure' },
-                    { id: 'Industrial Sheds & Steel', label: 'Industrial & Steel' }
+                    { id: 'Industrial Sheds & Steel', label: 'Industrial & Steel' },
+                    { id: 'Bridges & Substructures', label: 'Bridges & Substructures' },
+                    { id: 'Hydraulic Infrastructure', label: 'Hydraulic Infrastructure' }
                   ].map((item) => {
                     const isSelected = selectedDiscipline === item.id || (item.id === 'ALL' && (!selectedDiscipline || selectedDiscipline === 'ALL'));
                     return (
@@ -837,11 +957,11 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
                 <div className="flex items-stretch justify-start w-full border border-slate-200 rounded-none overflow-hidden bg-white shadow-xs">
                   {[
                     { id: 'ALL', label: 'All Projects' },
-                    { id: 'Bridges & Substructures', label: 'Bridges & Substructures' },
                     { id: 'Educational & Hostels', label: 'Educational & Hostels' },
                     { id: 'Government & Civic', label: 'Government & Civic' },
-                    { id: 'Hydraulic Infrastructure', label: 'Hydraulic Infrastructure' },
-                    { id: 'Industrial Sheds & Steel', label: 'Industrial & Steel' }
+                    { id: 'Industrial Sheds & Steel', label: 'Industrial & Steel' },
+                    { id: 'Bridges & Substructures', label: 'Bridges & Substructures' },
+                    { id: 'Hydraulic Infrastructure', label: 'Hydraulic Infrastructure' }
                   ].map((tab) => {
                     const isActive = selectedDiscipline === tab.id || (tab.id === 'ALL' && (!selectedDiscipline || selectedDiscipline === 'ALL'));
                     return (
@@ -924,7 +1044,7 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
       </section>
 
       {/* ── 4. FULL-BLEED EDGE-TO-EDGE 0-BORDER-RADIUS 0-GAP GRID (WHITE BACKGROUND) ─── */}
-      <div className="w-full px-0 py-0 overflow-hidden bg-white relative z-10">
+      <div className="w-full px-0 pt-2 pb-16 sm:pb-20 lg:pb-24 overflow-hidden bg-white relative z-10">
 
         {/* Empty State */}
         {filteredProjects.length === 0 ? (
@@ -950,7 +1070,10 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
             {filteredProjects.map((project) => (
               <div
                 key={project.id}
-                onClick={() => setSelectedProjectModal(project)}
+                onClick={() => {
+                  setSelectedProjectModal(project);
+                  setModalPhotoIndex(0);
+                }}
                 className="relative h-[440px] sm:h-[520px] lg:h-[600px] rounded-none overflow-hidden group shadow-none border-0 transition-all duration-500 bg-white cursor-pointer"
               >
                 {/* Full Background Image (No Shadow Layer) */}
@@ -997,6 +1120,19 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
           </div>
         )}
 
+        {/* End of Projects Catalog Space & Status Marker */}
+        {filteredProjects.length > 0 && (
+          <div className="mt-12 sm:mt-16 mb-4 text-center max-w-xl mx-auto px-4">
+            <div className="flex items-center justify-center gap-3 text-slate-400">
+              <span className="h-[1px] w-12 sm:w-16 bg-slate-300"></span>
+              <span className="text-[11px] sm:text-xs uppercase tracking-widest font-extrabold text-slate-500">
+                {filteredProjects.length} Projects Displayed • Complete Portfolio
+              </span>
+              <span className="h-[1px] w-12 sm:w-16 bg-slate-300"></span>
+            </div>
+          </div>
+        )}
+
       </div>
 
       {/* ── 5. PROJECT DETAILS MODAL ─── */}
@@ -1005,14 +1141,18 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
           <div className="relative w-full max-w-3xl bg-white border border-slate-200 rounded-none shadow-2xl overflow-hidden max-h-[90vh] flex flex-col text-[#07132c]">
             
             {/* Modal Image Header */}
-            <div className="relative h-64 sm:h-80 w-full overflow-hidden shrink-0">
+            <div className="relative h-64 sm:h-80 w-full overflow-hidden shrink-0 bg-slate-900">
               <img
-                src={selectedProjectModal.image}
+                src={
+                  selectedProjectModal.gallery && selectedProjectModal.gallery[modalPhotoIndex]
+                    ? selectedProjectModal.gallery[modalPhotoIndex]
+                    : selectedProjectModal.image
+                }
                 alt={selectedProjectModal.title}
                 onError={(e) => {
                   e.currentTarget.src = "/icon_mro_headquarters.jpg";
                 }}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-all duration-300"
               />
               
               <button
@@ -1022,6 +1162,16 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
               >
                 <X className="w-5 h-5" />
               </button>
+
+              {/* Gallery Image Counter/Tag */}
+              {selectedProjectModal.gallery && selectedProjectModal.gallery.length > 1 && (
+                <div className="absolute top-4 left-4 z-10">
+                  <span className="px-3 py-1 bg-black/80 text-[#e5be6b] text-xs font-bold border border-[#c5a059]/40 shadow-md">
+                    Photo {modalPhotoIndex + 1} of {selectedProjectModal.gallery.length}
+                    {selectedProjectModal.galleryLabels && ` • ${selectedProjectModal.galleryLabels[modalPhotoIndex]}`}
+                  </span>
+                </div>
+              )}
 
               <div className="absolute bottom-0 inset-x-0 p-5 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 text-white space-y-1.5">
                 <div className="flex items-center gap-2">
@@ -1039,6 +1189,26 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
                 </h3>
               </div>
             </div>
+
+            {/* Gallery Thumbnails Strip (if multiple photos available) */}
+            {selectedProjectModal.gallery && selectedProjectModal.gallery.length > 1 && (
+              <div className="bg-[#07132c] px-4 py-2.5 border-b border-[#c5a059]/30 flex items-center gap-2 overflow-x-auto [scrollbar-width:none]">
+                {selectedProjectModal.gallery.map((thumbUrl, idx) => {
+                  const isCur = modalPhotoIndex === idx;
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => setModalPhotoIndex(idx)}
+                      className={`relative h-12 w-16 sm:h-14 sm:w-20 shrink-0 overflow-hidden border-2 transition-all cursor-pointer ${
+                        isCur ? 'border-[#e5be6b] scale-105 shadow-md' : 'border-white/20 opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      <img src={thumbUrl} alt="Thumbnail" className="w-full h-full object-cover" />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Modal Content Body */}
             <div className="p-6 sm:p-8 space-y-6 overflow-y-auto">
@@ -1186,6 +1356,11 @@ export default function ProjectsPage({ onNavigate, onBack, initialDiscipline = '
                 <li>
                   <button onClick={() => navigate('expertise')} className="hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 text-inherit font-medium">
                     Expertise &amp; Capabilities
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate('careers')} className="hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 text-inherit font-medium">
+                    Careers (11 Openings)
                   </button>
                 </li>
                 <li>
