@@ -246,7 +246,7 @@ html.lenis, html.lenis body {
 }
 
 .animate-progress-fill {
-  animation: progressFill 7s linear forwards;
+  animation: progressFill 10s linear forwards;
 }
 
 /* Hero Content Swipe Animations */
