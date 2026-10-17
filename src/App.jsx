@@ -101,6 +101,25 @@ export default function App() {
   const [isHeroVideoPlaying, setIsHeroVideoPlaying] = useState(true);
   const [isHeroVideoMuted, setIsHeroVideoMuted] = useState(true);
 
+  const toggleHeroVideoPlay = () => {
+    if (heroVideoRef.current) {
+      if (isHeroVideoPlaying) {
+        heroVideoRef.current.pause();
+        setIsHeroVideoPlaying(false);
+      } else {
+        heroVideoRef.current.play();
+        setIsHeroVideoPlaying(true);
+      }
+    }
+  };
+
+  const toggleHeroVideoMute = () => {
+    if (heroVideoRef.current) {
+      heroVideoRef.current.muted = !isHeroVideoMuted;
+      setIsHeroVideoMuted(!isHeroVideoMuted);
+    }
+  };
+
   // GSAP ScrollTrigger Refs for Section 2 Pinned Showcase (5 Expertise Images) - Desktop/Laptop
   const section2PinRef = useRef(null);
   const image1Ref = useRef(null);
@@ -806,16 +825,66 @@ export default function App() {
         </div>
       )}
 
-      {/* 3. FULL-WIDTH IMMERSIVE HERO VIDEO BANNER */}
-      <section className="relative w-full h-[60vh] sm:h-[75vh] lg:h-[calc(100vh-108px)] min-h-[440px] bg-slate-950 overflow-hidden flex items-center justify-center">
+      {/* 3. FULL-WIDTH IMMERSIVE HERO VIDEO BANNER WITH CINEMATIC SHADE & BRAND TYPOGRAPHY */}
+      <section className="relative w-full min-h-[580px] sm:min-h-[660px] lg:h-[calc(100vh-108px)] lg:min-h-[680px] bg-[#07132c] overflow-hidden flex items-center">
+        {/* Background Video */}
         <video
+          ref={heroVideoRef}
           src="/home-banner-video.mp4"
           autoPlay
           loop
-          muted
+          muted={isHeroVideoMuted}
           playsInline
-          className="w-full h-full object-cover object-center"
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
+
+        {/* Subtle Light Shade Overlay (Light Tint) */}
+        <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/25 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#07132c]/50 via-transparent to-black/25 pointer-events-none" />
+
+        {/* Hero Foreground Content - Aligned directly beneath header logo */}
+        <div className="relative z-10 w-full px-6 sm:px-10 lg:px-14 py-12 sm:py-16 flex flex-col justify-center">
+          
+          {/* Main Title & Slogan */}
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.08] max-w-4xl mb-4 sm:mb-6 drop-shadow-[0_3px_12px_rgba(0,0,0,0.8)]">
+            Icon Constructions
+            <span className="block mt-2 sm:mt-3 text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-[#f3cf7a] drop-shadow-[0_3px_10px_rgba(0,0,0,0.7)]">
+              Engineering Landmarks & Civil Superstructures Across Telangana
+            </span>
+          </h1>
+
+          {/* Subtitle / Paragraph */}
+          <p className="text-sm sm:text-base lg:text-lg text-slate-100 font-medium leading-relaxed max-w-2xl mb-8 sm:mb-10 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+            For five decades, Icon Constructions has delivered high-capacity river bridges, civic administrative headquarters, premier educational campuses, and residential towers with uncompromised engineering integrity and precision execution.
+          </p>
+
+          {/* Interactive CTAs */}
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+            <button
+              onClick={() => handleNavigate('projects')}
+              className="px-6 sm:px-8 py-3 bg-[#c5a059] hover:bg-[#b58f45] text-[#07132c] font-bold text-xs sm:text-sm tracking-wide rounded-none transition-all shadow-2xl hover:shadow-[#c5a059]/40 flex items-center gap-2 cursor-pointer group"
+            >
+              <span>Explore Projects</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+
+            <button
+              onClick={() => handleNavigate('about')}
+              className="px-6 sm:px-8 py-3 bg-[#07132c]/70 hover:bg-white hover:text-[#07132c] text-white border border-white/50 font-bold text-xs sm:text-sm tracking-wide rounded-none transition-all backdrop-blur-md cursor-pointer flex items-center gap-2 shadow-lg"
+            >
+              <span>About Our Legacy</span>
+            </button>
+
+            <button
+              onClick={() => handleNavigate('contact')}
+              className="px-5 sm:px-6 py-3 text-white hover:text-[#f3cf7a] font-semibold text-xs sm:text-sm tracking-wide transition-colors flex items-center gap-1.5 cursor-pointer underline underline-offset-4 decoration-[#c5a059] drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]"
+            >
+              <span>Contact Us</span>
+            </button>
+          </div>
+
+        </div>
       </section>
 
       {/* 4. SECTION 2: GSAP SCROLLTRIGGER PINNED 5-IMAGE FULLSCREEN PROJECT SHOWCASE (DESKTOP & LAPTOP ONLY, HIDDEN ON MOBILE & TABLET) */}
