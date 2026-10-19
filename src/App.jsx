@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ProjectsPage from './ProjectsPage';
+import OngoingProjectsPage from './OngoingProjectsPage';
 import AboutPage from './AboutPage';
 import ExpertisePage from './ExpertisePage';
 import CareersPage from './CareersPage';
@@ -45,7 +46,16 @@ import {
   Briefcase,
   Volume2,
   VolumeX,
-  Maximize2
+  Maximize2,
+  Truck,
+  Wrench,
+  Compass,
+  Calculator,
+  Cpu,
+  BarChart3,
+  Ruler,
+  FileCheck,
+  Activity
 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -58,18 +68,19 @@ export default function App() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [selectedProjectModal, setSelectedProjectModal] = useState(null);
-  const [activeOngoingModal, setActiveOngoingModal] = useState(null);
   const [chilakapallyPhoto, setChilakapallyPhoto] = useState(0);
   const [goribkapellyPhoto, setGoribkapellyPhoto] = useState(0);
   const [activeReviewIndex, setActiveReviewIndex] = useState(0);
+  const [activeLifecycleStep, setActiveLifecycleStep] = useState(0);
+  const [activeHubIndex, setActiveHubIndex] = useState(0);
   const getInitialPage = () => {
     try {
       const cleanHash = window.location.hash.replace(/[#/]/g, '').toLowerCase();
-      if (['projects', 'about', 'expertise', 'careers', 'contact', 'home'].includes(cleanHash)) {
-        return cleanHash;
+      if (['projects', 'about', 'expertise', 'careers', 'contact', 'ongoing', 'ongoing-projects', 'home'].includes(cleanHash)) {
+        return cleanHash === 'ongoing-projects' ? 'ongoing' : cleanHash;
       }
       const saved = localStorage.getItem('icon_page');
-      if (['projects', 'about', 'expertise', 'careers', 'contact', 'home'].includes(saved)) {
+      if (['projects', 'about', 'expertise', 'careers', 'contact', 'ongoing', 'home'].includes(saved)) {
         return saved;
       }
     } catch (e) {
@@ -83,7 +94,9 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const cleanHash = window.location.hash.replace(/[#/]/g, '').toLowerCase();
-      if (['projects', 'about', 'expertise', 'careers', 'contact', 'home'].includes(cleanHash)) {
+      if (cleanHash === 'ongoing' || cleanHash === 'ongoing-projects') {
+        setCurrentPage('ongoing');
+      } else if (['projects', 'about', 'expertise', 'careers', 'contact', 'home'].includes(cleanHash)) {
         setCurrentPage(cleanHash);
       } else if (!cleanHash) {
         setCurrentPage('home');
@@ -323,42 +336,102 @@ export default function App() {
 
   // GSAP Horizontal Scroll for Why Choose Icon Constructions Section
   const whyChooseSectionRef = useRef(null);
+  const whyChooseTrackContainerRef = useRef(null);
   const whyChooseTrackRef = useRef(null);
+
+  const handleWhyChoosePrev = () => {
+    const container = whyChooseTrackContainerRef.current || whyChooseTrackRef.current?.parentElement;
+    if (window.innerWidth < 768) {
+      if (container) {
+        container.scrollBy({ left: -290, behavior: 'smooth' });
+      }
+    } else {
+      if (lenisRef.current) {
+        lenisRef.current.scrollTo(window.scrollY - 380);
+      } else {
+        window.scrollBy({ top: -380, behavior: 'smooth' });
+      }
+    }
+  };
+
+  const handleWhyChooseNext = () => {
+    const container = whyChooseTrackContainerRef.current || whyChooseTrackRef.current?.parentElement;
+    if (window.innerWidth < 768) {
+      if (container) {
+        container.scrollBy({ left: 290, behavior: 'smooth' });
+      }
+    } else {
+      if (lenisRef.current) {
+        lenisRef.current.scrollTo(window.scrollY + 380);
+      } else {
+        window.scrollBy({ top: 380, behavior: 'smooth' });
+      }
+    }
+  };
 
   useEffect(() => {
     if (currentPage !== 'home') return;
 
-    let ctx;
+    let mm;
+    let ro;
+    
+    // Allow DOM, fonts, and parent images to render layout
     const timer = setTimeout(() => {
-      if (!whyChooseSectionRef.current || !whyChooseTrackRef.current) return;
+      const section = whyChooseSectionRef.current;
+      const track = whyChooseTrackRef.current;
+      if (!section || !track) return;
 
-      ctx = gsap.context(() => {
-        const track = whyChooseTrackRef.current;
-        const totalScroll = track.scrollWidth - window.innerWidth;
+      mm = gsap.matchMedia();
 
-        if (totalScroll > 0) {
-          gsap.to(track, {
-            x: -totalScroll,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: whyChooseSectionRef.current,
-              start: 'top top',
-              end: () => `+=${totalScroll + 400}`,
-              pin: true,
-              scrub: 1,
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
-            }
-          });
-        }
+      // Pinned GSAP Horizontal Scroll on Desktop and Tablet (>= 768px)
+      mm.add("(min-width: 768px)", () => {
+        const getScrollDistance = () => {
+          if (!track) return 0;
+          return Math.max(0, track.scrollWidth - window.innerWidth + 120);
+        };
 
+        const horizontalTween = gsap.to(track, {
+          x: () => -getScrollDistance(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 80px',
+            end: () => `+=${getScrollDistance()}`,
+            pin: true,
+            scrub: 1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          }
+        });
+
+        return () => {
+          horizontalTween.kill();
+        };
+      });
+
+      // Clear GSAP transform on mobile viewports (< 768px)
+      mm.add("(max-width: 767px)", () => {
+        gsap.set(track, { clearProps: "transform,x" });
+      });
+
+      // ResizeObserver to automatically refresh trigger points whenever images or layout shift
+      ro = new ResizeObserver(() => {
         ScrollTrigger.refresh();
-      }, whyChooseSectionRef);
-    }, 120);
+      });
+      ro.observe(track);
+      ro.observe(section);
+
+      ScrollTrigger.refresh();
+    }, 150);
+
+    const handleWindowLoad = () => ScrollTrigger.refresh();
+    window.addEventListener('load', handleWindowLoad);
 
     return () => {
       clearTimeout(timer);
-      if (ctx) ctx.revert();
+      window.removeEventListener('load', handleWindowLoad);
+      if (ro) ro.disconnect();
+      if (mm) mm.revert();
     };
   }, [currentPage]);
 
@@ -573,6 +646,15 @@ export default function App() {
     );
   }
 
+  if (currentPage === 'ongoing') {
+    return (
+      <OngoingProjectsPage
+        onNavigate={handleNavigate}
+        onBack={() => handleNavigate('home')}
+      />
+    );
+  }
+
   if (currentPage === 'about') {
     return <AboutPage onNavigate={handleNavigate} onBack={() => handleNavigate('home')} />;
   }
@@ -630,6 +712,10 @@ export default function App() {
                 </button>
                 <button onClick={() => handleNavigate('projects')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0">
                   Projects
+                </button>
+                <button onClick={() => handleNavigate('ongoing')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 flex items-center gap-1.5">
+                  <span>Ongoing</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 </button>
                 <button onClick={() => handleNavigate('expertise')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0">
                   Expertise
@@ -731,6 +817,16 @@ export default function App() {
               className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-200/60 border border-transparent hover:border-[#c5a059]/30 transition-all text-left cursor-pointer"
             >
               <span>Projects</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </button>
+            <button 
+              onClick={() => { handleNavigate('ongoing'); setMobileNavOpen(false); }}
+              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-200/60 border border-transparent hover:border-[#c5a059]/30 transition-all text-left cursor-pointer"
+            >
+              <span className="flex items-center gap-2">
+                <span>Ongoing Projects</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              </span>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </button>
             <button 
@@ -1118,1378 +1214,562 @@ export default function App() {
         </div>
       </section>
 
-      {/* 6. SECTION 3: OUR EXPERTISE - FULL IMAGE BACKDROP CARDS (EXACT MATCH TO CLIENT REFERENCE) */}
-      <section id="expertise" className="py-14 sm:py-20 bg-white border-t border-slate-200">
-        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      {/* ── PRECISION ENGINEERING LIFECYCLE (WHITE THEME • LEFT-ALIGNED MODERN UI) ─── */}
+      <section className="w-full bg-white text-[#07132c] py-20 sm:py-28 relative border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
           
-          <div data-aos="fade-up" className="space-y-2 text-center md:text-left">
-            <span className="text-xs font-bold text-[#c5a059] uppercase tracking-widest block mb-1">Our Core Disciplines</span>
-            <h2 className="text-2xl sm:text-4xl font-black text-[#0d214a]">Our Expertise</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 w-full">
-            {[
-              {
-                title: "Educational &\nHostels",
-                tag: "SPACES FOR BRIGHTER FUTURES",
-                image: "/icon_school_assembly.jpg",
-                desc: "100-column residential schools, Kasturba KGBV campuses & student hostels.",
-                projects: ["Boys Residential School (100 Columns)", "High School Building – 2010", "Jyotiba Phule Building", "Minority Residential Building", "Kasturba KGBV Campus", "ST Hostel Building – 2009"]
-              },
-              {
-                title: "Government &\nCivic Works",
-                tag: "INFRASTRUCTURE FOR PEOPLE",
-                image: "/icon_tahasildar_mro.jpg",
-                desc: "MRO office headquarters, forest department offices & 5 integrated market complexes.",
-                projects: ["MRO Office Building – 2008", "Agriculture Building (Mancherial)", "Forest Range Office (Penchikalpet)", "Integrated Market Buildings (5 Nos.)", "Three-Floor Buildings (16 Nos.)"]
-              },
-              {
-                title: "Industrial Sheds\n& Steel",
-                tag: "PRECISION ENGINEERING",
-                image: "/icon_industrial_steel_sheds.jpg",
-                desc: "Pre-engineered structural steel sheds (IIT Asifabad) & heavy warehouses.",
-                projects: ["IIT Industrial Sheds (KB Asifabad)", "Structural Steel Fabrication Bays", "Heavy Gantry Crane Runways"]
-              },
-              {
-                title: "Bridges &\nSubstructures",
-                tag: "STRONGER CONNECTIONS",
-                image: "/icon_tonkini_10span_bridge.jpg",
-                desc: "Tonkini & Sirpur 10-span river bridges, pile foundations, pier jacketing & 25 box bridges.",
-                projects: ["Tonkini 10-Span Bridge", "Sirpur 10-Span Bridge", "Rasply 7-Span Bridge", "Kondapally 6-Span Bridge", "Dubbaguda 3-Span Bridge", "25 Box Bridges (Porsa)"]
-              },
-              {
-                title: "Hydraulic\nInfrastructure",
-                tag: "SUSTAINABLE WATER SOLUTIONS",
-                image: "/icon_overflow_check_dam.jpg",
-                desc: "Sirpur stream diversion check dams & 45+ reinforced highway box culverts.",
-                projects: ["Sirpur Stream Check Dam", "10-Unit Culverts Network", "20 Box Culverts (Gadchiroli)", "High-Discharge Box Culverts"]
-              }
-            ].slice(0, 2).map((exp, idx) => (
-              <div
-                key={idx}
-                onClick={() => handleNavigate('expertise')}
-                data-aos="fade-up"
-                data-aos-delay={idx * 120}
-                className="relative h-[420px] sm:h-[480px] rounded-none overflow-hidden shadow-lg group cursor-pointer border border-slate-200/60 hover:shadow-2xl transition-all duration-500 flex flex-col justify-end"
-              >
-                {/* Background Full Cover Image (No Shadow Layer) */}
-                <img
-                  src={exp.image}
-                  alt={exp.title.replace('\n', ' ')}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-
-                {/* Content Area in Compact Bottom Container */}
-                <div className="absolute bottom-0 inset-x-0 p-4 sm:p-5 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 z-10 flex items-center justify-between gap-4">
-                  <div className="space-y-1 min-w-0 flex-1">
-                    <span className="text-[10px] font-extrabold text-[#c5a059] uppercase tracking-widest block">
-                      {exp.tag}
-                    </span>
-                    <h3 className="text-lg sm:text-xl font-sans font-extrabold text-white tracking-tight leading-snug truncate group-hover:text-[#f3d38c] transition-colors">
-                      {exp.title.replace('\n', ' ')}
-                    </h3>
-                    <p className="text-[11px] text-slate-300 line-clamp-1 font-normal">
-                      {exp.desc}
-                    </p>
-                  </div>
-
-                  {/* View All Projects Button */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleNavigate('projects', { discipline: exp.title.replace('\n', ' ') });
-                    }}
-                    className="px-4 py-2 rounded-full bg-[#c5a059] hover:bg-[#e5be6b] text-[#07132c] text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-md hover:scale-105 transition-all duration-300 cursor-pointer border border-[#d4af37] shrink-0"
-                  >
-                    <span>View All Projects</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+          {/* Left-Aligned Header Block with Right-Side Authority Highlights */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-8 border-b border-slate-200">
+            <div data-aos="fade-up" className="max-w-3xl space-y-3 text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c5a059]/15 border border-[#c5a059]/30 text-[#927027] text-xs font-bold tracking-widest uppercase">
+                <HardHat className="w-3.5 h-3.5 text-[#927027]" />
+                <span>Class-1 Execution Protocols</span>
               </div>
-            ))}
-          </div>
-
-          {/* View All Capabilities Button */}
-          <div className="flex justify-center pt-2">
-            <button
-              onClick={() => handleNavigate('expertise')}
-              className="acc-btn acc-btn--gold text-xs px-6 sm:px-8 py-3 sm:py-3.5 flex items-center gap-2 shadow-md hover:shadow-xl transition-all duration-300 group cursor-pointer"
-            >
-              <span>View All Capabilities</span>
-              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </button>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ── 6.5 ONGOING PROJECTS SECTION (STACKED: CHILAKAPALLY THEN GORIBKAPELLY) ─── */}
-      <section id="ongoing" className="py-14 sm:py-20 bg-white text-[#07132c] border-t border-slate-200 w-full overflow-hidden relative">
-        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
-          
-          {/* Header */}
-          <div data-aos="fade-up" className="border-b border-slate-200 pb-4">
-            <div className="space-y-2 text-center md:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-[11px] font-bold uppercase tracking-wider">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+              <h2 className="text-3xl sm:text-5xl font-sans font-black text-[#07132c] tracking-tight leading-tight">
+                Precision Engineering Lifecycle: <br className="hidden sm:inline" />
+                <span className="text-[#927027]">
+                  How Icon Builds to Last 100+ Years
                 </span>
-                <span>Active On-Site Developments</span>
-              </div>
-              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-sans font-black text-[#0d214a] tracking-tight leading-tight">
-                Ongoing Projects
               </h2>
-            </div>
-          </div>
-
-          {/* ONGOING PROJECT 1: IBRAHIMPALLE */}
-          <div data-aos="fade-up" className="space-y-6 bg-slate-50/70 p-5 sm:p-8 rounded-none border border-slate-200 shadow-sm hover:border-[#c5a059] transition-all">
-            
-            {/* Top Images: 3 Images per Row Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              
-              {/* Image 1 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ibrahimpalle Project Site",
-                  subName: "Ibrahimpalle",
-                  image: '/ongoing_ibrahimpalle_1.jpg',
-                  caption: "Image 1: Contemporary Villa Front Elevation with Terracotta Screen & Sloped Roof",
-                  location: "Ibrahimpalle, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_ibrahimpalle_1.jpg"
-                  alt="Ibrahimpalle Project - Image 1"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 1 • Front Elevation
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 2 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ibrahimpalle Project Site",
-                  subName: "Ibrahimpalle",
-                  image: '/ongoing_ibrahimpalle_2.jpg',
-                  caption: "Image 2: Dynamic Exterior Angle with Clay Tile Jaali Work & Landscaped Garden",
-                  location: "Ibrahimpalle, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_ibrahimpalle_2.jpg"
-                  alt="Ibrahimpalle Project - Image 2"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 2 • Architectural Facade
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 3 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ibrahimpalle Project Site",
-                  subName: "Ibrahimpalle",
-                  image: '/ongoing_ibrahimpalle_3.jpg',
-                  caption: "Image 3: Extensive Side Elevation with Sloped Roofline & Perimeter Greenery",
-                  location: "Ibrahimpalle, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_ibrahimpalle_3.jpg"
-                  alt="Ibrahimpalle Project - Image 3"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 3 • Side Elevation
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 4 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ibrahimpalle Project Site",
-                  subName: "Ibrahimpalle",
-                  image: '/ongoing_ibrahimpalle_4.jpg',
-                  caption: "Image 4: Entrance Portico, Upper Balcony & Textured Terracotta Jaali Screens",
-                  location: "Ibrahimpalle, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_ibrahimpalle_4.jpg"
-                  alt="Ibrahimpalle Project - Image 4"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 4 • Entrance & Balcony
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 5 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ibrahimpalle Project Site",
-                  subName: "Ibrahimpalle",
-                  image: '/ongoing_ibrahimpalle_5.jpg',
-                  caption: "Image 5: Double-Height Concrete Fin Elements & Decorative Terracotta Brick Facade",
-                  location: "Ibrahimpalle, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_ibrahimpalle_5.jpg"
-                  alt="Ibrahimpalle Project - Image 5"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 5 • Structural Fins & Jaali
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 6 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ibrahimpalle Project Site",
-                  subName: "Ibrahimpalle",
-                  image: '/ongoing_ibrahimpalle_6.jpg',
-                  caption: "Image 6: Handcrafted Heritage Cart Feature & Outdoor Landscaping with Villa Facade",
-                  location: "Ibrahimpalle, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_ibrahimpalle_6.jpg"
-                  alt="Ibrahimpalle Project - Image 6"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 6 • Landscape & Heritage Decor
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 7 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ibrahimpalle Project Site",
-                  subName: "Ibrahimpalle",
-                  image: '/ongoing_nemalipalle_1.jpg',
-                  caption: "Image 7: Plinth Wall Casting & Vertical Starter Reinforcement",
-                  location: "Ibrahimpalle, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_nemalipalle_1.jpg"
-                  alt="Ibrahimpalle Project - Image 7"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 7 • Plinth Casting
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 8 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ibrahimpalle Project Site",
-                  subName: "Ibrahimpalle",
-                  image: '/ongoing_nemalipalle_2.jpg',
-                  caption: "Image 8: Modular Formwork Shuttering & Structural Rebar Cages",
-                  location: "Ibrahimpalle, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_nemalipalle_2.jpg"
-                  alt="Ibrahimpalle Project - Image 8"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 8 • Modular Formwork
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 9 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ibrahimpalle Project Site",
-                  subName: "Ibrahimpalle",
-                  image: '/ongoing_nemalipalle_3.jpg',
-                  caption: "Image 9: Extensive Foundation Slabs & Grade Beam Grid",
-                  location: "Ibrahimpalle, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_nemalipalle_3.jpg"
-                  alt="Ibrahimpalle Project - Image 9"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 9 • Foundation Grid
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-              {/* Image 10 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ramagundam Multi-Tower Complex – Master Panorama",
-                  subName: "Ibrahimpalle",
-                  image: '/icon_ramagundam_panorama.jpg',
-                  caption: "Master Panoramic View of Tower-1, Tower-2, and Tower-3 Multi-Story High-Rise Residential Complex",
-                  location: "Ramagundam, Peddapalli District, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/icon_ramagundam_panorama.jpg"
-                  alt="Ibrahimpalle - Image 10"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 10 • Master Panorama
-                  </span>
-                </div>
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 11 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ramagundam Tower-1 – Completed Elevation",
-                  subName: "Ibrahimpalle",
-                  image: '/icon_ramagundam_tower1.jpg',
-                  caption: "Tower-1: G+5 Multi-Story High-Rise Residential Tower with finished architectural plastering, safety balustrades, and external paint.",
-                  location: "Ramagundam, Peddapalli District, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/icon_ramagundam_tower1.jpg"
-                  alt="Ibrahimpalle - Image 11"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 11 • Tower-1 Facade
-                  </span>
-                </div>
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 12 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ramagundam Tower-2 – Completed Elevation",
-                  subName: "Ibrahimpalle",
-                  image: '/icon_ramagundam_tower2.jpg',
-                  caption: "Tower-2: G+5 Residential Tower elevation with central landscaped courtyard, modern balcony railings, and finished porticos.",
-                  location: "Ramagundam, Peddapalli District, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/icon_ramagundam_tower2.jpg"
-                  alt="Ibrahimpalle - Image 12"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 12 • Tower-2 Facade
-                  </span>
-                </div>
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 13 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ramagundam Tower-3 – Structural Framing & Scaffolding",
-                  subName: "Ibrahimpalle",
-                  image: '/icon_ramagundam_tower3.jpg',
-                  caption: "Tower-3: Heavy multi-tier structural scaffolding, AAC block masonry work, core stairwell shafts, and floor slab casting.",
-                  location: "Ramagundam, Peddapalli District, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/icon_ramagundam_tower3.jpg"
-                  alt="Ibrahimpalle - Image 13"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 13 • Tower-3 Structural
-                  </span>
-                </div>
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 14 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ramagundam Multi-Tower Structural Framework",
-                  subName: "Ibrahimpalle",
-                  image: '/icon_ramagundam_structural.jpg',
-                  caption: "Tri-Tower RCC Structural Execution: Sequential concrete framing and masonry staging across Tower-1, Tower-2, and Tower-3.",
-                  location: "Ramagundam, Peddapalli District, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/icon_ramagundam_structural.jpg"
-                  alt="Ibrahimpalle - Image 14"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 14 • Structural Frame
-                  </span>
-                </div>
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Bottom Project Names & Details */}
-            <div className="bg-white p-6 sm:p-8 border border-slate-200 space-y-4 shadow-sm">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-3 py-1 bg-[#07132c] text-[#e5be6b] text-xs font-black uppercase tracking-wider">
-                    Sub Name: Ibrahimpalle
-                  </span>
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold uppercase tracking-wider">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    Phase 1 • Under Construction
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-1.5 text-xs text-slate-600 font-semibold">
-                  <MapPin className="w-3.5 h-3.5 text-[#c5a059]" />
-                  <span>Ibrahimpalle, Telangana</span>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <h3 className="text-xl sm:text-2xl font-sans font-black text-[#0d214a] tracking-tight">
-                  Ibrahimpalle Project
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-4xl">
-                  Contemporary architectural villa construction featuring custom terracotta brick jaali facade screens, reinforced concrete perimeter frames, pitched roofline engineering, expansive glass integration, and curated landscape development across the Ibrahimpalle site.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-100">
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
-                    Terracotta Jaali Facade
-                  </span>
-                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
-                    Architectural Concrete Fins
-                  </span>
-                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
-                    Pitched Roof Engineering
-                  </span>
-                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
-                    Custom Landscaping
-                  </span>
-                </div>
-
-                <button
-                  onClick={() => setInquiryModalOpen(true)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#07132c] hover:bg-[#c5a059] text-white hover:text-[#07132c] text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
-                >
-                  <span>Inquire for Site Specifications</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-
-          </div>
-
-          {/* ONGOING PROJECT 2: PALAGUTTA */}
-          <div data-aos="fade-up" className="space-y-6 bg-slate-50/70 p-5 sm:p-8 rounded-none border border-slate-200 shadow-sm hover:border-[#c5a059] transition-all">
-            
-            {/* Top Images: 3 Images per Row Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              
-              {/* Image 1 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Palagutta Project Site",
-                  subName: "Palagutta",
-                  image: '/ongoing_palagutta_1.jpg',
-                  caption: "Image 1: Vertical Column Rebar Cages & Foundation Trench Layout",
-                  location: "Palagutta, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_palagutta_1.jpg"
-                  alt="Palagutta Project - Image 1"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 1 • Column Reinforcement
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 2 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Palagutta Project Site",
-                  subName: "Palagutta",
-                  image: '/ongoing_palagutta_2.jpg',
-                  caption: "Image 2: Wide-Area Site Excavation, Column Starter Placement & Heavy Earthmoving",
-                  location: "Palagutta, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_palagutta_2.jpg"
-                  alt="Palagutta Project - Image 2"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 2 • Excavation & Footings
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 3 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Palagutta Project Site",
-                  subName: "Palagutta",
-                  image: '/ongoing_palagutta_3.jpg',
-                  caption: "Image 3: Extensive Foundation Column Grid Array with On-Site Batching Plant Infrastructure",
-                  location: "Palagutta, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_palagutta_3.jpg"
-                  alt="Palagutta Project - Image 3"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 3 • Foundation Grid Overview
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 4 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Palagutta Project Site",
-                  subName: "Palagutta",
-                  image: '/ongoing_palagutta_4.jpg',
-                  caption: "Image 4: Precision Plinth Formwork Shuttering & Ground Beam Rebar Inspection",
-                  location: "Palagutta, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_palagutta_4.jpg"
-                  alt="Palagutta Project - Image 4"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 4 • Formwork & Shuttering
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 5 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Palagutta Project Site",
-                  subName: "Palagutta",
-                  image: '/ongoing_palagutta_5.jpg',
-                  caption: "Image 5: Comprehensive Substructure Shuttering Boxes & Reinforced Ground Beam Framework",
-                  location: "Palagutta, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_palagutta_5.jpg"
-                  alt="Palagutta Project - Image 5"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 5 • Raft Shuttering Array
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 6 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Palagutta Project Site",
-                  subName: "Palagutta",
-                  image: '/ongoing_chilakapally_1.jpg',
-                  caption: "Image 6: Overview of Reinforced Concrete Plinth & Foundation Grid Casting",
-                  location: "Palagutta, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_chilakapally_1.jpg"
-                  alt="Palagutta Project - Image 6"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 6 • Plinth & Grid Casting
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 7 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Palagutta Project Site",
-                  subName: "Palagutta",
-                  image: '/ongoing_chilakapally_2.jpg',
-                  caption: "Image 7: Structural Rebar Layout & Trench Foundation Grid",
-                  location: "Palagutta, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_chilakapally_2.jpg"
-                  alt="Palagutta Project - Image 7"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 7 • Trench Foundation Grid
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 8 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Palagutta Project Site",
-                  subName: "Palagutta",
-                  image: '/ongoing_goribkapelly_1.jpg',
-                  caption: "Image 8: Column Footing Grid & Formwork Shuttering Execution",
-                  location: "Palagutta, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_goribkapelly_1.jpg"
-                  alt="Palagutta Project - Image 8"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 8 • Column Footing Grid
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 9 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Palagutta Project Site",
-                  subName: "Palagutta",
-                  image: '/ongoing_goribkapelly_2.jpg',
-                  caption: "Image 9: Column Pedestals Elevation & Subgrade Works",
-                  location: "Palagutta, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/ongoing_goribkapelly_2.jpg"
-                  alt="Palagutta Project - Image 9"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 9 • Pedestals Elevation
-                  </span>
-                </div>
-
-                {/* Bottom View Pill */}
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-              {/* Image 10 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ramagundam Multi-Tower Complex – Master Panorama",
-                  subName: "Palagutta",
-                  image: '/icon_ramagundam_panorama.jpg',
-                  caption: "Master Panoramic View of Tower-1, Tower-2, and Tower-3 Multi-Story High-Rise Residential Complex",
-                  location: "Ramagundam, Peddapalli District, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/icon_ramagundam_panorama.jpg"
-                  alt="Palagutta - Image 10"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 10 • Master Panorama
-                  </span>
-                </div>
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 11 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ramagundam Tower-1 – Completed Elevation",
-                  subName: "Palagutta",
-                  image: '/icon_ramagundam_tower1.jpg',
-                  caption: "Tower-1: G+5 Multi-Story High-Rise Residential Tower with finished architectural plastering, safety balustrades, and external paint.",
-                  location: "Ramagundam, Peddapalli District, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/icon_ramagundam_tower1.jpg"
-                  alt="Palagutta - Image 11"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 11 • Tower-1 Facade
-                  </span>
-                </div>
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 12 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ramagundam Tower-2 – Completed Elevation",
-                  subName: "Palagutta",
-                  image: '/icon_ramagundam_tower2.jpg',
-                  caption: "Tower-2: G+5 Residential Tower elevation with central landscaped courtyard, modern balcony railings, and finished porticos.",
-                  location: "Ramagundam, Peddapalli District, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/icon_ramagundam_tower2.jpg"
-                  alt="Palagutta - Image 12"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 12 • Tower-2 Facade
-                  </span>
-                </div>
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 13 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ramagundam Tower-3 – Structural Framing & Scaffolding",
-                  subName: "Palagutta",
-                  image: '/icon_ramagundam_tower3.jpg',
-                  caption: "Tower-3: Heavy multi-tier structural scaffolding, AAC block masonry work, core stairwell shafts, and floor slab casting.",
-                  location: "Ramagundam, Peddapalli District, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/icon_ramagundam_tower3.jpg"
-                  alt="Palagutta - Image 13"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 13 • Tower-3 Structural
-                  </span>
-                </div>
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Image 14 */}
-              <div
-                onClick={() => setActiveOngoingModal({
-                  title: "Ramagundam Multi-Tower Structural Framework",
-                  subName: "Palagutta",
-                  image: '/icon_ramagundam_structural.jpg',
-                  caption: "Tri-Tower RCC Structural Execution: Sequential concrete framing and masonry staging across Tower-1, Tower-2, and Tower-3.",
-                  location: "Ramagundam, Peddapalli District, Telangana"
-                })}
-                className="relative h-[240px] sm:h-[300px] lg:h-[340px] bg-slate-950 overflow-hidden group cursor-pointer border border-slate-200/80 shadow-md"
-              >
-                <img
-                  src="/icon_ramagundam_structural.jpg"
-                  alt="Palagutta - Image 14"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-[#f3cf7a] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-[#c5a059]/40 shadow-md">
-                    Image 14 • Structural Frame
-                  </span>
-                </div>
-                <div className="absolute bottom-3 right-3 z-10">
-                  <span className="px-3 py-1 bg-[#07132c]/90 text-white text-[11px] font-bold group-hover:bg-[#c5a059] group-hover:text-[#07132c] transition-colors flex items-center gap-1.5 shadow-md">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Expand Photo</span>
-                  </span>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Bottom Project Names & Details */}
-            <div className="bg-white p-6 sm:p-8 border border-slate-200 space-y-4 shadow-sm">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-3 py-1 bg-[#07132c] text-[#e5be6b] text-xs font-black uppercase tracking-wider">
-                    Sub Name: Palagutta
-                  </span>
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold uppercase tracking-wider">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    Phase 1 • Under Construction
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-1.5 text-xs text-slate-600 font-semibold">
-                  <MapPin className="w-3.5 h-3.5 text-[#c5a059]" />
-                  <span>Palagutta, Telangana</span>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <h3 className="text-xl sm:text-2xl font-sans font-black text-[#0d214a] tracking-tight">
-                  Palagutta Project
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-4xl">
-                  Large-scale infrastructure civil works encompassing ground beam grid excavation, heavy reinforced column cages, high-precision formwork shuttering, and extensive structural foundation casting across the Palagutta site.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-100">
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
-                    Foundation Shuttering
-                  </span>
-                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
-                    Column Rebar Cages
-                  </span>
-                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
-                    Ground Beam Grid
-                  </span>
-                  <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
-                    Heavy Civil Infrastructure
-                  </span>
-                </div>
-
-                <button
-                  onClick={() => setInquiryModalOpen(true)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#07132c] hover:bg-[#c5a059] text-white hover:text-[#07132c] text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
-                >
-                  <span>Inquire for Site Specifications</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* 7. SECTION 4: OUR PROJECTS - FULL BLEED EDGE-TO-EDGE DISPLAY */}
-      <section id="projects" className="py-14 sm:py-20 bg-white text-[#07132c] relative border-t border-slate-200 w-full overflow-hidden">
-        <div className="w-full space-y-8 sm:space-y-12">
-          
-          {/* Section Header (Container Aligned) */}
-          <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div data-aos="fade-up" className="space-y-3 border-b border-slate-200 pb-6 sm:pb-8 text-center md:text-left">
-              <span className="text-xs font-bold text-[#927027] uppercase tracking-widest block">
-                LANDMARK CLIENT EXECUTIONS
-              </span>
-              <h2 className="text-2xl sm:text-5xl font-black text-[#0d214a] tracking-tight">
-                Our Projects
-              </h2>
-              <p className="text-xs sm:text-base text-slate-600 max-w-2xl mx-auto md:mx-0 leading-relaxed">
-                Featured signature civil and building projects executed across Sirpur Town &amp; Kumuram Bheem Asifabad District, Telangana.
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+                From deep sub-surface geotechnical drilling to final non-destructive testing, every Icon civil project follows a strict 4-phase monolithic execution standard validated against Indian Standard (IS) codes.
               </p>
             </div>
+
+            {/* Quick Authority Metric Badges */}
+            <div className="shrink-0 flex items-center gap-4 text-left">
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 min-w-[140px]">
+                <span className="text-2xl font-black text-[#07132c] block font-sans">4 Phases</span>
+                <span className="text-xs text-slate-500 font-medium">Monolithic Protocol</span>
+              </div>
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 min-w-[140px]">
+                <span className="text-2xl font-black text-[#927027] block font-sans">IS Codes</span>
+                <span className="text-xs text-slate-500 font-medium">IS 456, 1892, 2911</span>
+              </div>
+            </div>
           </div>
 
-          {/* 2-Column Grid (Consistent 1% X and Y Gap) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[1%] gap-y-[1vw] w-full px-[1%]">
-            {projects.map((project) => (
-              <div
-                key={project.id}
-                className="relative h-[360px] sm:h-[480px] lg:h-[600px] rounded-none overflow-hidden group shadow-xl hover:shadow-2xl border-0 transition-all duration-500 bg-slate-950"
-              >
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  onError={(e) => {
-                    e.currentTarget.src = "/icon_mro_headquarters.jpg";
-                  }}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
+          {/* Interactive Phase Selector Tabs (White & Slate Theme with High-Contrast Active State) */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {[
+              { step: '01', title: 'Geotechnical & Soil Profiling', subtitle: 'Strata Boring & SBC Analysis' },
+              { step: '02', title: 'Deep Piling & Raft Base', subtitle: 'Bored Rotary Foundation' },
+              { step: '03', title: 'Superstructure & Formwork', subtitle: 'M40 Monolithic RCC' },
+              { step: '04', title: 'Quality Commissioning', subtitle: 'NABL & Class-1 Handover' }
+            ].map((tab, idx) => {
+              const isActive = activeLifecycleStep === idx;
+              return (
+                <button
+                  key={idx}
+                  onClick={() => setActiveLifecycleStep(idx)}
+                  className={`text-left p-4 sm:p-5 rounded-xl border transition-all duration-200 relative group cursor-pointer ${
+                    isActive
+                      ? 'bg-[#07132c] text-white border-[#07132c] shadow-xl shadow-[#07132c]/10'
+                      : 'bg-slate-50/80 border-slate-200 hover:border-slate-300 hover:bg-slate-100 text-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`text-xs font-black tracking-wider ${isActive ? 'text-[#e5be6b]' : 'text-slate-400 group-hover:text-slate-600'}`}>
+                      PHASE {tab.step}
+                    </span>
+                    {isActive && (
+                      <span className="w-2 h-2 rounded-full bg-[#c5a059] shadow-[0_0_8px_#c5a059]" />
+                    )}
+                  </div>
+                  <h4 className={`text-sm sm:text-base font-bold mb-1 transition-colors ${isActive ? 'text-white' : 'text-[#07132c] group-hover:text-black'}`}>
+                    {tab.title}
+                  </h4>
+                  <p className={`text-[11px] sm:text-xs font-normal line-clamp-1 ${isActive ? 'text-slate-300' : 'text-slate-500'}`}>
+                    {tab.subtitle}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
 
-                {/* Top Badges */}
-                <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-10">
-                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-none bg-[#07132c]/90 text-[#e5be6b] text-[10px] sm:text-xs font-black uppercase tracking-widest border border-[#c5a059]/40 backdrop-blur-md">
-                    {project.categoryName}
-                  </span>
-                </div>
+          {/* Active Stage Detailed Display Card (Crisp White/Slate Container) */}
+          {(() => {
+            const stages = [
+              {
+                step: '01',
+                title: 'Geotechnical Core Exploration & Soil Boring',
+                category: 'Subsurface Analysis',
+                codeStandard: 'IS 1892 & IS 2131 Compliant',
+                summary: 'Every structure begins with deep rotary core drilling up to 30 meters below natural ground level to establish Safe Bearing Capacity (SBC) and eliminate unpredicted settlement.',
+                deliverables: [
+                  'Continuous SPT N-value recording across strata',
+                  'Groundwater sulphate & chloride aggressive soil testing',
+                  'Seismic Zone III/IV dynamic response profiling',
+                  'Zero differential settlement foundation design'
+                ],
+                metric: '100%',
+                metricLabel: 'Core Sample Recovery Rate',
+                metricSub: 'Validated at government certified soil labs',
+                image: '/ongoing_palagutta_1.jpg',
+                caption: 'Rotary foundation core excavation and trenching on active site'
+              },
+              {
+                step: '02',
+                title: 'Deep Rotary Bored Piling & Monolithic Raft Foundations',
+                category: 'Foundation Engineering',
+                codeStandard: 'IS 2911 & IRC 78 Certified',
+                summary: 'Cast-in-situ bored piling socketed into solid bedrock layers, anchored with high-yield Fe550D rebar cages and poured monolithically using high-slump tremie pipes.',
+                deliverables: [
+                  '1000mm to 1500mm diameter hydraulic rotary pile bores',
+                  'Continuous tremie pours to eliminate cold joints',
+                  'Corrosion-resistant high-ductility Fe550D rebar cages',
+                  'Cross-hole ultrasonic sonic logging (CSL) verified'
+                ],
+                metric: '450+ T',
+                metricLabel: 'Individual Pile Working Load',
+                metricSub: 'Tested under vertical static load protocols',
+                image: '/ongoing_palagutta_2.jpg',
+                caption: 'Heavy pile cap steel binding and monolithic shuttering'
+              },
+              {
+                step: '03',
+                title: 'Seismic Superstructure Framing & High-Pressure Shuttering',
+                category: 'Monolithic RCC Framework',
+                codeStandard: 'IS 456:2000 Structural Standard',
+                summary: 'Precision-engineered modular steel and aluminum formwork combined with computer-batched M35/M40 concrete ensures millimeter plumb accuracy and zero void defects.',
+                deliverables: [
+                  'Engineered high-pressure formwork with zero deflection',
+                  'Continuous 36-meter hydraulic boom pump casting',
+                  'Millimeter laser total station column-beam alignment',
+                  'Multi-layer curing membrane and temperature logging'
+                ],
+                metric: 'M40',
+                metricLabel: 'High-Durability Design Grade',
+                metricSub: 'Formulated with automated moisture compensation',
+                image: '/icon_ramagundam_structural.jpg',
+                caption: 'Reinforced concrete framing with monolithic beam-column junction ties'
+              },
+              {
+                step: '04',
+                title: 'Multi-Tier Quality Testing & Class-1 Civic Handover',
+                category: 'Quality Commissioning',
+                codeStandard: 'Telangana R&B Class-1 Bonded',
+                summary: 'Before official civic handover, every cubic meter undergoes non-destructive ultrasonic pulse testing, core compression testing, and joint authority inspections.',
+                deliverables: [
+                  'NABL-accredited 7-day and 28-day concrete cube crush tests',
+                  'Non-destructive rebound hammer structural audits',
+                  'Comprehensive As-Built CAD documentation & warranty',
+                  'Formal handover certificate signed by Executive Engineers'
+                ],
+                metric: '0-Defect',
+                metricLabel: 'Authority Handover Clearance',
+                metricSub: '100% compliance with government tender specifications',
+                image: '/icon_mro_headquarters.jpg',
+                caption: 'Fully commissioned multi-storey administrative headquarters'
+              }
+            ];
 
-                <div className="absolute top-4 sm:top-6 right-4 sm:right-6 z-10 bg-black/80 backdrop-blur-md px-3 sm:px-3.5 py-1 sm:py-1.5 text-[11px] sm:text-xs font-extrabold text-white border border-white/20">
-                  {project.year}
-                </div>
+            const currentStage = stages[activeLifecycleStep];
 
-                {/* Bottom Info Bar (Compact Sleek Height) */}
-                <div className="absolute bottom-0 inset-x-0 px-4 sm:px-6 py-2.5 sm:py-3.5 lg:py-4 bg-[#07132c]/90 backdrop-blur-md border-t border-[#c5a059]/40 z-10 space-y-1">
-                  <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-[#e5be6b] font-bold">
-                    <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 text-[#c5a059]" />
-                    <span className="truncate">{project.location}</span>
+            return (
+              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-10 lg:p-12 shadow-sm relative overflow-hidden">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center text-left">
+                  
+                  {/* Left: Stage Information */}
+                  <div className="lg:col-span-7 space-y-6">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="px-3 py-1 rounded-md bg-[#c5a059]/15 text-[#927027] text-xs font-bold uppercase tracking-wider">
+                        Phase {currentStage.step} • {currentStage.category}
+                      </span>
+                      <span className="px-3 py-1 rounded-md bg-white text-slate-700 text-xs font-mono border border-slate-200">
+                        {currentStage.codeStandard}
+                      </span>
+                    </div>
+
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-black text-[#07132c] leading-tight">
+                      {currentStage.title}
+                    </h3>
+
+                    <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+                      {currentStage.summary}
+                    </p>
+
+                    <div className="space-y-3 pt-2">
+                      <h5 className="text-xs font-bold text-[#927027] uppercase tracking-wider">
+                        Engineering Deliverables &amp; Protocols:
+                      </h5>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {currentStage.deliverables.map((item, dIdx) => (
+                          <div key={dIdx} className="flex items-start gap-2.5 bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                            <CheckCircle2 className="w-4 h-4 text-[#927027] shrink-0 mt-0.5" />
+                            <span className="text-xs text-slate-700 font-medium leading-relaxed">
+                              {item}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* CTAs */}
+                    <div className="pt-4 flex flex-wrap items-center gap-4">
+                      <button
+                        onClick={() => setInquiryModalOpen(true)}
+                        className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#07132c] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#c5a059] hover:text-[#07132c] shadow-md transition-all cursor-pointer"
+                      >
+                        <span>Request Technical Spec Sheet</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleNavigate('ongoing')}
+                        className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-[#07132c] text-xs font-bold tracking-wider transition-all cursor-pointer"
+                      >
+                        <span>View In-Progress Projects</span>
+                        <ArrowUpRight className="w-4 h-4 text-[#927027]" />
+                      </button>
+                    </div>
                   </div>
 
-                  <h3 className="text-base sm:text-lg lg:text-xl font-sans font-extrabold text-white leading-tight truncate">
-                    {project.title}
-                  </h3>
+                  {/* Right: Real Site Visual & Stat Badge */}
+                  <div className="lg:col-span-5 relative">
+                    <div className="relative rounded-xl overflow-hidden border border-slate-200 aspect-[4/3] shadow-md group">
+                      <img
+                        src={currentStage.image}
+                        alt={currentStage.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#07132c] via-transparent to-transparent opacity-75" />
+                      
+                      <div className="absolute bottom-4 left-4 right-4 text-xs text-white bg-[#07132c]/85 backdrop-blur-md p-3 rounded-lg border border-white/10">
+                        <span className="font-semibold text-[#e5be6b] block mb-0.5">Live Construction Verification</span>
+                        <p className="text-[11px] text-slate-200 font-normal">{currentStage.caption}</p>
+                      </div>
+                    </div>
+
+                    {/* Metric Callout Card */}
+                    <div className="mt-4 bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between shadow-xs">
+                      <div>
+                        <span className="text-2xl sm:text-3xl font-sans font-black text-[#07132c] block">
+                          {currentStage.metric}
+                        </span>
+                        <span className="text-xs font-bold text-slate-800 block">
+                          {currentStage.metricLabel}
+                        </span>
+                        <span className="text-[10px] text-slate-500 block">
+                          {currentStage.metricSub}
+                        </span>
+                      </div>
+                      <div className="w-12 h-12 rounded-full bg-[#c5a059]/15 border border-[#c5a059]/30 flex items-center justify-center shrink-0">
+                        <ShieldCheck className="w-6 h-6 text-[#927027]" />
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
-            ))}
+            );
+          })()}
+
+        </div>
+      </section>
+
+      {/* ── HEAVY PLANT, FLEET & TECHNICAL INFRASTRUCTURE (WHITE THEME) ─── */}
+      <section className="w-full bg-white text-[#07132c] py-20 sm:py-28 border-t border-slate-200 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-slate-200">
+            <div data-aos="fade-up" className="space-y-3 max-w-2xl text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c5a059]/15 border border-[#c5a059]/30 text-[#927027] text-xs font-bold tracking-widest uppercase">
+                <Truck className="w-3.5 h-3.5 text-[#927027]" />
+                <span>In-House Industrial Assets</span>
+              </div>
+              <h2 className="text-3xl sm:text-5xl font-sans font-black text-[#07132c] tracking-tight leading-tight">
+                Heavy Plant Machinery &amp; Mobilization Fleet
+              </h2>
+              <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
+                Direct ownership of advanced construction plant eliminates third-party supply chain bottlenecks, giving Icon full control over concrete pouring cycles, piling schedules, and rapid project delivery.
+              </p>
+            </div>
+
+            <div className="shrink-0 flex items-center gap-3">
+              <button
+                onClick={() => handleNavigate('expertise')}
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-300 text-[#07132c] text-xs font-bold tracking-wider transition-colors cursor-pointer shadow-xs"
+              >
+                <span>Full Machinery Inventory</span>
+                <ArrowUpRight className="w-4 h-4 text-[#927027]" />
+              </button>
+            </div>
           </div>
 
-          {/* ── VIEW MORE PROJECTS – Centered Bottom CTA ── */}
-          <div className="flex justify-center px-4 py-8 sm:py-12">
-            <button
-              id="view-more-projects-btn"
-              onClick={() => {
-                handleNavigate('projects');
-              }}
-              className="group flex items-center justify-center gap-3 sm:gap-4 bg-gradient-to-r from-[#d4af37] via-[#c5a059] to-[#a8813a] text-[#07132c] text-xs sm:text-base font-black uppercase tracking-widest px-8 sm:px-14 py-4 sm:py-6 rounded-xl sm:rounded-2xl shadow-2xl hover:scale-105 hover:shadow-[#d4af37]/40 hover:from-[#e5be6b] hover:to-[#d4af37] transition-all duration-300 cursor-pointer border-2 border-[#d4af37] w-full sm:w-auto text-center"
-            >
-              <span>VIEW MORE PROJECTS</span>
-              <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-[#07132c] group-hover:translate-x-1.5 transition-transform duration-200 shrink-0" />
-            </button>
-          </div>
+          {/* 6 High-Impact Capability Cards Grid (White Theme) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: Cpu,
+                title: 'Computerized Batching Plants',
+                capacity: '60 m³/hr Batch Capacity',
+                desc: 'Microprocessor-controlled concrete batching with digital aggregate load cells, automatic moisture probes, and admixture dosing for consistent M35/M40 grades.',
+                tag: '0% Batching Variance'
+              },
+              {
+                icon: Wrench,
+                title: 'Hydraulic Rotary Piling Rigs',
+                capacity: 'Up to 1500mm Bored Diameter',
+                desc: 'Heavy crawler piling rigs capable of drilling through hardest granite stratas and deep river silt beds for bridge piers and high-load foundation piles.',
+                tag: 'Bedrock Penetration'
+              },
+              {
+                icon: Truck,
+                title: 'High-Reach Boom Pumps & Placers',
+                capacity: '36-Meter Vertical Reach',
+                desc: 'Truck-mounted hydraulic placing booms enabling continuous, high-volume monolithic concrete pours across multi-storey slabs and deep river pier caps.',
+                tag: 'Monolithic Placement'
+              },
+              {
+                icon: Compass,
+                title: 'Leica 3D Total Station Optical Survey',
+                capacity: '±1mm Accuracy Tolerance',
+                desc: 'Millimeter-precision laser total stations and RTK satellite GPS contour rovers for precise foundation coordinates, bridge span axes, and boundary alignments.',
+                tag: 'Millimeter Precision'
+              },
+              {
+                icon: FileCheck,
+                title: 'NABL Certified Field Testing Lab',
+                capacity: '2000 kN Automated Crushing',
+                desc: 'Fully equipped mobile site laboratories for 7-day/28-day cube compression testing, ultrasonic pulse velocity, slump cone audits, and soil compaction verification.',
+                tag: 'On-Site NABL Standards'
+              },
+              {
+                icon: Activity,
+                title: 'Heavy Earthmoving & Compaction Fleet',
+                capacity: '45+ Dedicated Heavy Units',
+                desc: 'In-house fleet of Komatsu & JCB hydraulic excavators, 12-ton vibratory soil compactors, and high-capacity tippers ready for immediate remote mobilization.',
+                tag: 'Immediate Mobilization'
+              }
+            ].map((plant, pIdx) => {
+              const PlantIcon = plant.icon;
+              return (
+                <div
+                  key={pIdx}
+                  data-aos="fade-up"
+                  data-aos-delay={pIdx * 100}
+                  className="group bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 hover:border-[#927027] hover:bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between space-y-6 text-left"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="w-12 h-12 rounded-xl bg-[#c5a059]/15 border border-[#c5a059]/30 flex items-center justify-center text-[#927027] group-hover:bg-[#07132c] group-hover:text-[#e5be6b] transition-colors">
+                        <PlantIcon className="w-6 h-6" />
+                      </div>
+                      <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-600">
+                        {plant.tag}
+                      </span>
+                    </div>
 
-          {/* ── 5. SECTION 5: WHY CHOOSE ICON CONSTRUCTIONS (GSAP PINNED HORIZONTAL SCROLL - WHITE THEME) ─── */}
-          <section
-            ref={whyChooseSectionRef}
-            className="w-full h-screen bg-white text-[#07132c] overflow-hidden relative border-t border-slate-200 flex flex-col justify-between py-6 sm:py-10"
-          >
-            {/* Pinned Top Bar / Section Header */}
-            <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 z-20 shrink-0">
-              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-4">
-                <div className="space-y-1">
-                  <span className="text-xs font-bold text-[#927027] uppercase tracking-widest block">
-                    PROVEN ENGINEERING INTEGRITY
-                  </span>
-                  <h2 className="text-xl sm:text-4xl lg:text-5xl font-sans font-black text-[#07132c] tracking-tight leading-tight">
-                    Why Choose Icon Constructions?
-                  </h2>
+                    <div>
+                      <span className="text-xs font-bold text-[#927027] block mb-1">
+                        {plant.capacity}
+                      </span>
+                      <h4 className="text-lg font-bold text-[#07132c] group-hover:text-[#927027] transition-colors">
+                        {plant.title}
+                      </h4>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                      {plant.desc}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+                    <span className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#927027]" />
+                      <span className="font-medium text-slate-700">100% Company Owned</span>
+                    </span>
+                    <span className="font-mono text-slate-400">ASSET-0{pIdx + 1}</span>
+                  </div>
                 </div>
+              );
+            })}
+          </div>
+
+          {/* Fleet Metric Band (White / Light Slate) */}
+          <div className="rounded-2xl bg-slate-50 border border-slate-200 p-6 sm:p-8 grid grid-cols-2 lg:grid-cols-4 gap-6 text-center shadow-xs">
+            <div>
+              <span className="text-3xl sm:text-4xl font-sans font-black text-[#07132c] block">45+</span>
+              <span className="text-xs font-bold text-[#927027] uppercase tracking-wider block mt-1">Heavy Machinery Units</span>
+              <span className="text-[11px] text-slate-500 block mt-0.5">Excavators, Rigs &amp; Compactors</span>
+            </div>
+            <div>
+              <span className="text-3xl sm:text-4xl font-sans font-black text-[#07132c] block">100%</span>
+              <span className="text-xs font-bold text-[#927027] uppercase tracking-wider block mt-1">Direct Fleet Ownership</span>
+              <span className="text-[11px] text-slate-500 block mt-0.5">Zero reliance on middlemen</span>
+            </div>
+            <div>
+              <span className="text-3xl sm:text-4xl font-sans font-black text-[#07132c] block">24/7</span>
+              <span className="text-xs font-bold text-[#927027] uppercase tracking-wider block mt-1">Maintenance Dispatch</span>
+              <span className="text-[11px] text-slate-500 block mt-0.5">Dedicated mechanical engineers</span>
+            </div>
+            <div>
+              <span className="text-3xl sm:text-4xl font-sans font-black text-[#07132c] block">0 hrs</span>
+              <span className="text-xs font-bold text-[#927027] uppercase tracking-wider block mt-1">Batching Supply Delays</span>
+              <span className="text-[11px] text-slate-500 block mt-0.5">Dedicated continuous supply</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ── 5. SECTION 5: WHY CHOOSE ICON CONSTRUCTIONS (GSAP PINNED HORIZONTAL SCROLL - WHITE THEME) ─── */}
+      <section
+        ref={whyChooseSectionRef}
+        className="w-full min-h-[calc(100vh-80px)] md:h-[calc(100vh-80px)] bg-white text-[#07132c] overflow-hidden relative border-t border-slate-200 flex flex-col justify-between pt-4 pb-4 sm:pt-6 sm:pb-6"
+      >
+        {/* Pinned Top Bar / Section Header */}
+        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 z-20 shrink-0">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-3 text-left">
+            <div className="space-y-1">
+              <span className="text-xs font-bold text-[#927027] uppercase tracking-widest block">
+                PROVEN ENGINEERING INTEGRITY
+              </span>
+              <h2 className="text-xl sm:text-3xl lg:text-4xl font-sans font-black text-[#07132c] tracking-tight leading-tight">
+                Why Choose Icon Constructions?
+              </h2>
+            </div>
+
+            {/* Navigation Controls */}
+            <div className="flex items-center gap-2">
+              <span className="hidden sm:inline-block text-xs text-slate-500 font-medium mr-2">
+                Scroll or use controls to view all 6 pillars
+              </span>
+              <button
+                type="button"
+                onClick={handleWhyChoosePrev}
+                aria-label="Previous Pillar"
+                className="w-9 h-9 rounded-full border border-slate-300 hover:border-[#07132c] hover:bg-[#07132c] hover:text-[#e5be6b] active:scale-95 text-slate-700 flex items-center justify-center transition-all cursor-pointer"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={handleWhyChooseNext}
+                aria-label="Next Pillar"
+                className="w-9 h-9 rounded-full border border-slate-300 hover:border-[#07132c] hover:bg-[#07132c] hover:text-[#e5be6b] active:scale-95 text-slate-700 flex items-center justify-center transition-all cursor-pointer"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Horizontal Scrolling Track (Pins & Slides on Scroll) */}
+        <div
+          ref={whyChooseTrackContainerRef}
+          className="w-full overflow-x-auto md:overflow-hidden z-10 my-auto py-2 scroll-smooth scrollbar-none touch-pan-x"
+        >
+          <div
+            ref={whyChooseTrackRef}
+            className="flex flex-nowrap items-stretch gap-4 sm:gap-6 lg:gap-8 px-4 sm:px-8 lg:px-12 w-max will-change-transform"
+          >
+            {/* Intro Overview Card */}
+            <div className="w-[270px] sm:w-[340px] lg:w-[360px] h-[340px] sm:h-[370px] lg:h-[390px] p-5 sm:p-7 bg-slate-50 border border-slate-200 rounded-none shrink-0 flex flex-col justify-between shadow-md">
+              <div className="space-y-3">
+                <span className="px-2.5 sm:px-3 py-1 rounded-none bg-[#07132c] text-[#e5be6b] text-[9px] sm:text-[10px] font-black uppercase tracking-widest inline-block">
+                  Our Promise
+                </span>
+                <h3 className="text-lg sm:text-2xl font-sans font-bold text-[#07132c] leading-tight">
+                  Half a century of bonded engineering discipline.
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  From Northern Telangana's deepest river piers to multi-acre residential campuses, we deliver projects built to endure generations.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 text-xs font-bold text-[#927027]">
+                <span>Swipe to explore pillars</span>
+                <ArrowRight className="w-4 h-4 animate-bounce" />
               </div>
             </div>
 
-            {/* Horizontal Scrolling Track (Pins & Slides on Scroll) */}
-            <div className="w-full overflow-hidden z-10 my-auto py-2">
-              <div
-                ref={whyChooseTrackRef}
-                className="flex items-stretch gap-4 sm:gap-6 lg:gap-8 px-4 sm:px-8 lg:px-12 w-max"
-              >
-                {/* Intro Overview Card */}
-                <div className="w-[270px] sm:w-[350px] lg:w-[380px] h-[350px] sm:h-[400px] lg:h-[420px] p-5 sm:p-7 lg:p-8 bg-slate-50 border border-slate-200 rounded-none shrink-0 flex flex-col justify-between shadow-md">
-                  <div className="space-y-3 sm:space-y-4">
-                    <span className="px-2.5 sm:px-3 py-1 rounded-none bg-[#07132c] text-[#e5be6b] text-[9px] sm:text-[10px] font-black uppercase tracking-widest inline-block">
-                      Our Promise
-                    </span>
-                    <h3 className="text-lg sm:text-2xl font-sans font-bold text-[#07132c] leading-tight">
-                      Half a century of bonded engineering discipline.
+            {/* 6 Value Pillar Cards */}
+            {[
+              {
+                icon: ShieldCheck,
+                num: "01 / 06",
+                title: "Class-1 Empaneled Government Contractor",
+                desc: "Accredited partner with Roads & Buildings (R&B), Panchayat Raj, Tribal Welfare, and Municipal Corporations for high-stake capital tenders.",
+                metric: "Class-1",
+                metricLabel: "State Empanelment"
+              },
+              {
+                icon: Clock,
+                num: "02 / 06",
+                title: "50+ Years Regional Heritage",
+                desc: "Established in 1975 in Sirpur Town with unmatched local soil mastery, riverbed foundation experience, and deep community trust.",
+                metric: "50+ Years",
+                metricLabel: "Since 1975"
+              },
+              {
+                icon: HardHat,
+                num: "03 / 06",
+                title: "25M+ Safe Man-Hours Logged",
+                desc: "Zero-harm safety policy with rigorous daily toolbox inductions, certified safety stewards, and ISO 45001 worker health standards.",
+                metric: "25M+",
+                metricLabel: "Safe Work Hours"
+              },
+              {
+                icon: CheckCircle2,
+                num: "04 / 06",
+                title: "100% On-Time Handover Guarantee",
+                desc: "Unbroken record of delivering landmark bridges, educational campuses, and civic headquarters strictly within contracted timelines.",
+                metric: "100%",
+                metricLabel: "On-Time Handover"
+              },
+              {
+                icon: Building2,
+                num: "05 / 06",
+                title: "Heavy In-House Machinery & Fleet",
+                desc: "Equipped with automated concrete batching plants, rotary piling rigs, transit mixers, earthmovers, and PEB structural steel workshop.",
+                metric: "In-House",
+                metricLabel: "Heavy Piling Fleet"
+              },
+              {
+                icon: Award,
+                num: "06 / 06",
+                title: "Zero-Defect Quality Assurance",
+                desc: "Mandatory third-party laboratory compression testing, ultrasonic rebar scans, and ISO 9001 certified civil execution benchmarks.",
+                metric: "ISO 9001",
+                metricLabel: "Quality Certified"
+              }
+            ].map((item, idx) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={idx}
+                  className="w-[270px] sm:w-[340px] lg:w-[370px] h-[340px] sm:h-[370px] lg:h-[390px] p-5 sm:p-7 bg-white rounded-none border border-slate-200 hover:border-[#c5a059] hover:shadow-xl transition-all duration-300 shrink-0 flex flex-col justify-between shadow-md group"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="w-10 h-10 rounded-none bg-slate-100 text-[#07132c] flex items-center justify-center border border-slate-200 group-hover:bg-[#07132c] group-hover:text-[#e5be6b] transition-colors">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span className="text-xs font-mono font-bold text-[#927027] tracking-wider">{item.num}</span>
+                    </div>
+                    <h3 className="text-base sm:text-lg font-bold text-[#07132c] group-hover:text-[#927027] transition-colors leading-snug">
+                      {item.title}
                     </h3>
                     <p className="text-xs text-slate-600 leading-relaxed">
-                      From Northern Telangana's deepest river piers to multi-acre residential campuses, we deliver projects built to endure generations.
+                      {item.desc}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 text-xs font-bold text-[#927027]">
-                    <span>Swipe to explore pillars</span>
-                    <ArrowRight className="w-4 h-4 animate-bounce" />
+
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                    <div>
+                      <span className="text-xs sm:text-sm font-black text-[#07132c] block">{item.metric}</span>
+                      <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-wider">{item.metricLabel}</span>
+                    </div>
+                    <div className="w-7 h-7 rounded-none bg-slate-100 text-slate-500 group-hover:text-[#07132c] group-hover:bg-[#e5be6b] flex items-center justify-center transition-all">
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                    </div>
                   </div>
                 </div>
+              );
+            })}
 
-                {/* 6 Value Pillar Cards */}
-                {[
-                  {
-                    icon: ShieldCheck,
-                    num: "01 / 06",
-                    title: "Class-1 Empaneled Government Contractor",
-                    desc: "Accredited partner with Roads & Buildings (R&B), Panchayat Raj, Tribal Welfare, and Municipal Corporations for high-stake capital tenders.",
-                    metric: "Class-1",
-                    metricLabel: "State Empanelment"
-                  },
-                  {
-                    icon: Clock,
-                    num: "02 / 06",
-                    title: "50+ Years Regional Heritage",
-                    desc: "Established in 1975 in Sirpur Town with unmatched local soil mastery, riverbed foundation experience, and deep community trust.",
-                    metric: "50+ Years",
-                    metricLabel: "Since 1975"
-                  },
-                  {
-                    icon: HardHat,
-                    num: "03 / 06",
-                    title: "25M+ Safe Man-Hours Logged",
-                    desc: "Zero-harm safety policy with rigorous daily toolbox inductions, certified safety stewards, and ISO 45001 worker health standards.",
-                    metric: "25M+",
-                    metricLabel: "Safe Work Hours"
-                  },
-                  {
-                    icon: CheckCircle2,
-                    num: "04 / 06",
-                    title: "100% On-Time Handover Guarantee",
-                    desc: "Unbroken record of delivering landmark bridges, educational campuses, and civic headquarters strictly within contracted timelines.",
-                    metric: "100%",
-                    metricLabel: "On-Time Handover"
-                  },
-                  {
-                    icon: Building2,
-                    num: "05 / 06",
-                    title: "Heavy In-House Machinery & Fleet",
-                    desc: "Equipped with automated concrete batching plants, rotary piling rigs, transit mixers, earthmovers, and PEB structural steel workshop.",
-                    metric: "In-House",
-                    metricLabel: "Heavy Piling Fleet"
-                  },
-                  {
-                    icon: Award,
-                    num: "06 / 06",
-                    title: "Zero-Defect Quality Assurance",
-                    desc: "Mandatory third-party laboratory compression testing, ultrasonic rebar scans, and ISO 9001 certified civil execution benchmarks.",
-                    metric: "ISO 9001",
-                    metricLabel: "Quality Certified"
-                  }
-                ].map((item, idx) => {
-                  const Icon = item.icon;
-                  return (
-                    <div
-                      key={idx}
-                      className="w-[280px] sm:w-[360px] lg:w-[400px] h-[350px] sm:h-[400px] lg:h-[420px] p-5 sm:p-7 lg:p-8 bg-white rounded-none border border-slate-200 hover:border-[#c5a059] hover:shadow-xl transition-all duration-300 shrink-0 flex flex-col justify-between shadow-md group"
-                    >
-                      <div className="space-y-3 sm:space-y-4">
-                        <div className="flex items-center justify-between">
-                          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-none bg-slate-100 text-[#07132c] flex items-center justify-center border border-slate-200 group-hover:bg-[#07132c] group-hover:text-[#e5be6b] transition-colors">
-                            <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                          </div>
-                          <span className="text-xs font-mono font-bold text-[#927027] tracking-wider">{item.num}</span>
-                        </div>
-                        <h3 className="text-base sm:text-xl font-bold text-[#07132c] group-hover:text-[#927027] transition-colors leading-snug">
-                          {item.title}
-                        </h3>
-                        <p className="text-xs text-slate-600 leading-relaxed">
-                          {item.desc}
-                        </p>
-                      </div>
-
-                      <div className="pt-3 sm:pt-4 border-t border-slate-100 flex items-center justify-between">
-                        <div>
-                          <span className="text-xs sm:text-sm font-black text-[#07132c] block">{item.metric}</span>
-                          <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-wider">{item.metricLabel}</span>
-                        </div>
-                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-none bg-slate-100 text-slate-500 group-hover:text-[#07132c] group-hover:bg-[#e5be6b] flex items-center justify-center transition-all">
-                          <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-0.5 transition-transform" />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {/* Closing CTA Card */}
-                <div className="w-[270px] sm:w-[350px] lg:w-[380px] h-[350px] sm:h-[400px] lg:h-[420px] p-5 sm:p-7 lg:p-8 bg-gradient-to-br from-[#07132c] via-[#0b1e3d] to-[#07132c] text-white rounded-none shrink-0 flex flex-col justify-between shadow-xl">
+            {/* Closing CTA Card */}
+            <div className="w-[270px] sm:w-[340px] lg:w-[360px] h-[340px] sm:h-[370px] lg:h-[390px] p-5 sm:p-7 bg-gradient-to-br from-[#07132c] via-[#0b1e3d] to-[#07132c] text-white rounded-none shrink-0 flex flex-col justify-between shadow-xl">
                   <div className="space-y-3 sm:space-y-4">
                     <span className="px-2.5 sm:px-3 py-1 rounded-none bg-[#c5a059] text-[#07132c] text-[9px] sm:text-[10px] font-black uppercase tracking-widest inline-block">
                       Take Action
@@ -2518,6 +1798,226 @@ export default function App() {
                 <span>Icon Constructions Engineering Integrity</span>
                 <span className="text-[#927027] font-semibold">6 Pillar Horizontal Showcase</span>
               </div>
+            </div>
+          </section>
+
+          {/* ── NEW SECTION C: REGIONAL INFRASTRUCTURE FOOTPRINT & KEY EXECUTION HUBS ─── */}
+          <section className="w-full bg-white text-[#07132c] py-24 sm:py-32 relative border-t border-slate-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+              
+              <div data-aos="fade-up" className="max-w-3xl space-y-4 text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c5a059]/15 border border-[#c5a059]/30 text-[#927027] text-xs font-bold tracking-widest uppercase">
+                  <MapPin className="w-3.5 h-3.5 text-[#927027]" />
+                  <span>Territorial Execution Presence</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-sans font-black text-[#07132c] tracking-tight leading-tight">
+                  Regional Infrastructure Footprint &amp; Command Hubs
+                </h2>
+                <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
+                  With permanently stationed project managers, machinery yards, and testing depots throughout Northern Telangana and the Godavari River basin, Icon delivers rapid site mobilization across remote districts.
+                </p>
+              </div>
+
+              {/* Hub Tabs */}
+              <div className="flex flex-wrap gap-2.5 sm:gap-3 border-b border-slate-200 pb-4">
+                {[
+                  { name: 'Kumuram Bheem Asifabad & Sirpur Hub', count: '48+ Sites' },
+                  { name: 'Mancherial & Godavari River Basin', count: '35+ Sites' },
+                  { name: 'Ramagundam & Peddapalli Industrial Hub', count: '26+ Sites' },
+                  { name: 'Northern Telangana Connectivity Network', count: '40+ Spans' }
+                ].map((hub, hIdx) => {
+                  const isActive = activeHubIndex === hIdx;
+                  return (
+                    <button
+                      key={hIdx}
+                      onClick={() => setActiveHubIndex(hIdx)}
+                      className={`px-4 sm:px-6 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer flex items-center gap-2.5 ${
+                        isActive
+                          ? 'bg-[#07132c] text-[#e5be6b] shadow-md'
+                          : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-[#07132c] border border-slate-200'
+                      }`}
+                    >
+                      <span>{hub.name}</span>
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full ${isActive ? 'bg-[#c5a059] text-[#07132c] font-black' : 'bg-white text-slate-600 border border-slate-200'}`}>
+                        {hub.count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Active Hub Card Display */}
+              {(() => {
+                const hubs = [
+                  {
+                    name: 'Kumuram Bheem Asifabad & Sirpur Command Hub',
+                    tagline: 'Flagship Remote Civic & River Bridge Infrastructure',
+                    description: 'Our primary northern district operation overseeing multi-acre tribal welfare model residential schools, high-level river bridges, remote 33/11kV electrical sub-stations, and civil administrative complexes.',
+                    stats: [
+                      { label: 'Completed / Active Sites', val: '48+ Projects' },
+                      { label: 'Major River Bridges', val: '10-Span Tonkini' },
+                      { label: 'Built-Up Institutional Area', val: '4,20,000+ sq.ft' },
+                      { label: 'Key Department Client', val: 'R&B, Tribal Welfare & TGSPDCL' }
+                    ],
+                    projects: [
+                      'Tonkini 10-Span Heavy River Bridge (Penchikalpet)',
+                      'KGBV Model Residential School Campus (Asifabad)',
+                      'Sirpur Town Model High School Complex',
+                      'Chilakapally & Goribkapelly Sub-Station Civil Infrastructure'
+                    ],
+                    image: '/icon_tonkini_10span_bridge.jpg',
+                    imageCaption: 'Tonkini 10-span river bridge connecting remote mandals over perennial waters'
+                  },
+                  {
+                    name: 'Mancherial & Godavari River Basin Operations',
+                    tagline: 'High-Density Educational Corridors & Urban Drainage',
+                    description: 'Directing multi-storey educational wings, municipal administrative headquarters, and high-capacity concrete drainage infrastructure across the industrial Godavari basin.',
+                    stats: [
+                      { label: 'Delivered Projects', val: '35+ Projects' },
+                      { label: 'Educational Classrooms', val: '180+ Completed' },
+                      { label: 'Arterial Paved Roads', val: '45+ Kilometers' },
+                      { label: 'Key Department Client', val: 'Samagra Shiksha & Municipal Admin' }
+                    ],
+                    projects: [
+                      'Mancherial Model High School Multi-Storey Wings',
+                      'Sub-Divisional Revenue Headquarters (MRO Complex)',
+                      'Heavy Reinforced Stormwater Canal Lining',
+                      'Municipal CC Road Infrastructure Networks'
+                    ],
+                    image: '/icon_school_front_campus.jpg',
+                    imageCaption: 'Mancherial Model High School multi-tier reinforced concrete structure'
+                  },
+                  {
+                    name: 'Ramagundam & Peddapalli Industrial Hub',
+                    tagline: 'Structural Staff Housing & Heavy Foundation Engineering',
+                    description: 'Executing high-load residential quarters, reinforced concrete utility trenches, retaining walls, and monolithic multi-storey housing for industrial workforce sectors.',
+                    stats: [
+                      { label: 'Delivered Housing Blocks', val: '26+ Buildings' },
+                      { label: 'Average Construction Grade', val: 'M35 / M40 Concrete' },
+                      { label: 'Foundation Standard', val: 'Bored Piles in Hard Strata' },
+                      { label: 'Key Department Client', val: 'Public Housing & Industrial Welfare' }
+                    ],
+                    projects: [
+                      'Ramagundam Structural Residential Quarters',
+                      'Township Staff Quarters & Dormitory Facilities',
+                      'Heavy Retaining Walls & Earth Stabilization',
+                      'Integrated Water Supply & Overhead Storage Towers'
+                    ],
+                    image: '/icon_ramagundam_structural.jpg',
+                    imageCaption: 'Heavy multi-tier structural residential quarters at Ramagundam'
+                  },
+                  {
+                    name: 'Northern Telangana Connectivity Network',
+                    tagline: 'State Highway Bridges, Box Culverts & Causeways',
+                    description: 'Specialized mobile bridge construction teams carrying heavy girder casting beds, pre-stressing equipment, and rapid flood-relief box culvert formwork across state roads.',
+                    stats: [
+                      { label: 'Total Bridge Spans', val: '40+ Spans Cast' },
+                      { label: 'High-Level Crossings', val: '12 Major Bridges' },
+                      { label: 'Box Culverts Executed', val: '85+ Installations' },
+                      { label: 'Key Department Client', val: 'State Highways & PR Engineering' }
+                    ],
+                    projects: [
+                      'Prestressed Concrete Girder High-Level Bridges',
+                      'High-Flood Submersible Causeway Crossings',
+                      'Multi-Cell Reinforced Concrete Box Culverts',
+                      'All-Weather Heavy Industrial Access Corridors'
+                    ],
+                    image: '/icon_8span_river_bridge.jpg',
+                    imageCaption: 'High-load arterial bridge superstructure engineered for extreme monsoon flood flows'
+                  }
+                ];
+
+                const currentHub = hubs[activeHubIndex];
+
+                return (
+                  <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 sm:p-10 lg:p-12 shadow-xl shadow-slate-100 text-left">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                      
+                      {/* Left: Hub Information */}
+                      <div className="lg:col-span-7 space-y-6">
+                        <div>
+                          <span className="text-xs font-bold text-[#927027] uppercase tracking-wider block mb-1">
+                            {currentHub.tagline}
+                          </span>
+                          <h3 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-black text-[#07132c] leading-tight">
+                            {currentHub.name}
+                          </h3>
+                        </div>
+
+                        <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+                          {currentHub.description}
+                        </p>
+
+                        {/* 4 Stats Grid */}
+                        <div className="grid grid-cols-2 gap-4 py-2">
+                          {currentHub.stats.map((stat, sIdx) => (
+                            <div key={sIdx} className="bg-white border border-slate-200/90 rounded-xl p-3 sm:p-4 shadow-sm">
+                              <span className="text-lg sm:text-2xl font-sans font-black text-[#07132c] block">
+                                {stat.val}
+                              </span>
+                              <span className="text-[11px] sm:text-xs text-slate-500 font-medium block mt-0.5">
+                                {stat.label}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Signature Projects in this Hub */}
+                        <div className="space-y-2.5">
+                          <span className="text-xs font-bold text-[#07132c] uppercase tracking-wider block">
+                            Signature Executions in this District:
+                          </span>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {currentHub.projects.map((proj, pIdx) => (
+                              <div key={pIdx} className="flex items-center gap-2 text-xs text-slate-700">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#c5a059] shrink-0" />
+                                <span>{proj}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="pt-2 flex flex-wrap items-center gap-4">
+                          <button
+                            onClick={() => handleNavigate('ongoing')}
+                            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#07132c] text-[#e5be6b] hover:bg-[#0c1f44] text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-md"
+                          >
+                            <span>Inspect Active Sites in this Hub</span>
+                            <ArrowRight className="w-4 h-4 text-[#e5be6b]" />
+                          </button>
+                          <button
+                            onClick={() => handleNavigate('projects')}
+                            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold tracking-wider transition-colors cursor-pointer shadow-sm"
+                          >
+                            <span>View All Completed Works</span>
+                            <ExternalLink className="w-4 h-4 text-[#927027]" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Right: Real Visual */}
+                      <div className="lg:col-span-5 relative">
+                        <div className="relative rounded-xl overflow-hidden border border-slate-200 aspect-[4/3] shadow-lg group">
+                          <img
+                            src={currentHub.image}
+                            alt={currentHub.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                          
+                          <div className="absolute bottom-4 left-4 right-4 text-xs text-white bg-slate-900/80 backdrop-blur-md p-3 rounded-lg border border-white/10 shadow-lg">
+                            <span className="font-semibold text-[#e5be6b] block mb-0.5">District Landmark Execution</span>
+                            <p className="text-[11px] text-slate-300 font-normal">{currentHub.imageCaption}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                );
+              })()}
+
             </div>
           </section>
 
@@ -2700,8 +2200,7 @@ export default function App() {
             </div>
           </div>
 
-        </div>
-      </section>
+
 
       {/* ── 8. MODERN UPGRADED GLOBAL FOOTER (0 BORDER RADIUS, CLEAN 4-COLUMN) ─── */}
       <footer className="bg-[#050e1f] text-white border-t border-slate-800 pt-20 pb-12 font-sans">
@@ -2743,6 +2242,12 @@ export default function App() {
                 <li>
                   <button onClick={() => handleNavigate('projects')} className="hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 text-inherit font-medium">
                     Our Projects (Full Portfolio)
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleNavigate('ongoing')} className="hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 text-inherit font-medium flex items-center gap-1.5">
+                    <span>Ongoing Projects (Live Sites)</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   </button>
                 </li>
                 <li>
@@ -2939,63 +2444,7 @@ _Sent from Icon Constructions Website_`;
         </div>
       )}
 
-      {/* ONGOING PROJECT IMAGE LIGHTBOX MODAL */}
-      {activeOngoingModal && (
-        <div 
-          onClick={() => setActiveOngoingModal(null)}
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 cursor-pointer"
-        >
-          <div 
-            onClick={(e) => e.stopPropagation()}
-            className="bg-[#07132c] border border-slate-700 max-w-4xl w-full overflow-hidden shadow-2xl relative flex flex-col cursor-default"
-          >
-            <button
-              onClick={() => setActiveOngoingModal(null)}
-              className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/70 hover:bg-[#c5a059] text-white hover:text-[#07132c] transition-all cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
 
-            <div className="relative max-h-[70vh] bg-black flex items-center justify-center overflow-hidden">
-              <img
-                src={activeOngoingModal.image}
-                alt={activeOngoingModal.title}
-                className="max-h-[70vh] w-auto max-w-full object-contain"
-              />
-            </div>
-
-            <div className="p-5 sm:p-6 bg-[#07132c] border-t border-slate-700/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 bg-[#c5a059] text-[#07132c] text-[10px] font-black uppercase tracking-wider">
-                    {activeOngoingModal.subName}
-                  </span>
-                  <span className="text-xs text-slate-300 flex items-center gap-1">
-                    <MapPin className="w-3 h-3 text-[#c5a059]" />
-                    {activeOngoingModal.location}
-                  </span>
-                </div>
-                <h3 className="text-base sm:text-lg font-bold text-white">
-                  {activeOngoingModal.title}
-                </h3>
-                <p className="text-xs text-slate-300">
-                  {activeOngoingModal.caption}
-                </p>
-              </div>
-
-              <button
-                onClick={() => {
-                  setActiveOngoingModal(null);
-                  setInquiryModalOpen(true);
-                }}
-                className="px-5 py-2.5 bg-[#c5a059] hover:bg-[#e5be6b] text-[#07132c] text-xs font-bold uppercase tracking-wider transition-all shrink-0 cursor-pointer"
-              >
-                Inquire Project
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
     </div>
   );

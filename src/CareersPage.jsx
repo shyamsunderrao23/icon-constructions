@@ -314,6 +314,10 @@ export default function CareersPage({ onNavigate, onBack }) {
                 <button onClick={() => navigate('projects')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0">
                   Projects
                 </button>
+                <button onClick={() => navigate('ongoing')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 flex items-center gap-1.5">
+                  <span>Ongoing</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                </button>
                 <button onClick={() => navigate('expertise')} className="px-3 py-2 text-xs xl:text-sm font-semibold tracking-wide text-slate-800 hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0">
                   Expertise
                 </button>
@@ -409,6 +413,16 @@ export default function CareersPage({ onNavigate, onBack }) {
               className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-200/60 border border-transparent hover:border-[#c5a059]/30 transition-all text-left cursor-pointer"
             >
               <span>Projects</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </button>
+            <button 
+              onClick={() => { navigate('ongoing'); setMobileNavOpen(false); }}
+              className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold tracking-wide text-[#07132c] hover:text-[#c5a059] hover:bg-slate-200/60 border border-transparent hover:border-[#c5a059]/30 transition-all text-left cursor-pointer"
+            >
+              <span className="flex items-center gap-2">
+                <span>Ongoing Projects</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              </span>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </button>
             <button 
@@ -1189,6 +1203,12 @@ export default function CareersPage({ onNavigate, onBack }) {
                 <li>
                   <button onClick={() => navigate('projects')} className="hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 p-0 text-left">
                     Projects (25 Benchmarks)
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate('ongoing')} className="hover:text-[#c5a059] transition-colors cursor-pointer bg-transparent border-0 p-0 text-left flex items-center gap-1.5">
+                    <span>Ongoing Projects (Live Sites)</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   </button>
                 </li>
                 <li>
